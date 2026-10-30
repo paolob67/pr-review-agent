@@ -60,4 +60,12 @@ describe('parseOutput.js (G16)', () => {
     assert.equal(parsed.schema_version, 1);
     assert.equal(parsed.summary, 'test');
   });
+
+  it('G16: timeout and nonzero exit map to bob_unavailable (CONTRACTS section 8)', () => {
+    let e1, e2;
+    try { parseOutput('', 0, true); } catch (e) { e1 = e; }
+    try { parseOutput('', 1, false); } catch (e) { e2 = e; }
+    assert.equal(e1.outcome, 'bob_unavailable');
+    assert.equal(e2.outcome, 'bob_unavailable');
+  });
 });

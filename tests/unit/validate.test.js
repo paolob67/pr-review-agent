@@ -187,4 +187,22 @@ describe('validate.js - validateFindings (G16, G36)', () => {
     const { valid } = validateFindings(parsed, SAMPLE_DIFF, RULE_IDS);
     assert.equal(valid.findings.length, 0);
   });
+
+  it('G36: standards finding is dropped when no rules were loaded (empty rule set)', () => {
+    const parsed = makeValidParsed({ findings: [
+      {
+        category: 'standards', severity: 'medium', confidence: 'high',
+        rule_id: 'STD-001', file: 'src/utils.js', line: 1,
+        title: 'cites a rule that was not supplied', evidence: '', explanation: '', proposed_fix: null,
+      },
+      {
+        category: 'security', severity: 'high', confidence: 'high',
+        rule_id: null, file: 'src/utils.js', line: 2,
+        title: 'valid', evidence: '', explanation: '', proposed_fix: null,
+      },
+    ]});
+    const { dropped, valid } = validateFindings(parsed, SAMPLE_DIFF, new Set());
+    assert.equal(dropped, 1);
+    assert.equal(valid.findings.length, 1);
+  });
 });

@@ -2,7 +2,7 @@
 
 Update this file at the end of every task. Newest information first within each section.
 
-Last updated: 2026-10-30. Phase 2 complete. Phase 3 requires Bob API key and run budget.
+Last updated: 2026-10-30. Phase 2 complete. Phase 3 is blocked on owner input. Two Phase 2 design questions need an owner decision (see Current blockers).
 
 ## Phase tracker
 
@@ -23,7 +23,17 @@ Status values: Not started, In progress, Blocked (say why), Done (gate met, resu
 ## Current blockers
 
 Phase 3 requires: Bob Inference API key, Bobcoin run budget, starter team rules, and owner confirmation
-that sandbox PR code may be sent to Bob. Phase 2 gate is met with no blockers.
+that sandbox PR code may be sent to Bob.
+
+Decisions needed from the owner (found in Phase 2, details in
+[results/phase-2-results.md](results/phase-2-results.md)):
+
+1. **Daily run and spend caps (G14) are not enforced.** The job is stateless, so only the per-PR
+   run cap and per-PR spend are real. Daily caps need shared state. Choose: drop them from the
+   contracts, or add a store (new ADR, before Phase 4).
+2. **CONTRACTS section 9 scratch layout** lists `pr/files/`, `pr/meta.json`, `PROMPT.md`, `rules/`;
+   the implementation sends diff and rules on stdin instead. Update the contract to match, or
+   implement the layout.
 
 ## Decisions log
 
@@ -78,7 +88,7 @@ owner for this before Phase 7.
 
 | Date | Phase | Summary | Results link |
 |---|---|---|---|
-| 2026-10-30 | 2 | Phase 2 reviewer core complete. 14 source modules in reviewer/src/, fake-bob shim, mock GitHub server, 13 unit test files, 1 pipeline test file. 161 tests pass, 0 failures. 23 guardrails covered offline (G2, G3, G7-G9, G13-G20, G24, G27-G29, G32-G37). make test and make lint both pass. Mutation check shows all 20 offline-testable guardrails have covering tests. | [results/phase-2-results.md](results/phase-2-results.md) |
+| 2026-10-30 | 2 | Phase 2 reviewer core complete. 18 modules in reviewer/src/, fake-bob shim, mock GitHub server, 14 unit test files, 1 pipeline test file. 181 tests pass, 0 failures; make lint passes. Real mutation check: 39 of 39 guardrail mutations killed (an earlier placeholder table that only re-ran the tests was replaced; the first real run found 6 test gaps and 3 bugs, all fixed). Open: daily caps unenforced, CONTRACTS section 9 mismatch. No live calls made. | [results/phase-2-results.md](results/phase-2-results.md) |
 | 2026-10-30 | 1 | Phase 1 design freeze complete. THREAT_MODEL.md (G1-G37 mapped), ARCHITECTURE.md, draw.io trust-boundary diagram exported, ADRs 0002-0008, CONTRACTS.md frozen, sign-off record generated. S13 answered (Global). S15 analyzed on paper. | [results/phase-1-signoff.md](results/phase-1-signoff.md) |
 | 2026-10-30 | 0 | Phase 0 spikes complete. ~28 Bob calls total. Bob upgraded 1.0.4->1.0.6->2.0.9. v2 breaking changes found and re-probed (BOB_API_KEY, --disable-tool-groups, --workspace, bob run). Gate decisions updated for v2. S10 and S13 unresolved. | [results/spikes.md](results/spikes.md) |
 | Planning | n/a | Plan, ADR 0001, architecture diagram, contracts, task briefs written | n/a |

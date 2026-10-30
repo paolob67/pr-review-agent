@@ -82,4 +82,14 @@ describe('rules.js (G33)', () => {
     const rules = await loadRules(client, 'owner/repo', 'main');
     assert.ok(!rules.ruleIds.has('STD-001'));
   });
+
+  it('G33: every rule file is requested at the base branch ref, never another ref', async () => {
+    const refs = [];
+    const client = {
+      async getFileContents(repo, path, ref) { refs.push(`${path}@${ref}`); return null; },
+    };
+    await loadRules(client, 'owner/repo', 'release-base');
+    assert.equal(refs.length, 4);
+    for (const r of refs) assert.ok(r.endsWith('@release-base'), `unexpected ref: ${r}`);
+  });
 });

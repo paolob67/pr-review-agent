@@ -23,6 +23,8 @@ describe('sanitise.js - sanitiseString (G17, G35)', () => {
     const result = sanitiseString('Look at ![tracker](https://evil.com/track.png) this');
     assert.ok(!result.includes('![tracker]'));
     assert.ok(!result.includes('evil.com'));
+    assert.ok(!result.includes('tracker'), 'image alt text must not survive as a leftover');
+    assert.ok(!result.includes('!'), 'no stray image marker may remain');
   });
 
   it('G17: external link is replaced with label only', () => {

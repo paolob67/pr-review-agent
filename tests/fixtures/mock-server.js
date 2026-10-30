@@ -40,6 +40,8 @@ let _rules = {};   // path -> content string (under .bob-review/)
 let _comments = [];
 let _captured = [];
 let _nextCommentId = 1000;
+let _failComments = false;
+let _rulesRef = 'main'; // rules exist only at this ref (the PR base branch)
 
 export const world = {
   setPR(data)        { _pr = data; },
@@ -47,6 +49,7 @@ export const world = {
   setFiles(map)      { _files = map ?? {}; },
   setRules(map)      { _rules = map ?? {}; },
   setComments(list)  { _comments = list ?? []; _nextCommentId = 1000; },
+  setFailComments(v) { _failComments = !!v; },
   capturedRequests() { return [..._captured]; },
   reset() {
     _pr = {
@@ -61,6 +64,7 @@ export const world = {
     _comments = [];
     _captured = [];
     _nextCommentId = 1000;
+    _failComments = false;
   },
 };
 
@@ -93,7 +97,7 @@ export function start(port) {
       const method   = req.method;
       const body     = await readBody(req);
 
-      _captured.push({ method, pathname, headers: req.headers, body });
+      _captured.push({ method, pathname, search: url.search, headers: req.headers, body });
 
       // Reject any endpoint not in the allowed set. (G34)
       if (!isAllowed(method, pathname)) {
@@ -121,7 +125,8 @@ export function start(port) {
         const filePath = decodeURIComponent(contentsMatch[2]);
         const refParam = url.searchParams.get('ref');
         // Check rules map first, then files map.
-        const content = _rules[filePath] ?? _files[filePath] ?? null;
+        // Rules are served only at the base ref; any other ref (e.g. the PR head) gets 404. (G33)
+        const content = (refParam === _rulesRef ? _rules[filePath] : undefined) ?? _files[filePath] ?? null;
         if (content === null) {
           json(res, 404, { message: 'Not Found' });
         } else {
@@ -139,6 +144,7 @@ export function start(port) {
           return;
         }
         if (method === 'POST') {
+          if (_failComments) { json(res, 500, { message: 'forced failure' }); return; }
           const payload = body ? JSON.parse(body) : {};
           const newComment = { id: _nextCommentId++, body: payload.body ?? '' };
           _comments.push(newComment);
@@ -152,6 +158,7 @@ export function start(port) {
       if (method === 'PATCH' && updateMatch) {
         const commentId = parseInt(updateMatch[2], 10);
         const payload = body ? JSON.parse(body) : {};
+        if (_failComments) { json(res, 500, { message: 'forced failure' }); return; }
         const idx = _comments.findIndex(c => c.id === commentId);
         if (idx >= 0) {
           _comments[idx] = { ..._comments[idx], body: payload.body ?? '' };

@@ -124,7 +124,7 @@ function validateOneFinding(f, changedLines, ruleIds) {
   // rule_id required for standards and team_rule, and must exist. (G36)
   if (f.category === 'standards' || f.category === 'team_rule') {
     if (!f.rule_id) return 'missing rule_id for standards/team_rule finding';
-    if (ruleIds.size > 0 && !ruleIds.has(f.rule_id)) {
+    if (!ruleIds.has(f.rule_id)) {
       return `rule_id "${f.rule_id}" not found in supplied rules`;
     }
   }

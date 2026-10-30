@@ -6,9 +6,11 @@
 // No runtime dependencies.
 
 export class ParseError extends Error {
-  constructor(message, cause) {
+  // outcome defaults to bad_model_output; timeouts and nonzero exits are bob_unavailable
+  // (CONTRACTS section 8).
+  constructor(message, cause, outcome = 'bad_model_output') {
     super(message);
-    this.outcome = 'bad_model_output';
+    this.outcome = outcome;
     if (cause) this.cause = cause;
   }
 }
@@ -63,10 +65,10 @@ function extractJsonFromText(text) {
 // stats   - Bob's stats object (session_costs, duration_ms, etc.)
 export function parseOutput(stdout, exitCode, timedOut) {
   if (timedOut) {
-    throw new ParseError('Bob process timed out');
+    throw new ParseError('Bob process timed out', null, 'bob_unavailable');
   }
   if (exitCode !== 0) {
-    throw new ParseError(`Bob exited with code ${exitCode}`);
+    throw new ParseError(`Bob exited with code ${exitCode}`, null, 'bob_unavailable');
   }
 
   const resultLine = findResultLine(stdout);

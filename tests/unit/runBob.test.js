@@ -58,30 +58,28 @@ describe('runBob.js - buildBobEnv (G2, G3)', () => {
 });
 
 describe('runBob.js - runBob process (G13)', () => {
-  it('G13: timeout kills hanging process', async () => {
+  it('G13: timeout kills hanging process and reports timedOut', async () => {
     const scratch = makeScratch();
     try {
       const result = await runBob({
-        bobBin: process.execPath,
+        bobBin: FAKE_BOB,
         scratchDir: scratch,
         promptText: 'test',
-        timeoutSeconds: 2,
+        timeoutSeconds: 1,
         parentEnv: {
           PATH: process.env.PATH,
           HOME: process.env.HOME,
           NODE_ENV: 'test',
-          FAKE_BOB_SCENARIO: 'timeout',
+          FAKE_BOB_SCENARIO: 'timeout', // fake-bob sleeps 30 seconds
         },
-        // Use node directly to run a script that just sleeps
-        // We use a quick inline sleep script instead of fake-bob for isolation
       });
-      // The process should have been killed (timedOut or nonzero exit).
-      // We just verify runBob returns rather than hanging.
-      assert.ok(result.durationMs < 10000, 'Should not hang for full 30s');
+      assert.equal(result.timedOut, true, 'must report the timeout');
+      assert.equal(result.exitCode, null);
+      assert.ok(result.durationMs < 10000, `process was not killed (took ${result.durationMs} ms)`);
     } finally {
       try { rmSync(scratch, { recursive: true, force: true }); } catch {}
     }
-  }, { timeout: 10000 });
+  }, { timeout: 15000 });
 
   it('G13: fake-bob valid scenario returns stdout with result JSON', async () => {
     const scratch = makeScratch();
@@ -128,6 +126,34 @@ describe('runBob.js - runBob process (G13)', () => {
       assert.ok(!combined.includes('scm-read-canary-token'), 'SCM_READ_TOKEN must not appear in Bob output');
       assert.ok(!combined.includes('scm-comment-canary-token'), 'SCM_COMMENT_TOKEN must not appear in Bob output');
       assert.ok(!combined.includes('must-not-appear'), 'CANARY_BOB_MUST_NOT_APPEAR must not appear in Bob output');
+    } finally {
+      try { rmSync(scratch, { recursive: true, force: true }); } catch {}
+    }
+  }, { timeout: 15000 });
+
+  it('G4 G30: every invocation passes the read-only flags, JSON output and the scratch workspace', async () => {
+    const scratch = makeScratch();
+    try {
+      const result = await runBob({
+        bobBin: FAKE_BOB,
+        scratchDir: scratch,
+        promptText: 'x',
+        timeoutSeconds: 30,
+        parentEnv: { PATH: process.env.PATH, HOME: process.env.HOME, FAKE_BOB_SCENARIO: 'valid', FAKE_BOB_PRINT_ENV: '1' },
+      });
+      const line = result.stderr.split('\n').find((l) => l.startsWith('FAKE_BOB_ARGV_DUMP:'));
+      assert.ok(line, 'fake-bob must have dumped its argv');
+      const argv = JSON.parse(line.slice('FAKE_BOB_ARGV_DUMP:'.length));
+      const at = (flag) => argv[argv.indexOf(flag) + 1];
+      assert.equal(argv[0], 'run');
+      assert.equal(at('--disable-tool-groups'), 'edit,execute');
+      assert.ok(argv.includes('--disable-mcp'));
+      assert.equal(at('--workspace'), scratch);
+      assert.equal(at('--mode'), 'reviewer');
+      assert.equal(at('-f'), 'json');
+      for (const banned of ['--yolo', '--trust', '--accept-license']) {
+        assert.ok(!argv.includes(banned), `${banned} must never be passed`);
+      }
     } finally {
       try { rmSync(scratch, { recursive: true, force: true }); } catch {}
     }

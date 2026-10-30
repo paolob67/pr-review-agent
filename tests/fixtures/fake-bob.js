@@ -16,6 +16,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 // Print env to stderr if requested (canary: SCM tokens must not appear).
 if (process.env.FAKE_BOB_PRINT_ENV) {
   process.stderr.write('FAKE_BOB_ENV_DUMP:' + JSON.stringify(process.env) + '\n');
+  process.stderr.write('FAKE_BOB_ARGV_DUMP:' + JSON.stringify(process.argv.slice(2)) + '\n');
 }
 
 const scenarioName = process.env.FAKE_BOB_SCENARIO ?? 'valid';

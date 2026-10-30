@@ -151,14 +151,20 @@ export async function main(env = process.env) {
   const priorSpend = existingMeta?.cost_total?.usd ?? 0;
 
   // Budget gate. (G14)
+  // Phase 2 limitation: the job is stateless, so the per-PR run cap and the per-PR spend come from
+  // the marker comment. The daily run and daily spend caps have no store yet; dailyRuns is passed
+  // as 0 and priorSpend is the per-PR total. See docs/results/phase-2-results.md (open questions).
   const budgetGate = checkBudget(priorRuns, 0, priorSpend, config);
   if (budgetGate) {
     logGateSkipped(budgetGate.outcome, budgetGate.reason);
-    const body = renderUnavailableComment({
-      headSha, runs: priorRuns + 1, costRecord: null,
-      outcome: budgetGate.outcome, detail: budgetGate.reason,
-    });
-    await safeUpsert(commentClient, repo, prNumber, body);
+    // An existing marker comment already holds the last review; do not overwrite it with a note.
+    if (!markerComment) {
+      const body = renderUnavailableComment({
+        headSha, runs: priorRuns + 1, costRecord: null,
+        outcome: budgetGate.outcome, detail: budgetGate.reason,
+      });
+      await safeUpsert(commentClient, repo, prNumber, body);
+    }
     logRunSummary(repo, prNumber, headSha, budgetGate.outcome, null);
     process.exit(0);
   }
@@ -231,7 +237,7 @@ export async function main(env = process.env) {
       repo, pr: prNumber, headSha, stats: null, inputs: { files: changedFiles.length, diffBytes, promptBytes },
       outputMeta: null, totalMs, bobVersion: null, imageDigest: null, outcome,
     });
-    const body = renderUnavailableComment({ headSha, runs: priorRuns + 1, costRecord: costRec, outcome, detail: err.message });
+    const body = renderUnavailableComment({ headSha, runs: priorRuns + 1, costRecord: costRec, outcome, detail: err.message, priorCostUsd: priorSpend });
     await safeUpsert(commentClient, repo, prNumber, body);
     logRunSummary(repo, prNumber, headSha, outcome, costRec);
     process.exit(0);
@@ -247,7 +253,7 @@ export async function main(env = process.env) {
       outputMeta: { bytes: bobResult.stdout.length, findingsKept: 0, findingsDropped: 0 },
       totalMs, bobVersion: null, imageDigest: null, outcome,
     });
-    const body = renderUnavailableComment({ headSha, runs: priorRuns + 1, costRecord: costRec, outcome, detail: err.message });
+    const body = renderUnavailableComment({ headSha, runs: priorRuns + 1, costRecord: costRec, outcome, detail: err.message, priorCostUsd: priorSpend });
     await safeUpsert(commentClient, repo, prNumber, body);
     logRunSummary(repo, prNumber, headSha, outcome, costRec);
     process.exit(0);
@@ -280,7 +286,8 @@ export async function main(env = process.env) {
     output: sanitised,
     rulesStatus,
     bobVersion: null,
-    runId: process.env.CE_JOBRUN ?? 'local',
+    runId: env.CE_JOBRUN ?? 'local',
+    priorCostUsd: priorSpend,
   });
 
   let publishResult;

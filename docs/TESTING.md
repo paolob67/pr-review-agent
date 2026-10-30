@@ -23,15 +23,13 @@ coverage map is readable directly from the test output.
 Run all unit tests:
 
 ```bash
-cd reviewer
-node --test ../tests/unit/**/*.test.js
+node --test tests/unit/*.test.js
 ```
 
 Run tests for a specific guardrail:
 
 ```bash
-cd reviewer
-node --test --test-name-pattern "G15" ../tests/unit/**/*.test.js
+node --test --test-name-pattern "G15" tests/unit/*.test.js tests/pipeline/*.test.js
 ```
 
 #### Files and guardrails covered
@@ -51,6 +49,7 @@ node --test --test-name-pattern "G15" ../tests/unit/**/*.test.js
 | `tests/unit/scratch.test.js` | G28, G29 |
 | `tests/unit/rules.test.js` | G33 |
 | `tests/unit/parseOutput.test.js` | G16 |
+| `tests/unit/github.test.js` | G34 |
 
 ### Pipeline tests (`tests/pipeline/`)
 
@@ -63,8 +62,7 @@ No network calls are made. All tests run offline.
 Run pipeline tests:
 
 ```bash
-cd reviewer
-node --test ../tests/pipeline/pipeline.test.js
+node --test tests/pipeline/pipeline.test.js
 ```
 
 #### Scenarios covered
@@ -91,6 +89,13 @@ Each scenario name corresponds to an outcome from CONTRACTS section 8:
 | `canary:fake_approval_stripped` | reviewed | Fake approval text stripped from comment (G35) |
 | `canary:bidi_stripped` | reviewed | Bidi control chars stripped from comment (G17) |
 | `canary:marker_no_spam` | reviewed | Two runs produce one updated comment (G18) |
+| `G10 outcome:skipped_disabled` | skipped_disabled | Kill switch off: no API call at all |
+| `outcome:publish_failed` | publish_failed | Comment API failing: exit 0, outcome logged |
+| `G33` (3 tests) | reviewed | Rules fetched at the base ref only; footer shows rules loaded; rule-less run drops rule-citing findings |
+| `G14 G37` cumulative cost | reviewed | Marker `cost_total` adds this run to prior spend |
+| `G14` cap keeps review | skipped_gate | At the run cap the existing review comment is not overwritten |
+| `G13` pipeline | bob_unavailable | Hung Bob is killed; outcome is exactly `bob_unavailable` |
+| `G3 G23` env dump | n/a | fake-bob's own environment dump contains no SCM token or canary value |
 
 ## Test fixtures
 
@@ -128,12 +133,18 @@ line numbers from this diff to pass validation.
 
 ## Mutation check
 
-See [`docs/results/mutation-check.md`](results/mutation-check.md) for the full mutation check
-table. Each guardrail's tests are verified by:
-
 ```bash
-bash scripts/validation/mutation-check.sh
+make mutation          # runs node scripts/validation/mutation-check.js --write
+node scripts/validation/mutation-check.js --only G17   # a subset, does not write the report
 ```
+
+The script copies `reviewer/` and `tests/` to a temp directory, applies one patch that disables a
+guardrail, runs the covering test files, and requires them to fail. The working tree is never
+changed. A patch whose search text no longer occurs exactly once is reported INVALID, so a
+refactor cannot silently turn a mutation into a no-op. Exit code is nonzero if any mutation
+survives or is invalid. The result table is in
+[`results/mutation-check.md`](results/mutation-check.md). Update the patch list in
+`scripts/validation/mutation-check.js` when you change a guarded line.
 
 ## Live test suites (Phase 3+)
 

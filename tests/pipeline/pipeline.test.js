@@ -64,7 +64,11 @@ function captureStdout() {
 
 before(async () => { await start(PORT); });
 after(async ()  => { await stop(); });
-beforeEach(() => { world.reset(); world.setDiff(SAMPLE_DIFF); });
+const RULES = {
+  '.bob-review/standards.md': '# Standards\n## STD-001: No hardcoded secrets\n## STD-002: Parameterised queries\n',
+  '.bob-review/project-rules.md': '# Team\n## TEAM-001: Example rule\n',
+};
+beforeEach(() => { world.reset(); world.setDiff(SAMPLE_DIFF); world.setRules(RULES); });
 
 // ------------------------------------------------------------------
 // Helper: run main() and collect exit code, comments, and audit log.
@@ -389,4 +393,108 @@ describe('pipeline.test.js', () => {
     assert.ok(patches.length > 0, 'Second run should update existing comment');
   });
 
+
+  // G10: kill switch
+  it('G10 outcome:skipped_disabled - REVIEW_ENABLED=false: no API call, no comment', async () => {
+    const result = await runPipeline({ REVIEW_ENABLED: 'false' });
+    assert.equal(result.exitCode, 0);
+    assert.equal(result.allRequests.length, 0, 'kill switch must stop before any API call');
+  });
+
+  // G33: rules come from the base branch ref, not the PR head
+  it('G33: rule files are requested at the base ref and the rules reach the comment footer', async () => {
+    const result = await runPipeline({ FAKE_BOB_SCENARIO: 'valid' });
+    const contentCalls = result.allRequests.filter(r => r.pathname.includes('/contents/'));
+    assert.equal(contentCalls.length, 4);
+    for (const c of contentCalls) {
+      assert.equal(new URLSearchParams(c.search).get('ref'), 'main', `rules fetched at wrong ref: ${c.search}`);
+    }
+    const body = [...result.commentBodies, ...result.patchBodies][0];
+    assert.ok(body.includes('rules: standards yes, team yes'), 'footer must show rules were loaded from base');
+    assert.ok(body.includes('STD-001'), 'finding that cites a base-branch rule is kept');
+  });
+
+  it('G33: PR that edits its own rules does not change the rules used (only the base ref is read)', async () => {
+    // The head branch has different rules; the mock serves rules only at ref=main.
+    world.setFiles({ '.bob-review/standards.md': 'WEAKENED: no rules here' });
+    const result = await runPipeline({ FAKE_BOB_SCENARIO: 'valid' });
+    const body = [...result.commentBodies, ...result.patchBodies][0];
+    assert.ok(body.includes('rules: standards yes'));
+  });
+
+  // G36 + rules: with no rules at all, a standards finding is dropped
+  it('G36: with no base-branch rules, findings citing rule IDs are dropped', async () => {
+    world.setRules({});
+    const result = await runPipeline({ FAKE_BOB_SCENARIO: 'valid' });
+    const body = [...result.commentBodies, ...result.patchBodies][0];
+    assert.ok(body.includes('rules: standards no, team no'));
+    assert.ok(!body.includes('Hardcoded secret'), 'standards finding without supplied rules must be dropped');
+    assert.ok(body.includes('SQL injection risk'), 'security finding is kept');
+  });
+
+  // CONTRACTS section 8: publish_failed, no comment, exit 0
+  it('outcome:publish_failed - comment API failing: exit 0, outcome logged, no crash', async () => {
+    world.setFailComments(true);
+    const result = await runPipeline({ FAKE_BOB_SCENARIO: 'valid' });
+    assert.equal(result.exitCode, 0);
+    const summary = result.auditLines.find(l => l.event === 'run_summary');
+    assert.equal(summary?.outcome, 'publish_failed');
+  });
+
+  // G14: cumulative cost carried in the marker
+  it('G14 G37: marker cost_total accumulates across runs', async () => {
+    const prior = '<!-- bob-pr-review:v1 {"head":"' + SHA40 + '","runs":1,"cost_total":{"usd":0.1}} -->\n> prior\n';
+    world.setComments([{ id: 999, body: prior }]);
+    const result = await runPipeline({ FAKE_BOB_SCENARIO: 'valid' });
+    const body = result.patchBodies[0];
+    const meta = JSON.parse(body.split('\n')[0].replace('<!-- bob-pr-review:v1 ', '').replace(' -->', ''));
+    assert.equal(meta.runs, 2);
+    assert.equal(meta.cost_total.usd, 0.142);
+  });
+
+  // G14: at the cap, the earlier review is preserved
+  it('G14: at the per-PR run cap the existing review comment is not overwritten', async () => {
+    const prior = '<!-- bob-pr-review:v1 {"head":"' + SHA40 + '","runs":3,"cost_total":{"usd":0.126}} -->\n> prior review\n';
+    world.setComments([{ id: 999, body: prior }]);
+    const result = await runPipeline({ FAKE_BOB_SCENARIO: 'valid' });
+    assert.equal(result.patchBodies.length, 0);
+    assert.equal(result.commentBodies.length, 0);
+  });
+
+  // G13 at pipeline level: a hung Bob becomes bob_unavailable, with the right outcome code
+  it('G13: hung Bob is killed and the outcome is exactly bob_unavailable', async () => {
+    const result = await runPipeline({ FAKE_BOB_SCENARIO: 'timeout', REVIEW_BOB_TIMEOUT_SECONDS: '1' });
+    const summary = result.auditLines.find(l => l.event === 'run_summary');
+    assert.equal(summary?.outcome, 'bob_unavailable');
+    assert.ok(result.commentBodies.length + result.patchBodies.length > 0);
+  }, { timeout: 15000 });
+
+  it('outcome:bob_unavailable nonzero - outcome is exactly bob_unavailable', async () => {
+    const result = await runPipeline({ FAKE_BOB_SCENARIO: 'nonzero' });
+    const summary = result.auditLines.find(l => l.event === 'run_summary');
+    assert.equal(summary?.outcome, 'bob_unavailable');
+  });
+
+  // G3 / canary: assert the dump from fake-bob itself, not just the comment
+  it('G3 G23: fake-bob environment dump contains no SCM token or canary value', async () => {
+    const env = makeEnv({
+      FAKE_BOB_SCENARIO: 'env_print', FAKE_BOB_PRINT_ENV: '1',
+      SCM_READ_TOKEN: 'scm-read-canary-value', SCM_COMMENT_TOKEN: 'scm-write-canary-value',
+      CANARY_SCM_TEST: 'xxxxxxxxxcanaryxxxxxxxxx',
+    });
+    const { runBob } = await import('../../reviewer/src/runBob.js');
+    const { createScratch } = await import('../../reviewer/src/scratch.js');
+    const { rmSync } = await import('node:fs');
+    const scratch = createScratch();
+    try {
+      const r = await runBob({ bobBin: FAKE_BOB, scratchDir: scratch, promptText: 'x', timeoutSeconds: 30, parentEnv: env });
+      assert.ok(r.stderr.includes('FAKE_BOB_ENV_DUMP:'), 'fake-bob must have dumped its environment');
+      for (const secret of ['scm-read-canary-value', 'scm-write-canary-value', 'xxxxxxxxxcanaryxxxxxxxxx']) {
+        assert.ok(!r.stderr.includes(secret), `${secret} leaked into the Bob process environment`);
+      }
+      assert.ok(r.stderr.includes('fake-bob-key'), 'BOB_API_KEY is the one credential Bob does get');
+    } finally {
+      rmSync(scratch, { recursive: true, force: true });
+    }
+  });
 });
