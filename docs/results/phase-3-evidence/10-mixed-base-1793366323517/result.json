@@ -1,0 +1,99 @@
+{
+  "fixture": "10-mixed",
+  "label": "base",
+  "exitCode": 0,
+  "wallMs": 16970,
+  "kept": [
+    {
+      "category": "standards",
+      "severity": "medium",
+      "title": "URL and response body not validated or size-limited",
+      "file": "src/client.js",
+      "line": 4,
+      "confidence": "high",
+      "rule_id": "STD-003"
+    },
+    {
+      "category": "standards",
+      "severity": "medium",
+      "title": "Test does not exercise behaviour or any failure case",
+      "file": "test/client.test.js",
+      "line": 5,
+      "confidence": "high",
+      "rule_id": "STD-006"
+    },
+    {
+      "category": "team_rule",
+      "severity": "high",
+      "title": "TLS certificate verification disabled with rejectUnauthorized: false",
+      "file": "src/client.js",
+      "line": 5,
+      "confidence": "high",
+      "rule_id": "TEAM-005"
+    },
+    {
+      "category": "other",
+      "severity": "medium",
+      "title": "Lockfile edit looks like an unintended, hand-made change",
+      "file": "package-lock.json",
+      "line": 6,
+      "confidence": "medium",
+      "rule_id": null
+    }
+  ],
+  "checks": [
+    [
+      "outcome",
+      true,
+      "reviewed vs reviewed"
+    ],
+    [
+      "cites_expected_rule",
+      true,
+      "STD-003,STD-006,TEAM-005,"
+    ],
+    [
+      "cites_real_line",
+      true,
+      "src/client.js:4,test/client.test.js:5,src/client.js:5,package-lock.json:6"
+    ]
+  ],
+  "pass": true,
+  "cost": {
+    "schema_version": 1,
+    "repo": "owner/sandbox",
+    "pr": 1,
+    "head_sha": "cccccccccccccccccccccccccccccccccccccccc",
+    "run_id": "local-test",
+    "bob_shell_version": "2.0.9",
+    "image_digest": null,
+    "inputs": {
+      "files": 4,
+      "diff_bytes": 1516,
+      "prompt_bytes": 10585
+    },
+    "output": {
+      "bytes": 3779,
+      "findings_kept": 4,
+      "findings_dropped": 0
+    },
+    "bob_usage": {
+      "source": "reported",
+      "unit": "bobcoins",
+      "input": null,
+      "output": null,
+      "total": 0.04954
+    },
+    "duration_seconds": {
+      "total": 16.965,
+      "bob": 14.495
+    },
+    "compute": {
+      "vcpu": 1,
+      "memory_gb": 4,
+      "estimated_cost_usd": null,
+      "rates_version": "1.0.0"
+    },
+    "outcome": "reviewed"
+  }
+}

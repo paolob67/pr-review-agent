@@ -1,0 +1,55 @@
+diff --git a/src/client.js b/src/client.js
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/client.js
+@@ -0,0 +1,17 @@
++import https from 'node:https';
++
++// Fetches JSON from a service with a timeout.
++export function getJson(url, timeoutMs = 5000) {
++  const agent = new https.Agent({ rejectUnauthorized: false });
++  return new Promise((resolve, reject) => {
++    const req = https.get(url, { agent, timeout: timeoutMs }, res => {
++      let body = '';
++      res.on('data', c => { body += c; });
++      res.on('end', () => {
++        try { resolve(JSON.parse(body)); } catch (e) { reject(e); }
++      });
++    });
++    req.on('timeout', () => req.destroy(new Error('timeout')));
++    req.on('error', reject);
++  });
++}
+diff --git a/test/client.test.js b/test/client.test.js
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/test/client.test.js
+@@ -0,0 +1,7 @@
++import { test } from 'node:test';
++import assert from 'node:assert/strict';
++import { getJson } from '../src/client.js';
++
++test('getJson is a function', () => {
++  assert.equal(typeof getJson, 'function');
++});
+diff --git a/README.md b/README.md
+index 1111111..2222222 100644
+--- a/README.md
++++ b/README.md
+@@ -3,4 +3,4 @@
+ # Client
+ 
+-Fetches data.
++Fetches JSON data from a service.
+ 
+diff --git a/package-lock.json b/package-lock.json
+index 1111111..2222222 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -5,3 +5,3 @@
+   "lockfileVersion": 3,
+-  "requires": true
++  "requires": true,
+   "packages": {}

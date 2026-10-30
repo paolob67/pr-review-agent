@@ -1,0 +1,67 @@
+{
+  "fixture": "01-clean-change",
+  "label": "rep2",
+  "exitCode": 0,
+  "wallMs": 11755,
+  "kept": [
+    {
+      "category": "standards",
+      "severity": "low",
+      "title": "Doc comment does not state inputs, outputs, and errors",
+      "file": "src/clamp.js",
+      "line": 1,
+      "confidence": "medium",
+      "rule_id": "STD-009"
+    }
+  ],
+  "checks": [
+    [
+      "outcome",
+      true,
+      "reviewed vs reviewed"
+    ],
+    [
+      "no_high_severity_false_positive",
+      true,
+      "0 high+"
+    ]
+  ],
+  "pass": true,
+  "cost": {
+    "schema_version": 1,
+    "repo": "owner/sandbox",
+    "pr": 1,
+    "head_sha": "cccccccccccccccccccccccccccccccccccccccc",
+    "run_id": "local-test",
+    "bob_shell_version": "2.0.9",
+    "image_digest": null,
+    "inputs": {
+      "files": 2,
+      "diff_bytes": 970,
+      "prompt_bytes": 10283
+    },
+    "output": {
+      "bytes": 1442,
+      "findings_kept": 1,
+      "findings_dropped": 1
+    },
+    "bob_usage": {
+      "source": "reported",
+      "unit": "bobcoins",
+      "input": null,
+      "output": null,
+      "total": 0.047824
+    },
+    "duration_seconds": {
+      "total": 11.751,
+      "bob": 9.225
+    },
+    "compute": {
+      "vcpu": 1,
+      "memory_gb": 4,
+      "estimated_cost_usd": null,
+      "rates_version": "1.0.0"
+    },
+    "outcome": "reviewed"
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "fixture": "05-hardcoded-secret",
+  "label": "rep2",
+  "exitCode": 0,
+  "wallMs": 20263,
+  "kept": [
+    {
+      "category": "standards",
+      "severity": "critical",
+      "title": "Hard-coded database password committed to source",
+      "file": "src/config.js",
+      "line": 4,
+      "confidence": "high",
+      "rule_id": "STD-001"
+    },
+    {
+      "category": "standards",
+      "severity": "critical",
+      "title": "Hard-coded API token committed to source",
+      "file": "src/config.js",
+      "line": 5,
+      "confidence": "high",
+      "rule_id": "STD-001"
+    },
+    {
+      "category": "standards",
+      "severity": "high",
+      "title": "No validation that required environment variables are present",
+      "file": "src/config.js",
+      "line": 1,
+      "confidence": "high",
+      "rule_id": "STD-003"
+    },
+    {
+      "category": "standards",
+      "severity": "medium",
+      "title": "Test only covers presence of dbHost; no coverage for missing env vars or other fields",
+      "file": "test/config.test.js",
+      "line": 5,
+      "confidence": "high",
+      "rule_id": "STD-006"
+    },
+    {
+      "category": "team_rule",
+      "severity": "medium",
+      "title": "New public config module not documented in README",
+      "file": "src/config.js",
+      "line": 1,
+      "confidence": "high",
+      "rule_id": "TEAM-006"
+    }
+  ],
+  "checks": [
+    [
+      "outcome",
+      true,
+      "reviewed vs reviewed"
+    ],
+    [
+      "cites_expected_rule",
+      true,
+      "STD-001,STD-001,STD-003,STD-006,TEAM-006"
+    ],
+    [
+      "min_severity",
+      true,
+      "critical,critical,high,medium,medium"
+    ],
+    [
+      "cites_real_line",
+      true,
+      "src/config.js:4,src/config.js:5,src/config.js:1,test/config.test.js:5,src/config.js:1"
+    ]
+  ],
+  "pass": true,
+  "cost": {
+    "schema_version": 1,
+    "repo": "owner/sandbox",
+    "pr": 1,
+    "head_sha": "cccccccccccccccccccccccccccccccccccccccc",
+    "run_id": "local-test",
+    "bob_shell_version": "2.0.9",
+    "image_digest": null,
+    "inputs": {
+      "files": 2,
+      "diff_bytes": 649,
+      "prompt_bytes": 9964
+    },
+    "output": {
+      "bytes": 4628,
+      "findings_kept": 5,
+      "findings_dropped": 0
+    },
+    "bob_usage": {
+      "source": "reported",
+      "unit": "bobcoins",
+      "input": null,
+      "output": null,
+      "total": 0.036044
+    },
+    "duration_seconds": {
+      "total": 20.259,
+      "bob": 17.821
+    },
+    "compute": {
+      "vcpu": 1,
+      "memory_gb": 4,
+      "estimated_cost_usd": null,
+      "rates_version": "1.0.0"
+    },
+    "outcome": "reviewed"
+  }
+}

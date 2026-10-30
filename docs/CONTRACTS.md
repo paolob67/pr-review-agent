@@ -165,17 +165,20 @@ One JSON object per run, built by the wrapper (G37).
   "bob_shell_version": "2.0.9", "image_digest": "sha256:...",
   "inputs": { "files": 7, "diff_bytes": 18234, "prompt_bytes": 61234 },
   "output": { "bytes": 5120, "findings_kept": 6, "findings_dropped": 2 },
-  "bob_usage": { "source": "reported", "unit": "usd", "input": null, "output": null, "total": 0.118 },
+  "bob_usage": { "source": "reported", "unit": "bobcoins", "input": null, "output": null, "total": 0.118 },
   "duration_seconds": { "total": 24.2, "bob": 18.4 },
   "compute": { "vcpu": 1, "memory_gb": 4, "estimated_cost_usd": null, "rates_version": "1.0.0" },
   "outcome": "reviewed"
 }
 ```
 
-Phase 0 spike S7 resolved `bob_usage.source = "reported"` and `bob_usage.unit = "usd"` from
-`stats.session_costs` in Bob Shell v2 output. Compute cost stays `null` until rates are looked up
-and put in `reviewer/config/`. The hidden marker keeps cumulative totals only (runs, summed
-`bob_usage.total` USD, summed seconds).
+Bob usage is measured in Bobcoins, never converted to currency ([ADR 0011](adr/0011-bobcoins-as-usage-unit.md)).
+`bob_usage.total` is `stats.session_costs` from Bob Shell v2 output, recorded with
+`source = "reported"` and `unit = "bobcoins"`. Bob's documentation does not state the unit of
+`session_costs`; treating it as Bobcoins is unverified until reconciled with the Bobcoin balance
+(Phase 3 results). Only `compute.estimated_cost_usd` is a currency figure (Code Engine compute,
+`null` until rates are looked up and put in `reviewer/config/`). The hidden marker keeps cumulative
+totals only (runs, summed `bob_usage.total` as `cost_total.bobcoins`, summed seconds).
 
 ## 7. Audit log line
 

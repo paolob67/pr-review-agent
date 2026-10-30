@@ -4,7 +4,7 @@ Reference implementation and write-up for running IBM Bob Shell as an advisory p
 reviewer on IBM Cloud Code Engine (Frankfurt, `eu-de`), triggered from GitHub Actions after the
 team's CI has passed. Comments are marked "AI Assisted"; a human makes the final decision.
 
-Status: Phase 2 complete (offline reviewer core with tests). See [docs/STATUS.md](docs/STATUS.md).
+Status: Phase 3 complete (reviewer core runs against the real Bob locally). See [docs/STATUS.md](docs/STATUS.md).
 
 Run the offline test suite:
 

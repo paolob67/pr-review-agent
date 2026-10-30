@@ -1,0 +1,31 @@
+diff --git a/src/users.js b/src/users.js
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/users.js
+@@ -0,0 +1,9 @@
++export async function findUser(db, req) {
++  const name = req.query.name;
++  const sql = "SELECT id, email FROM users WHERE name = '" + name + "'";
++  return db.query(sql);
++}
++
++export async function findUserSafe(db, req) {
++  return db.query('SELECT id, email FROM users WHERE name = $1', [req.query.name]);
++}
+diff --git a/test/users.test.js b/test/users.test.js
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/test/users.test.js
+@@ -0,0 +1,10 @@
++import { test } from 'node:test';
++import assert from 'node:assert/strict';
++import { findUserSafe } from '../src/users.js';
++
++test('findUserSafe passes the value as a parameter', async () => {
++  let seen;
++  const db = { query: async (sql, params) => { seen = params; return []; } };
++  await findUserSafe(db, { query: { name: "x' OR '1'='1" } });
++  assert.deepEqual(seen, ["x' OR '1'='1"]);
++});

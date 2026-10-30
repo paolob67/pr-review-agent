@@ -131,7 +131,7 @@ Every execution generates a machine-readable cost record (G37) containing:
 * Repository name, PR number, commit SHA, and job run ID.
 * Input metrics: changed file count, diff bytes, prompt bytes.
 * Output metrics: findings kept, findings dropped.
-* Bob usage: reported session cost in USD (`stats.session_costs` from Bob JSON output).
+* Bob usage: reported usage in Bobcoins (`stats.session_costs` from Bob JSON output).
 * Execution timing: total duration and Bob inference duration in seconds.
 
 The cumulative cost and run count across all reviews of a given PR are preserved in a hidden HTML

@@ -1,0 +1,94 @@
+{
+  "fixture": "03-team-rule-violation",
+  "label": "base",
+  "exitCode": 0,
+  "wallMs": 15706,
+  "kept": [
+    {
+      "category": "standards",
+      "severity": "medium",
+      "title": "Tests lack failure and security-relevant cases",
+      "file": "test/token.test.js",
+      "line": 6,
+      "confidence": "medium",
+      "rule_id": "STD-006"
+    },
+    {
+      "category": "standards",
+      "severity": "low",
+      "title": "Public functions lack doc comments",
+      "file": "src/token.js",
+      "line": 3,
+      "confidence": "medium",
+      "rule_id": "STD-009"
+    },
+    {
+      "category": "team_rule",
+      "severity": "high",
+      "title": "Session token generated with Math.random()",
+      "file": "src/token.js",
+      "line": 4,
+      "confidence": "high",
+      "rule_id": "TEAM-003"
+    },
+    {
+      "category": "team_rule",
+      "severity": "medium",
+      "title": "MD5 hard-coded at call site",
+      "file": "src/token.js",
+      "line": 8,
+      "confidence": "high",
+      "rule_id": "TEAM-002"
+    }
+  ],
+  "checks": [
+    [
+      "outcome",
+      true,
+      "reviewed vs reviewed"
+    ],
+    [
+      "cites_expected_rule",
+      true,
+      "STD-006,STD-009,TEAM-003,TEAM-002"
+    ]
+  ],
+  "pass": true,
+  "cost": {
+    "schema_version": 1,
+    "repo": "owner/sandbox",
+    "pr": 1,
+    "head_sha": "cccccccccccccccccccccccccccccccccccccccc",
+    "run_id": "local-test",
+    "bob_shell_version": "2.0.9",
+    "image_digest": null,
+    "inputs": {
+      "files": 2,
+      "diff_bytes": 854,
+      "prompt_bytes": 9891
+    },
+    "output": {
+      "bytes": 3539,
+      "findings_kept": 4,
+      "findings_dropped": 0
+    },
+    "bob_usage": {
+      "source": "reported",
+      "unit": "bobcoins",
+      "input": null,
+      "output": null,
+      "total": 0.04879
+    },
+    "duration_seconds": {
+      "total": 15.699,
+      "bob": 13.149
+    },
+    "compute": {
+      "vcpu": 1,
+      "memory_gb": 4,
+      "estimated_cost_usd": null,
+      "rates_version": "1.0.0"
+    },
+    "outcome": "reviewed"
+  }
+}

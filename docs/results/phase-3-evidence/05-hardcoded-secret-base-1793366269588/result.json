@@ -1,0 +1,104 @@
+{
+  "fixture": "05-hardcoded-secret",
+  "label": "base",
+  "exitCode": 0,
+  "wallMs": 14761,
+  "kept": [
+    {
+      "category": "standards",
+      "severity": "high",
+      "title": "Hard-coded database password in source",
+      "file": "src/config.js",
+      "line": 4,
+      "confidence": "high",
+      "rule_id": "STD-001"
+    },
+    {
+      "category": "standards",
+      "severity": "high",
+      "title": "Hard-coded API token in source",
+      "file": "src/config.js",
+      "line": 5,
+      "confidence": "high",
+      "rule_id": "STD-001"
+    },
+    {
+      "category": "standards",
+      "severity": "low",
+      "title": "No validation of configuration values",
+      "file": "src/config.js",
+      "line": 1,
+      "confidence": "medium",
+      "rule_id": "STD-003"
+    },
+    {
+      "category": "standards",
+      "severity": "low",
+      "title": "Test covers only a trivial success path",
+      "file": "test/config.test.js",
+      "line": 5,
+      "confidence": "medium",
+      "rule_id": "STD-006"
+    }
+  ],
+  "checks": [
+    [
+      "outcome",
+      true,
+      "reviewed vs reviewed"
+    ],
+    [
+      "cites_expected_rule",
+      true,
+      "STD-001,STD-001,STD-003,STD-006"
+    ],
+    [
+      "min_severity",
+      true,
+      "high,high,low,low"
+    ],
+    [
+      "cites_real_line",
+      true,
+      "src/config.js:4,src/config.js:5,src/config.js:1,test/config.test.js:5"
+    ]
+  ],
+  "pass": true,
+  "cost": {
+    "schema_version": 1,
+    "repo": "owner/sandbox",
+    "pr": 1,
+    "head_sha": "cccccccccccccccccccccccccccccccccccccccc",
+    "run_id": "local-test",
+    "bob_shell_version": "2.0.9",
+    "image_digest": null,
+    "inputs": {
+      "files": 2,
+      "diff_bytes": 649,
+      "prompt_bytes": 9688
+    },
+    "output": {
+      "bytes": 3232,
+      "findings_kept": 4,
+      "findings_dropped": 0
+    },
+    "bob_usage": {
+      "source": "reported",
+      "unit": "bobcoins",
+      "input": null,
+      "output": null,
+      "total": 0.04826
+    },
+    "duration_seconds": {
+      "total": 14.758,
+      "bob": 12.231
+    },
+    "compute": {
+      "vcpu": 1,
+      "memory_gb": 4,
+      "estimated_cost_usd": null,
+      "rates_version": "1.0.0"
+    },
+    "outcome": "reviewed"
+  }
+}

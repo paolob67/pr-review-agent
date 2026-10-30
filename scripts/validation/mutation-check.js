@@ -36,7 +36,7 @@ export const MUTATIONS = [
   { id: 'G10', file: 'reviewer/src/main.js', find: 'if (!config.enabled) {', replace: 'if (false) {', tests: [P], desc: 'Kill switch ignored' },
   { id: 'G13', file: 'reviewer/src/runBob.js', find: "try { child.kill('SIGKILL'); } catch { /* already exited */ }", replace: '/* kill disabled */', tests: [U('runBob')], desc: 'Timeout no longer kills the Bob process' },
   { id: 'G14a', file: 'reviewer/src/gate.js', find: 'export function checkBudget(runs, config) {', replace: 'export function checkBudget(runs, config) {\n  return null;', tests: [U('gate'), P], desc: 'Budget gate always passes' },
-  { id: 'G14b', file: 'reviewer/src/render.js', find: 'usd: +(priorCostUsd + (costRecord?.bob_usage?.total ?? 0)).toFixed(6),\n  };', replace: 'usd: null,\n  };', tests: [U('render'), P], desc: 'Cumulative spend is not carried into the marker' },
+  { id: 'G14b', file: 'reviewer/src/render.js', find: 'bobcoins: +(priorCostBobcoins + (costRecord?.bob_usage?.total ?? 0)).toFixed(6),\n  };', replace: 'bobcoins: null,\n  };', tests: [U('render'), P], desc: 'Cumulative spend is not carried into the marker' },
   { id: 'G15', file: 'reviewer/src/redact.js', find: "if (typeof diff !== 'string') return diff;", replace: 'return diff;', tests: [U('redact'), P], desc: 'Diff is not redacted' },
   { id: 'G16a', file: 'reviewer/src/validate.js', find: 'if (parsed.schema_version !== 1) {', replace: 'if (false) {', tests: [U('validate')], desc: 'schema_version not checked' },
   { id: 'G16b', file: 'reviewer/src/parseOutput.js', find: "throw new ParseError('No result JSON line found in Bob stdout');", replace: 'return { parsed: { schema_version: 1, findings: [] }, stats: null };', tests: [U('parseOutput'), P], desc: 'Missing result line yields an empty review' },
@@ -62,7 +62,7 @@ export const MUTATIONS = [
   { id: 'G36b', file: 'reviewer/src/triage.js', find: 'if (categoryCounts[cat] <= maxPerCategory) {', replace: 'if (true) {', tests: [U('triage')], desc: 'Per-category cap removed' },
   { id: 'G36c', file: 'reviewer/src/triage.js', find: 'if (!seen.has(key)) {', replace: 'if (true) {', tests: [U('triage')], desc: 'De-duplication removed' },
   { id: 'G36d', file: 'reviewer/src/validate.js', find: 'if (!ruleIds.has(f.rule_id)) {', replace: 'if (false) {', tests: [U('validate')], desc: 'Unknown rule IDs accepted' },
-  { id: 'G14c', file: 'reviewer/src/main.js', find: 'const priorSpend = existingMeta?.cost_total?.usd ?? 0;', replace: 'const priorSpend = 0;', tests: [P], desc: 'Prior spend ignored when counting the per-PR total' },
+  { id: 'G14c', file: 'reviewer/src/main.js', find: 'const priorSpend = existingMeta?.cost_total?.bobcoins ?? 0;', replace: 'const priorSpend = 0;', tests: [P], desc: 'Prior spend ignored when counting the per-PR total' },
   { id: 'G37', file: 'reviewer/src/cost.js', find: "total: typeof stats.session_costs === 'number' ? stats.session_costs : null,", replace: 'total: null,', tests: [U('cost'), P], desc: 'Reported Bob cost dropped from the record' },
 ];
 

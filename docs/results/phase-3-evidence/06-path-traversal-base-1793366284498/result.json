@@ -1,0 +1,131 @@
+{
+  "fixture": "06-path-traversal",
+  "label": "base",
+  "exitCode": 0,
+  "wallMs": 23717,
+  "kept": [
+    {
+      "category": "security",
+      "severity": "critical",
+      "title": "Path traversal via unvalidated req.query.file in join()",
+      "file": "src/download.js",
+      "line": 7,
+      "confidence": "high",
+      "rule_id": null
+    },
+    {
+      "category": "standards",
+      "severity": "high",
+      "title": "Path built from user input is not checked to stay inside the base directory",
+      "file": "src/download.js",
+      "line": 7,
+      "confidence": "high",
+      "rule_id": "STD-004"
+    },
+    {
+      "category": "standards",
+      "severity": "medium",
+      "title": "No validation of type, length or format of req.query.file",
+      "file": "src/download.js",
+      "line": 7,
+      "confidence": "high",
+      "rule_id": "STD-003"
+    },
+    {
+      "category": "standards",
+      "severity": "medium",
+      "title": "readFile failures are unhandled",
+      "file": "src/download.js",
+      "line": 8,
+      "confidence": "high",
+      "rule_id": "STD-005"
+    },
+    {
+      "category": "standards",
+      "severity": "medium",
+      "title": "Test does not cover behaviour or any failure case",
+      "file": "test/download.test.js",
+      "line": 5,
+      "confidence": "high",
+      "rule_id": "STD-006"
+    },
+    {
+      "category": "standards",
+      "severity": "low",
+      "title": "Exported function lacks a doc comment",
+      "file": "src/download.js",
+      "line": 6,
+      "confidence": "medium",
+      "rule_id": "STD-009"
+    },
+    {
+      "category": "team_rule",
+      "severity": "low",
+      "title": "New public endpoint handler added without documentation",
+      "file": "src/download.js",
+      "line": 6,
+      "confidence": "medium",
+      "rule_id": "TEAM-006"
+    }
+  ],
+  "checks": [
+    [
+      "outcome",
+      true,
+      "reviewed vs reviewed"
+    ],
+    [
+      "cites_expected_rule",
+      true,
+      ",STD-004,STD-003,STD-005,STD-006,STD-009,TEAM-006"
+    ],
+    [
+      "min_severity",
+      true,
+      "critical,high,medium,medium,medium,low,low"
+    ],
+    [
+      "cites_real_line",
+      true,
+      "src/download.js:7,src/download.js:7,src/download.js:7,src/download.js:8,test/download.test.js:5,src/download.js:6,src/download.js:6"
+    ]
+  ],
+  "pass": true,
+  "cost": {
+    "schema_version": 1,
+    "repo": "owner/sandbox",
+    "pr": 1,
+    "head_sha": "cccccccccccccccccccccccccccccccccccccccc",
+    "run_id": "local-test",
+    "bob_shell_version": "2.0.9",
+    "image_digest": null,
+    "inputs": {
+      "files": 2,
+      "diff_bytes": 793,
+      "prompt_bytes": 9836
+    },
+    "output": {
+      "bytes": 5470,
+      "findings_kept": 7,
+      "findings_dropped": 0
+    },
+    "bob_usage": {
+      "source": "reported",
+      "unit": "bobcoins",
+      "input": null,
+      "output": null,
+      "total": 0.049836
+    },
+    "duration_seconds": {
+      "total": 23.713,
+      "bob": 21.313
+    },
+    "compute": {
+      "vcpu": 1,
+      "memory_gb": 4,
+      "estimated_cost_usd": null,
+      "rates_version": "1.0.0"
+    },
+    "outcome": "reviewed"
+  }
+}

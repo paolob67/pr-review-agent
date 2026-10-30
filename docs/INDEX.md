@@ -27,6 +27,7 @@
 | [adr/0007-cost-record-and-cap-semantics.md](adr/0007-cost-record-and-cap-semantics.md) | Cost record schema, per-PR cap (daily caps superseded by 0009) | Accepted |
 | [adr/0009-drop-daily-caps.md](adr/0009-drop-daily-caps.md) | Daily run and spend caps dropped | Accepted |
 | [adr/0010-scratch-layout-stdin.md](adr/0010-scratch-layout-stdin.md) | Prompt on stdin; scratch holds only the mode file | Accepted |
+| [adr/0011-bobcoins-as-usage-unit.md](adr/0011-bobcoins-as-usage-unit.md) | Bob usage recorded in Bobcoins, no currency conversion | Accepted |
 | [adr/0008-scm-identity-for-comments.md](adr/0008-scm-identity-for-comments.md) | Dedicated bot account, comment-only scope | Accepted |
 | [diagrams/architecture-overview.drawio](diagrams/architecture-overview.drawio) | Architecture overview (source; PNG alongside) | Current |
 | [diagrams/trust-boundaries.drawio](diagrams/trust-boundaries.drawio) | Trust boundaries diagram (source; PNG alongside) | Current |
@@ -37,6 +38,8 @@
 | [results/spikes.md](results/spikes.md) | Phase 0 spike findings: S1-S10, S13, S14; gate decisions | Phase 0 done 2026-10-30 |
 | [results/phase-1-signoff.md](results/phase-1-signoff.md) | Phase 1 sign-off record and policy decisions | Phase 1 done 2026-10-30 |
 | [results/phase-2-results.md](results/phase-2-results.md) | Phase 2 test counts, guardrails covered, design notes | Phase 2 done 2026-10-30 |
+| [results/phase-3-runs.md](results/phase-3-runs.md) | Phase 3 real-Bob runs: pass rate, usage, latency, hostile-config check | Phase 3 done 2026-10-30 |
+| [results/phase-3-evidence/](results/phase-3-evidence/) | Saved comment, result and argv per run, plus the budget ledger | Phase 3 done 2026-10-30 |
 | [results/mutation-check.md](results/mutation-check.md) | Mutation check results (real patch-and-run, 39 mutations) | Phase 2 done 2026-10-30 |
 | [scripts/spikes/s1-installer.sh](../scripts/spikes/s1-installer.sh) | S1: installer inspection script | Phase 0 |
 | [scripts/spikes/s2-s5-readonly.sh](../scripts/spikes/s2-s5-readonly.sh) | S2/S5: non-interactive flags and read-only enforcement | Phase 0 |

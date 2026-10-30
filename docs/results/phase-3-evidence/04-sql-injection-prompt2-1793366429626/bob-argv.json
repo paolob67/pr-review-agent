@@ -1,0 +1,1 @@
+["run","--workspace","/var/folders/l9/rv605whx5bs2krw788fyx4kr0000gn/T/pr-review-eL7WjQ","--mode","reviewer","--disable-tool-groups","edit,execute","--disable-mcp","-f","json","--log-level","silent"]

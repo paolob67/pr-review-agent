@@ -101,4 +101,30 @@ export function runBob({ bobBin, scratchDir, promptText, timeoutSeconds, parentE
   });
 }
 
+// getBobVersion returns the version string from `bob --version` (first line), or null. (G37)
+// Uses the same scrubbed environment as the review run. Never throws; null on any problem.
+export function getBobVersion({ bobBin, parentEnv, timeoutSeconds = 15 }) {
+  return new Promise((resolve) => {
+    let out = '';
+    let child;
+    try {
+      child = spawn(bobBin, ['--version'], {
+        env: buildBobEnv(parentEnv ?? process.env),
+        stdio: ['ignore', 'pipe', 'ignore'],
+      });
+    } catch {
+      resolve(null);
+      return;
+    }
+    const timer = setTimeout(() => { try { child.kill('SIGKILL'); } catch { /* gone */ } }, timeoutSeconds * 1000);
+    child.stdout.on('data', c => { out += c.toString(); });
+    child.on('error', () => { clearTimeout(timer); resolve(null); });
+    child.on('close', () => {
+      clearTimeout(timer);
+      const first = out.split('\n')[0].trim();
+      resolve(/^\d+\.\d+\.\d+[\w.+-]*$/.test(first) ? first : null);
+    });
+  });
+}
+
 export default runBob;

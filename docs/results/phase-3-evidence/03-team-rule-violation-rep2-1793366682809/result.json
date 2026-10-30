@@ -1,0 +1,94 @@
+{
+  "fixture": "03-team-rule-violation",
+  "label": "rep2",
+  "exitCode": 0,
+  "wallMs": 15258,
+  "kept": [
+    {
+      "category": "standards",
+      "severity": "medium",
+      "title": "Tests lack failure cases and property checks",
+      "file": "test/token.test.js",
+      "line": 6,
+      "confidence": "medium",
+      "rule_id": "STD-006"
+    },
+    {
+      "category": "standards",
+      "severity": "low",
+      "title": "Exported functions lack doc comments",
+      "file": "src/token.js",
+      "line": 3,
+      "confidence": "medium",
+      "rule_id": "STD-009"
+    },
+    {
+      "category": "team_rule",
+      "severity": "high",
+      "title": "Session token generated with Math.random()",
+      "file": "src/token.js",
+      "line": 4,
+      "confidence": "high",
+      "rule_id": "TEAM-003"
+    },
+    {
+      "category": "team_rule",
+      "severity": "high",
+      "title": "Hard-coded MD5 used for fingerprint",
+      "file": "src/token.js",
+      "line": 8,
+      "confidence": "high",
+      "rule_id": "TEAM-002"
+    }
+  ],
+  "checks": [
+    [
+      "outcome",
+      true,
+      "reviewed vs reviewed"
+    ],
+    [
+      "cites_expected_rule",
+      true,
+      "STD-006,STD-009,TEAM-003,TEAM-002"
+    ]
+  ],
+  "pass": true,
+  "cost": {
+    "schema_version": 1,
+    "repo": "owner/sandbox",
+    "pr": 1,
+    "head_sha": "cccccccccccccccccccccccccccccccccccccccc",
+    "run_id": "local-test",
+    "bob_shell_version": "2.0.9",
+    "image_digest": null,
+    "inputs": {
+      "files": 2,
+      "diff_bytes": 854,
+      "prompt_bytes": 10167
+    },
+    "output": {
+      "bytes": 3526,
+      "findings_kept": 4,
+      "findings_dropped": 0
+    },
+    "bob_usage": {
+      "source": "reported",
+      "unit": "bobcoins",
+      "input": null,
+      "output": null,
+      "total": 0.049066
+    },
+    "duration_seconds": {
+      "total": 15.254,
+      "bob": 12.871
+    },
+    "compute": {
+      "vcpu": 1,
+      "memory_gb": 4,
+      "estimated_cost_usd": null,
+      "rates_version": "1.0.0"
+    },
+    "outcome": "reviewed"
+  }
+}

@@ -1,0 +1,32 @@
+diff --git a/src/token.js b/src/token.js
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/token.js
+@@ -0,0 +1,9 @@
++import { createHash } from 'node:crypto';
++
++export function newSessionToken() {
++  return Math.random().toString(36).slice(2);
++}
++
++export function fingerprint(data) {
++  return createHash('md5').update(data).digest('hex');
++}
+diff --git a/test/token.test.js b/test/token.test.js
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/test/token.test.js
+@@ -0,0 +1,11 @@
++import { test } from 'node:test';
++import assert from 'node:assert/strict';
++import { newSessionToken, fingerprint } from '../src/token.js';
++
++test('token is a non-empty string', () => {
++  assert.ok(newSessionToken().length > 0);
++});
++
++test('fingerprint is stable', () => {
++  assert.equal(fingerprint('a'), fingerprint('a'));
++});

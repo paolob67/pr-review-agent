@@ -8,7 +8,7 @@ import { renderComment, renderUnavailableComment, parseMarker } from '../../revi
 
 const SHA = 'a'.repeat(40);
 const COST_RECORD = {
-  bob_usage: { source: 'reported', unit: 'usd', total: 0.042 },
+  bob_usage: { source: 'reported', unit: 'bobcoins', total: 0.042 },
   duration_seconds: { total: 10.0, bob: 8.0 },
 };
 const OUTPUT = {
@@ -76,14 +76,14 @@ describe('render.js (G18, G19, G35)', () => {
   });
 
   it('G14: marker cost_total is cumulative (prior spend plus this run)', () => {
-    const comment = renderComment({ headSha: SHA, runs: 2, costRecord: COST_RECORD, output: OUTPUT, rulesStatus: {}, bobVersion: null, runId: 'r1', priorCostUsd: 0.1 });
+    const comment = renderComment({ headSha: SHA, runs: 2, costRecord: COST_RECORD, output: OUTPUT, rulesStatus: {}, bobVersion: null, runId: 'r1', priorCostBobcoins: 0.1 });
     const meta = parseMarker(comment);
-    assert.equal(meta.cost_total.usd, 0.142);
+    assert.equal(meta.cost_total.bobcoins, 0.142);
     assert.equal(meta.runs, 2);
   });
 
   it('G14: unavailable note keeps the cumulative spend in the marker', () => {
-    const comment = renderUnavailableComment({ headSha: SHA, runs: 3, costRecord: null, outcome: 'bob_unavailable', detail: 'x', priorCostUsd: 0.25 });
-    assert.equal(parseMarker(comment).cost_total.usd, 0.25);
+    const comment = renderUnavailableComment({ headSha: SHA, runs: 3, costRecord: null, outcome: 'bob_unavailable', detail: 'x', priorCostBobcoins: 0.25 });
+    assert.equal(parseMarker(comment).cost_total.bobcoins, 0.25);
   });
 });

@@ -300,7 +300,7 @@ job writes its own cost record regardless.
 | S4 | How do trusted folders behave non-interactively? | G29 | Answered (v2): trusted folders do NOT control tool availability in v2; `--disable-tool-groups` is the mechanism; `--workspace` controls project config scope. |
 | S5 | What happens when the model tries a disallowed tool? | G4 test oracle | Answered (v2): with `--disable-tool-groups edit,execute`, write tools absent; stats.tool_calls=0; exit code 0. |
 | S6 | Exit codes and error output for auth failure, quota exhaustion, timeout | Failure handling | Answered (v2): auth failure exit 1 + plain text to stderr; empty prompt exit 1; budget overrun exit 0; API key env var is BOB_API_KEY. |
-| S7 | Does a non-interactive run report token or Bobcoin usage anywhere? | G14, G37, cost section of the article | Answered (v2): stats.session_costs (USD) in `-f json` result. No token breakdown. No Bobcoin counter. |
+| S7 | Does a non-interactive run report token or Bobcoin usage anywhere? | G14, G37, cost section of the article | Answered (v2): stats.session_costs in `-f json` result, recorded as Bobcoins (ADR 0011; unit unverified). No token breakdown. |
 | S8 | Can Bob read files outside the workspace, and can stdin carry a large prompt? | Prompt delivery design | Answered (v2): outside-workspace file access denied; stdin works for large prompts (200KB tested); deliver diff via stdin. |
 | S9 | Which system packages does Bob need beyond Node? | Dockerfile | Answered (v2): Node 22+ (24+ preferred); npm; package is @ibm/bob. Verify in Phase 4. |
 | S10 | Rate and concurrency limits on one API key | Parallel PR handling | Unresolved: no documentation found. Assume one-at-a-time; verify empirically in Phase 3. |

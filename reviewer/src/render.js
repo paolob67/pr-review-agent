@@ -52,11 +52,11 @@ function renderSection(title, findings) {
 
 // renderComment builds the full comment string per CONTRACTS section 5. (G18, G35)
 export function renderComment({
-  headSha, runs, costRecord, output, rulesStatus, bobVersion, runId, priorCostUsd = 0,
+  headSha, runs, costRecord, output, rulesStatus, bobVersion, runId, priorCostBobcoins = 0,
 }) {
   // Cumulative PR cost: spend of earlier runs (from the previous marker) plus this run. (G14, G37)
   const costTotal = {
-    usd: +(priorCostUsd + (costRecord?.bob_usage?.total ?? 0)).toFixed(6),
+    bobcoins: +(priorCostBobcoins + (costRecord?.bob_usage?.total ?? 0)).toFixed(6),
   };
   const marker = buildMarker(headSha, runs, costTotal);
 
@@ -106,22 +106,22 @@ export function renderComment({
   const runIdStr = runId ?? 'n/a';
   const stdStatus  = rulesStatus?.standards  ? 'yes' : 'no';
   const teamStatus = rulesStatus?.teamRules  ? 'yes' : 'no';
-  const costBobUsd  = costRecord?.bob_usage?.total;
-  const costThisRun = costBobUsd != null ? `$${costBobUsd.toFixed(4)} USD (reported)` : '$0.0000 USD (not reported)';
-  const prTotalUsd  = `$${costTotal.usd.toFixed(4)} USD`;
+  const costBobcoins = costRecord?.bob_usage?.total;
+  const costThisRun  = costBobcoins != null ? `${costBobcoins.toFixed(4)} Bobcoins (reported)` : 'not reported';
+  const prTotal      = `${costTotal.bobcoins.toFixed(4)} Bobcoins`;
 
   parts.push('');
   parts.push('---');
   parts.push(`Reviewed commit \`${shortSha}\` | ${versionStr} | run ${runIdStr} | rules: standards ${stdStatus}, team ${teamStatus}`);
-  parts.push(`Cost this run: ${costThisRun}, PR total: ${prTotalUsd} over ${runs} run(s). AI Assisted, advisory only.`);
+  parts.push(`Cost this run: ${costThisRun}, PR total: ${prTotal} over ${runs} run(s). AI Assisted, advisory only.`);
 
   return parts.join('\n');
 }
 
 // renderUnavailableComment builds a short "review unavailable" note. (G18, G35)
-export function renderUnavailableComment({ headSha, runs, costRecord, outcome, detail, priorCostUsd = 0 }) {
+export function renderUnavailableComment({ headSha, runs, costRecord, outcome, detail, priorCostBobcoins = 0 }) {
   // Keep the cumulative spend even when this run produced no review. (G14, G37)
-  const costTotal = { usd: +(priorCostUsd + (costRecord?.bob_usage?.total ?? 0)).toFixed(6) };
+  const costTotal = { bobcoins: +(priorCostBobcoins + (costRecord?.bob_usage?.total ?? 0)).toFixed(6) };
   const marker = buildMarker(headSha, runs, costTotal);
   const shortSha = typeof headSha === 'string' ? headSha.slice(0, 7) : 'unknown';
   const parts = [

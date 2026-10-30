@@ -1,0 +1,428 @@
+diff --git a/src/format/group1.js b/src/format/group1.js
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/format/group1.js
+@@ -0,0 +1,95 @@
++// Formats value 1 of group 1.
++export function format1x1(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 2 of group 1.
++export function format1x2(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 3 of group 1.
++export function format1x3(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 4 of group 1.
++export function format1x4(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 5 of group 1.
++export function format1x5(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 6 of group 1.
++export function format1x6(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 7 of group 1.
++export function format1x7(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 8 of group 1.
++export function format1x8(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 9 of group 1.
++export function format1x9(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 10 of group 1.
++export function format1x10(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 11 of group 1.
++export function format1x11(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 12 of group 1.
++export function format1x12(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
+diff --git a/src/format/group2.js b/src/format/group2.js
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/format/group2.js
+@@ -0,0 +1,95 @@
++// Formats value 1 of group 2.
++export function format2x1(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 2 of group 2.
++export function format2x2(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 3 of group 2.
++export function format2x3(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 4 of group 2.
++export function format2x4(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 5 of group 2.
++export function format2x5(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 6 of group 2.
++export function format2x6(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 7 of group 2.
++export function format2x7(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 8 of group 2.
++export function format2x8(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 9 of group 2.
++export function format2x9(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 10 of group 2.
++export function format2x10(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 11 of group 2.
++export function format2x11(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 12 of group 2.
++export function format2x12(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
+diff --git a/src/format/group3.js b/src/format/group3.js
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/format/group3.js
+@@ -0,0 +1,95 @@
++// Formats value 1 of group 3.
++export function format3x1(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 2 of group 3.
++export function format3x2(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 3 of group 3.
++export function format3x3(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 4 of group 3.
++export function format3x4(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 5 of group 3.
++export function format3x5(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 6 of group 3.
++export function format3x6(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 7 of group 3.
++export function format3x7(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 8 of group 3.
++export function format3x8(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 9 of group 3.
++export function format3x9(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 10 of group 3.
++export function format3x10(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 11 of group 3.
++export function format3x11(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 12 of group 3.
++export function format3x12(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
+diff --git a/src/format/group4.js b/src/format/group4.js
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/format/group4.js
+@@ -0,0 +1,95 @@
++// Formats value 1 of group 4.
++export function format4x1(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 2 of group 4.
++export function format4x2(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 3 of group 4.
++export function format4x3(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 4 of group 4.
++export function format4x4(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 5 of group 4.
++export function format4x5(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 6 of group 4.
++export function format4x6(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 7 of group 4.
++export function format4x7(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 8 of group 4.
++export function format4x8(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 9 of group 4.
++export function format4x9(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 10 of group 4.
++export function format4x10(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 11 of group 4.
++export function format4x11(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
++
++// Formats value 12 of group 4.
++export function format4x12(value) {
++  if (value === null || value === undefined) {
++    return '';
++  }
++  return String(value).trim();
++}
+diff --git a/src/format/index.js b/src/format/index.js
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/format/index.js
+@@ -0,0 +1,4 @@
++export * from './group1.js';
++export * from './group2.js';
++export * from './group3.js';
++export * from './group4.js';
+diff --git a/test/format.test.js b/test/format.test.js
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/test/format.test.js
+@@ -0,0 +1,8 @@
++import { test } from 'node:test';
++import assert from 'node:assert/strict';
++import { format1x1, format4x12 } from '../src/format/index.js';
++
++test('formatters trim and tolerate null', () => {
++  assert.equal(format1x1('  a '), 'a');
++  assert.equal(format4x12(null), '');
++});

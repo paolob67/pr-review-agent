@@ -1,0 +1,85 @@
+{
+  "fixture": "07-large-refactor",
+  "label": "base",
+  "exitCode": 0,
+  "wallMs": 15008,
+  "kept": [
+    {
+      "category": "standards",
+      "severity": "medium",
+      "title": "48 duplicated formatter functions with identical bodies",
+      "file": "src/format/group1.js",
+      "line": 2,
+      "confidence": "high",
+      "rule_id": "STD-008"
+    },
+    {
+      "category": "standards",
+      "severity": "medium",
+      "title": "Tests cover only 2 of 48 new functions",
+      "file": "test/format.test.js",
+      "line": 5,
+      "confidence": "high",
+      "rule_id": "STD-006"
+    },
+    {
+      "category": "standards",
+      "severity": "low",
+      "title": "Comments restate the function name and omit inputs and outputs",
+      "file": "src/format/group1.js",
+      "line": 1,
+      "confidence": "medium",
+      "rule_id": "STD-009"
+    }
+  ],
+  "checks": [
+    [
+      "outcome",
+      true,
+      "reviewed vs reviewed"
+    ],
+    [
+      "no_high_severity_false_positive",
+      true,
+      "0 high+"
+    ]
+  ],
+  "pass": true,
+  "cost": {
+    "schema_version": 1,
+    "repo": "owner/sandbox",
+    "pr": 1,
+    "head_sha": "cccccccccccccccccccccccccccccccccccccccc",
+    "run_id": "local-test",
+    "bob_shell_version": "2.0.9",
+    "image_digest": null,
+    "inputs": {
+      "files": 6,
+      "diff_bytes": 9714,
+      "prompt_bytes": 18847
+    },
+    "output": {
+      "bytes": 2861,
+      "findings_kept": 3,
+      "findings_dropped": 0
+    },
+    "bob_usage": {
+      "source": "reported",
+      "unit": "bobcoins",
+      "input": null,
+      "output": null,
+      "total": 0.055372
+    },
+    "duration_seconds": {
+      "total": 15.005,
+      "bob": 12.532
+    },
+    "compute": {
+      "vcpu": 1,
+      "memory_gb": 4,
+      "estimated_cost_usd": null,
+      "rates_version": "1.0.0"
+    },
+    "outcome": "reviewed"
+  }
+}

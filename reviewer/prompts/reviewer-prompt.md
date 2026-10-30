@@ -30,7 +30,7 @@ Do NOT:
       "title": "string, at most 120 characters",
       "evidence": "string, at most 400 characters: quote or describe the specific code",
       "explanation": "string, at most 800 characters: why this is a problem",
-      "proposed_fix": "string or null, at most 1500 characters: text or a unified diff"
+      "proposed_fix": "string or null, at most 1500 characters: ONLY code or a unified diff; null if you cannot give code"
     }
   ],
   "needs_human_attention": [
@@ -58,6 +58,9 @@ Do NOT:
    quality/maintainability issue; `low` = style or minor; `info` = observation.
 6. Do not report findings on files not shown in the diff.
 7. Keep the total number of findings reasonable (aim for quality over quantity; at most 15).
+8. `proposed_fix` is rendered inside a code fence. It must contain only code or a unified diff
+   (lines starting with `+` and `-`). Never put advice or prose in it; put advice in `explanation`.
+   Use `null` when you cannot write the code.
 
 ## Security review focus
 

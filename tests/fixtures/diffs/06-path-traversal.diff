@@ -1,0 +1,29 @@
+diff --git a/src/download.js b/src/download.js
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/download.js
+@@ -0,0 +1,10 @@
++import { readFile } from 'node:fs/promises';
++import { join } from 'node:path';
++
++const BASE = '/srv/app/uploads';
++
++export async function download(req, res) {
++  const target = join(BASE, req.query.file);
++  const data = await readFile(target);
++  res.end(data);
++}
+diff --git a/test/download.test.js b/test/download.test.js
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/test/download.test.js
+@@ -0,0 +1,7 @@
++import { test } from 'node:test';
++import assert from 'node:assert/strict';
++import { download } from '../src/download.js';
++
++test('download is a function', () => {
++  assert.equal(typeof download, 'function');
++});

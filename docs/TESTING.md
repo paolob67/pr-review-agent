@@ -157,3 +157,18 @@ The following suites require real credentials and are not run by `make test`:
 
 These are defined in separate Makefile targets and documented in `docs/TESTING.md` as they are
 added.
+
+## Live local runs (Phase 3, not part of `make test`)
+
+These call the real Bob and spend Bobcoins. They are never run by default and a ledger refuses calls
+past 60 calls or 24 Bobcoins (80 percent of 30).
+
+```bash
+node scripts/dev/review-local.js --status         # ledger: calls and Bobcoins used
+node scripts/dev/review-local.js 04               # one fixture through the full pipeline, real Bob
+node scripts/dev/review-local.js 11 --hostile     # hostile-parent-directory check
+node scripts/dev/review-local.js 04 --fake valid  # same driver, fake-bob, no cost
+```
+
+The key is read from the git-ignored `pr-review-agent.json` or `BOB_API_KEY`. Results:
+[results/phase-3-runs.md](results/phase-3-runs.md).

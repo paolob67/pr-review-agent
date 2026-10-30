@@ -13,6 +13,12 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+// `bob --version` probe: answer immediately, never read the scenario.
+if (process.argv.includes('--version')) {
+  process.stdout.write((process.env.FAKE_BOB_VERSION ?? '0.0.0-fake') + '\ncommit: fake\n');
+  process.exit(0);
+}
+
 // Print env to stderr if requested (canary: SCM tokens must not appear).
 if (process.env.FAKE_BOB_PRINT_ENV) {
   process.stderr.write('FAKE_BOB_ENV_DUMP:' + JSON.stringify(process.env) + '\n');

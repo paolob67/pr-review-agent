@@ -1,0 +1,19 @@
+diff --git a/README.md b/README.md
+index 1111111..2222222 100644
+--- a/README.md
++++ b/README.md
+@@ -10,4 +10,4 @@
+ ## Usage
+ 
+-Run the tool.
++Run the tool with `--help` to see options.
+ 
+diff --git a/docs/guide.md b/docs/guide.md
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/docs/guide.md
+@@ -0,0 +1,3 @@
++# Guide
++
++This guide explains the options.

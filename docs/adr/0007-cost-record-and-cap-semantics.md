@@ -15,13 +15,13 @@ their pull requests.
 1. **Per-Run Cost Record (Guardrail G37)**:
    * Every execution builds a machine-readable JSON cost record with schema version 1.
    * Tracks changed files count, diff byte size, prompt bytes, findings count (kept vs dropped),
-     Bob inference duration, total runtime duration, and reported Bob inference cost in USD.
-   * In Bob Shell v2, `stats.session_costs` (USD float) is reported directly in the `-f json` output
-     and recorded with `bob_usage.source = "reported"` and `bob_usage.unit = "usd"`.
+     Bob inference duration, total runtime duration, and reported Bob usage in Bobcoins (see ADR 0011).
+   * In Bob Shell v2, `stats.session_costs` (a float; Bobcoins per ADR 0011) is reported directly in the `-f json` output
+     and recorded with `bob_usage.source = "reported"` and `bob_usage.unit = "bobcoins"`.
 2. **Cumulative PR Tracking**:
-   * The wrapper embeds the cumulative run count and total USD cost across all reviews of a PR into
-     the hidden HTML marker: `<!-- bob-pr-review:v1 {"head":"...","runs":N,"cost_total":{"usd":0.45}} -->`.
-   * The published comment footer displays: `Cost this run: $0.12 (reported), PR total: $0.36 over 3 runs.`
+   * The wrapper embeds the cumulative run count and total Bobcoins across all reviews of a PR into
+     the hidden HTML marker: `<!-- bob-pr-review:v1 {"head":"...","runs":N,"cost_total":{"bobcoins":0.45}} -->`.
+   * The published comment footer displays: `Cost this run: 0.1200 Bobcoins (reported), PR total: 0.3600 Bobcoins over 3 runs.`
 3. **Operational Caps (Guardrail G14)**:
    * **Per-PR Run Cap**: Default maximum 3 runs per PR. Subsequent triggers on the same PR exit with
      outcome `skipped_gate` (reason: `pr_run_limit_reached`).

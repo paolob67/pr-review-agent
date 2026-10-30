@@ -1,0 +1,16 @@
+diff --git a/package-lock.json b/package-lock.json
+index 1111111..2222222 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -5,3 +5,3 @@
+   "lockfileVersion": 3,
+-  "requires": true
++  "requires": true,
+   "packages": {}
+diff --git a/dist/app.min.js b/dist/app.min.js
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/dist/app.min.js
+@@ -0,0 +1,1 @@
++var a=1;function b(){return a+1}b();

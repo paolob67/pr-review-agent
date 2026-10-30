@@ -1,0 +1,85 @@
+{
+  "fixture": "02-standards-violation",
+  "label": "rep2",
+  "exitCode": 0,
+  "wallMs": 22092,
+  "kept": [
+    {
+      "category": "standards",
+      "severity": "medium",
+      "title": "Silent error swallowing in catch block",
+      "file": "src/orders.js",
+      "line": 6,
+      "confidence": "high",
+      "rule_id": "STD-005"
+    },
+    {
+      "category": "standards",
+      "severity": "low",
+      "title": "Debug print statement left in source code",
+      "file": "src/orders.js",
+      "line": 4,
+      "confidence": "high",
+      "rule_id": "STD-007"
+    },
+    {
+      "category": "standards",
+      "severity": "low",
+      "title": "Commented-out code left in source",
+      "file": "src/orders.js",
+      "line": 11,
+      "confidence": "high",
+      "rule_id": "STD-007"
+    }
+  ],
+  "checks": [
+    [
+      "outcome",
+      true,
+      "reviewed vs reviewed"
+    ],
+    [
+      "cites_expected_rule",
+      true,
+      "STD-005,STD-007,STD-007"
+    ]
+  ],
+  "pass": true,
+  "cost": {
+    "schema_version": 1,
+    "repo": "owner/sandbox",
+    "pr": 1,
+    "head_sha": "cccccccccccccccccccccccccccccccccccccccc",
+    "run_id": "local-test",
+    "bob_shell_version": "2.0.9",
+    "image_digest": null,
+    "inputs": {
+      "files": 1,
+      "diff_bytes": 575,
+      "prompt_bytes": 9869
+    },
+    "output": {
+      "bytes": 1903,
+      "findings_kept": 3,
+      "findings_dropped": 0
+    },
+    "bob_usage": {
+      "source": "reported",
+      "unit": "bobcoins",
+      "input": null,
+      "output": null,
+      "total": 0.034472
+    },
+    "duration_seconds": {
+      "total": 22.088,
+      "bob": 19.509
+    },
+    "compute": {
+      "vcpu": 1,
+      "memory_gb": 4,
+      "estimated_cost_usd": null,
+      "rates_version": "1.0.0"
+    },
+    "outcome": "reviewed"
+  }
+}

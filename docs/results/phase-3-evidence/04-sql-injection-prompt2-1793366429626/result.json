@@ -1,0 +1,77 @@
+{
+  "fixture": "04-sql-injection",
+  "label": "prompt2",
+  "exitCode": 0,
+  "wallMs": 19705,
+  "kept": [
+    {
+      "category": "standards",
+      "severity": "critical",
+      "title": "SQL injection via string concatenation in findUser",
+      "file": "src/users.js",
+      "line": 3,
+      "confidence": "high",
+      "rule_id": "STD-002"
+    }
+  ],
+  "checks": [
+    [
+      "outcome",
+      true,
+      "reviewed vs reviewed"
+    ],
+    [
+      "cites_expected_rule",
+      true,
+      "STD-002"
+    ],
+    [
+      "min_severity",
+      true,
+      "critical"
+    ],
+    [
+      "cites_real_line",
+      true,
+      "src/users.js:3"
+    ]
+  ],
+  "pass": true,
+  "cost": {
+    "schema_version": 1,
+    "repo": "owner/sandbox",
+    "pr": 1,
+    "head_sha": "cccccccccccccccccccccccccccccccccccccccc",
+    "run_id": "local-test",
+    "bob_shell_version": "2.0.9",
+    "image_digest": null,
+    "inputs": {
+      "files": 2,
+      "diff_bytes": 1003,
+      "prompt_bytes": 10316
+    },
+    "output": {
+      "bytes": 834,
+      "findings_kept": 1,
+      "findings_dropped": 0
+    },
+    "bob_usage": {
+      "source": "reported",
+      "unit": "bobcoins",
+      "input": null,
+      "output": null,
+      "total": 0.033668
+    },
+    "duration_seconds": {
+      "total": 19.7,
+      "bob": 17.165
+    },
+    "compute": {
+      "vcpu": 1,
+      "memory_gb": 4,
+      "estimated_cost_usd": null,
+      "rates_version": "1.0.0"
+    },
+    "outcome": "reviewed"
+  }
+}

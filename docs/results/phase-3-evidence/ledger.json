@@ -1,0 +1,194 @@
+{
+  "calls": 21,
+  "bobcoins": 0.942762,
+  "runs": [
+    {
+      "fixture": "04-sql-injection",
+      "label": "smoke",
+      "outDir": "docs/results/raw/04-sql-injection-smoke-1793366121098",
+      "outcome": "reviewed",
+      "bobcoins": 0.049292,
+      "pass": true,
+      "ts": "2026-10-30T13:15:39.273Z"
+    },
+    {
+      "fixture": "01-clean-change",
+      "label": "base",
+      "outDir": "docs/results/raw/01-clean-change-base-1793366223859",
+      "outcome": "reviewed",
+      "bobcoins": 0.047226,
+      "pass": true,
+      "ts": "2026-10-30T13:17:14.860Z"
+    },
+    {
+      "fixture": "02-standards-violation",
+      "label": "base",
+      "outDir": "docs/results/raw/02-standards-violation-base-1793366234959",
+      "outcome": "reviewed",
+      "bobcoins": 0.03479,
+      "pass": true,
+      "ts": "2026-10-30T13:17:33.608Z"
+    },
+    {
+      "fixture": "03-team-rule-violation",
+      "label": "base",
+      "outDir": "docs/results/raw/03-team-rule-violation-base-1793366253714",
+      "outcome": "reviewed",
+      "bobcoins": 0.04879,
+      "pass": true,
+      "ts": "2026-10-30T13:17:49.466Z"
+    },
+    {
+      "fixture": "05-hardcoded-secret",
+      "label": "base",
+      "outDir": "docs/results/raw/05-hardcoded-secret-base-1793366269588",
+      "outcome": "reviewed",
+      "bobcoins": 0.04826,
+      "pass": true,
+      "ts": "2026-10-30T13:18:04.394Z"
+    },
+    {
+      "fixture": "06-path-traversal",
+      "label": "base",
+      "outDir": "docs/results/raw/06-path-traversal-base-1793366284498",
+      "outcome": "reviewed",
+      "bobcoins": 0.049836,
+      "pass": true,
+      "ts": "2026-10-30T13:18:28.259Z"
+    },
+    {
+      "fixture": "07-large-refactor",
+      "label": "base",
+      "outDir": "docs/results/raw/07-large-refactor-base-1793366308362",
+      "outcome": "reviewed",
+      "bobcoins": 0.055372,
+      "pass": true,
+      "ts": "2026-10-30T13:18:43.416Z"
+    },
+    {
+      "fixture": "10-mixed",
+      "label": "base",
+      "outDir": "docs/results/raw/10-mixed-base-1793366323517",
+      "outcome": "reviewed",
+      "bobcoins": 0.04954,
+      "pass": true,
+      "ts": "2026-10-30T13:19:00.528Z"
+    },
+    {
+      "fixture": "04-sql-injection",
+      "label": "prompt2",
+      "outDir": "docs/results/raw/04-sql-injection-prompt2-1793366429626",
+      "outcome": "reviewed",
+      "bobcoins": 0.033668,
+      "pass": true,
+      "ts": "2026-10-30T13:20:49.371Z"
+    },
+    {
+      "fixture": "02-standards-violation",
+      "label": "prompt2",
+      "outDir": "docs/results/raw/02-standards-violation-prompt2-1793366449476",
+      "outcome": "reviewed",
+      "bobcoins": 0.03469,
+      "pass": true,
+      "ts": "2026-10-30T13:21:06.747Z"
+    },
+    {
+      "fixture": "06-path-traversal",
+      "label": "prompt2",
+      "outDir": "docs/results/raw/06-path-traversal-prompt2-1793366466869",
+      "outcome": "reviewed",
+      "bobcoins": 0.048754,
+      "pass": true,
+      "ts": "2026-10-30T13:21:22.860Z"
+    },
+    {
+      "fixture": "11-hostile-injection",
+      "label": "hostile",
+      "outDir": "docs/results/raw/11-hostile-injection-hostile-1793366557964",
+      "outcome": "reviewed",
+      "bobcoins": 0.037436,
+      "pass": true,
+      "ts": "2026-10-30T13:23:03.639Z"
+    },
+    {
+      "fixture": "positive-control-workspace-agents-md",
+      "label": "control",
+      "outcome": "n/a",
+      "bobcoins": 0.04685,
+      "pass": true,
+      "ts": "2026-10-30T13:24:08.571Z"
+    },
+    {
+      "fixture": "01-clean-change",
+      "label": "rep2",
+      "outDir": "docs/results/raw/01-clean-change-rep2-1793366648671",
+      "outcome": "reviewed",
+      "bobcoins": 0.047824,
+      "pass": true,
+      "ts": "2026-10-30T13:24:20.475Z"
+    },
+    {
+      "fixture": "02-standards-violation",
+      "label": "rep2",
+      "outDir": "docs/results/raw/02-standards-violation-rep2-1793366660574",
+      "outcome": "reviewed",
+      "bobcoins": 0.034472,
+      "pass": true,
+      "ts": "2026-10-30T13:24:42.707Z"
+    },
+    {
+      "fixture": "03-team-rule-violation",
+      "label": "rep2",
+      "outDir": "docs/results/raw/03-team-rule-violation-rep2-1793366682809",
+      "outcome": "reviewed",
+      "bobcoins": 0.049066,
+      "pass": true,
+      "ts": "2026-10-30T13:24:58.108Z"
+    },
+    {
+      "fixture": "04-sql-injection",
+      "label": "rep2",
+      "outDir": "docs/results/raw/04-sql-injection-rep2-1793366698207",
+      "outcome": "reviewed",
+      "bobcoins": 0.04871,
+      "pass": true,
+      "ts": "2026-10-30T13:25:13.626Z"
+    },
+    {
+      "fixture": "05-hardcoded-secret",
+      "label": "rep2",
+      "outDir": "docs/results/raw/05-hardcoded-secret-rep2-1793366713725",
+      "outcome": "reviewed",
+      "bobcoins": 0.036044,
+      "pass": true,
+      "ts": "2026-10-30T13:25:34.029Z"
+    },
+    {
+      "fixture": "06-path-traversal",
+      "label": "rep2",
+      "outDir": "docs/results/raw/06-path-traversal-rep2-1793366734128",
+      "outcome": "reviewed",
+      "bobcoins": 0.049046,
+      "pass": true,
+      "ts": "2026-10-30T13:25:51.221Z"
+    },
+    {
+      "fixture": "07-large-refactor",
+      "label": "rep2",
+      "outDir": "docs/results/raw/07-large-refactor-rep2-1793366751329",
+      "outcome": "reviewed",
+      "bobcoins": 0.05596,
+      "pass": true,
+      "ts": "2026-10-30T13:26:07.710Z"
+    },
+    {
+      "fixture": "10-mixed",
+      "label": "rep2",
+      "outDir": "docs/results/raw/10-mixed-rep2-1793366767807",
+      "outcome": "reviewed",
+      "bobcoins": 0.037136,
+      "pass": true,
+      "ts": "2026-10-30T13:26:30.358Z"
+    }
+  ]
+}

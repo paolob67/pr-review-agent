@@ -48,12 +48,12 @@ export function buildCostRecord({
   const bobUsage = stats
     ? {
         source: 'reported',
-        unit: 'usd',
+        unit: 'bobcoins',
         input: null,   // Bob v2 does not report token breakdown (S7)
         output: null,
         total: typeof stats.session_costs === 'number' ? stats.session_costs : null,
       }
-    : { source: 'reported', unit: 'usd', input: null, output: null, total: null };
+    : { source: 'reported', unit: 'bobcoins', input: null, output: null, total: null };
 
   const totalSec  = totalMs != null ? +(totalMs / 1000).toFixed(3) : null;
   const bobMs     = stats?.duration_ms;

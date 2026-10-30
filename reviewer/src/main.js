@@ -12,7 +12,7 @@ import { loadRules }          from './rules.js';
 import { redactDiff }         from './redact.js';
 import { buildPrompt }        from './prompt.js';
 import { createScratch }      from './scratch.js';
-import { runBob }             from './runBob.js';
+import { runBob, getBobVersion } from './runBob.js';
 import { parseOutput, ParseError } from './parseOutput.js';
 import { validateFindings, ValidationError } from './validate.js';
 import { triageFindings }     from './triage.js';
@@ -148,7 +148,7 @@ export async function main(env = process.env) {
   const markerComment = existingComments.find(c => (c.body ?? '').trimStart().startsWith('<!-- bob-pr-review:v1 '));
   existingMeta = markerComment ? parseMarker(markerComment.body) : null;
   const priorRuns  = existingMeta?.runs ?? 0;
-  const priorSpend = existingMeta?.cost_total?.usd ?? 0;
+  const priorSpend = existingMeta?.cost_total?.bobcoins ?? 0;
 
   // Budget gate. (G14)
   // Only the per-PR run cap exists; the run count comes from the marker comment (ADR 0009).
@@ -203,6 +203,7 @@ export async function main(env = process.env) {
   }
 
   // --- Stage 2: Review ---
+  const bobVersion = await getBobVersion({ bobBin: config.bobBin, parentEnv: env });
   logBobStarted();
   let bobResult;
   try {
@@ -233,9 +234,9 @@ export async function main(env = process.env) {
     const outcome = err.outcome ?? 'bob_unavailable';
     const costRec = buildCostRecord({
       repo, pr: prNumber, headSha, stats: null, inputs: { files: changedFiles.length, diffBytes, promptBytes },
-      outputMeta: null, totalMs, bobVersion: null, imageDigest: null, outcome,
+      outputMeta: null, totalMs, bobVersion, imageDigest: null, outcome,
     });
-    const body = renderUnavailableComment({ headSha, runs: priorRuns + 1, costRecord: costRec, outcome, detail: err.message, priorCostUsd: priorSpend });
+    const body = renderUnavailableComment({ headSha, runs: priorRuns + 1, costRecord: costRec, outcome, detail: err.message, priorCostBobcoins: priorSpend });
     await safeUpsert(commentClient, repo, prNumber, body);
     logRunSummary(repo, prNumber, headSha, outcome, costRec);
     process.exit(0);
@@ -249,9 +250,9 @@ export async function main(env = process.env) {
     const costRec = buildCostRecord({
       repo, pr: prNumber, headSha, stats, inputs: { files: changedFiles.length, diffBytes, promptBytes },
       outputMeta: { bytes: bobResult.stdout.length, findingsKept: 0, findingsDropped: 0 },
-      totalMs, bobVersion: null, imageDigest: null, outcome,
+      totalMs, bobVersion, imageDigest: null, outcome,
     });
-    const body = renderUnavailableComment({ headSha, runs: priorRuns + 1, costRecord: costRec, outcome, detail: err.message, priorCostUsd: priorSpend });
+    const body = renderUnavailableComment({ headSha, runs: priorRuns + 1, costRecord: costRec, outcome, detail: err.message, priorCostBobcoins: priorSpend });
     await safeUpsert(commentClient, repo, prNumber, body);
     logRunSummary(repo, prNumber, headSha, outcome, costRec);
     process.exit(0);
@@ -268,7 +269,7 @@ export async function main(env = process.env) {
     repo, pr: prNumber, headSha, stats,
     inputs: { files: changedFiles.length, diffBytes, promptBytes },
     outputMeta: { bytes: outputBytes, findingsKept, findingsDropped },
-    totalMs, bobVersion: null, imageDigest: null, outcome: 'reviewed',
+    totalMs, bobVersion, imageDigest: null, outcome: 'reviewed',
   });
 
   const rulesStatus = {
@@ -283,9 +284,9 @@ export async function main(env = process.env) {
     costRecord,
     output: sanitised,
     rulesStatus,
-    bobVersion: null,
+    bobVersion,
     runId: env.CE_JOBRUN ?? 'local',
-    priorCostUsd: priorSpend,
+    priorCostBobcoins: priorSpend,
   });
 
   let publishResult;

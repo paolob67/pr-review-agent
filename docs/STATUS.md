@@ -2,7 +2,7 @@
 
 Update this file at the end of every task. Newest information first within each section.
 
-Last updated: 2026-10-30. Phase 2 complete. Phase 3 is blocked on owner input (see Current blockers).
+Last updated: 2026-10-30. Phases 0 to 3 complete. Phase 4 (Code Engine) needs owner input (see Current blockers).
 
 ## Phase tracker
 
@@ -11,7 +11,7 @@ Last updated: 2026-10-30. Phase 2 complete. Phase 3 is blocked on owner input (s
 | 0. Spikes against local Bob | [phase-0-spikes.md](tasks/phase-0-spikes.md) | Done | Yes | n/a |
 | 1. Threat model, ADRs, architecture freeze | [phase-1-design-freeze.md](tasks/phase-1-design-freeze.md) | Done | Yes | n/a (Sign-off complete) |
 | 2. Reviewer core with offline tests | [phase-2-reviewer-core.md](tasks/phase-2-reviewer-core.md) | Done | Yes | n/a |
-| 3. Real Bob integration (local) | [phase-3-real-bob.md](tasks/phase-3-real-bob.md) | Not started | No | Bob Inference API key, Bobcoin budget, starter team rules, confirmation that sandbox code may be sent to Bob |
+| 3. Real Bob integration (local) | [phase-3-real-bob.md](tasks/phase-3-real-bob.md) | Done | Yes | n/a (key, 30 Bobcoin budget, rules direction and data consent supplied) |
 | 4. Code Engine foundation (eu-de) | [phase-4-code-engine.md](tasks/phase-4-code-engine.md) | Not started | No | Pay-as-you-Go IBM Cloud account, confirmed `ibmcloud` login |
 | 5. GitHub trigger and end-to-end matrix | [phase-5-github-trigger.md](tasks/phase-5-github-trigger.md) | Not started | No | Sandbox GitHub repo, second account, bot account |
 | 6. Red team and quality evals | [phase-6-redteam-evals.md](tasks/phase-6-redteam-evals.md) | Not started | No | Eval and red-team run budget |
@@ -22,11 +22,19 @@ Status values: Not started, In progress, Blocked (say why), Done (gate met, resu
 
 ## Current blockers
 
-Phase 3 requires: Bob Inference API key, Bobcoin run budget, starter team rules, and owner confirmation
-that sandbox PR code may be sent to Bob.
+Phase 4 needs from the owner: a Pay-as-you-Go IBM Cloud account and a confirmed `ibmcloud` login
+(IBM Cloud login state was not checked yet). A container build needs `docker` or `podman`; neither is
+installed locally, so the image build must happen on Code Engine (build from source) or after the owner
+installs one.
 
-No open Phase 2 design questions: daily caps dropped (ADR 0009), scratch layout aligned (ADR 0010).
-Before Phase 3 the owner must also set a quota on the Bob key, because there is no daily cap.
+Open follow-ups for the owner (none block Phase 4):
+
+1. **Verify the usage unit.** Compare the Bobcoin balance (or Bobalytics) with the Phase 3 ledger total
+   of 0.9428 (21 calls). Until then `session_costs` is "reported by Bob, unit unverified" (ADR 0011).
+2. **The Bob key has no spending limit set by this project.** With no daily cap (ADR 0009), the Bobcoin
+   budget on the account is the only ceiling. Confirm who watches it.
+3. The key in `pr-review-agent.json` expires 2026-12-30. Phase 4 puts it into a Code Engine secret; do not
+   paste it anywhere else.
 
 ## Decisions log
 
@@ -40,6 +48,7 @@ Before Phase 3 the owner must also set a quota on the Bob key, because there is 
 | 2026-10-30 | Cost record schema, per-PR run cap (3) | [ADR 0007](adr/0007-cost-record-and-cap-semantics.md) |
 | 2026-10-30 | Daily run and spend caps dropped (stateless job) | [ADR 0009](adr/0009-drop-daily-caps.md) |
 | 2026-10-30 | Prompt, rules and diff on stdin; scratch holds only the mode file | [ADR 0010](adr/0010-scratch-layout-stdin.md) |
+| 2026-10-30 | Usage recorded in Bobcoins, no currency conversion; Phase 3 budget 30 Bobcoins | [ADR 0011](adr/0011-bobcoins-as-usage-unit.md) |
 | 2026-10-30 | SCM identity: dedicated bot account, comment-only scope, non-blocking | [ADR 0008](adr/0008-scm-identity-for-comments.md) |
 | Planning | Bob Shell runs as a Code Engine job in `eu-de` from a prebuilt image | [ADR 0001](adr/0001-execution-environment.md) |
 | Planning | GitHub Actions is the only CI system; review starts after required CI is green | [PLAN.md](PLAN.md) section 3 |
@@ -83,6 +92,7 @@ owner for this before Phase 7.
 
 | Date | Phase | Summary | Results link |
 |---|---|---|---|
+| 2026-10-30 | 3 | Phase 3 real Bob integration complete. Real Bob 2.0.9 through the full pipeline against a mock GitHub: 20 pipeline runs over 9 fixtures plus 2 gate-skipped, all schema-valid first time, expected rules and lines cited; 21 Bob calls, 0.9428 Bobcoins reported (unit unverified). One prompt change (proposed_fix is code only: prose blocks 12 of 31 to 0 of 29). Hostile-parent check passed with a positive control. 187 offline tests, lint, 39 of 39 mutations killed. | [results/phase-3-runs.md](results/phase-3-runs.md) |
 | 2026-10-30 | 2 | Phase 2 reviewer core complete. 18 modules in reviewer/src/, fake-bob shim, mock GitHub server, 14 unit test files, 1 pipeline test file. 180 tests pass, 0 failures; make lint passes. Real mutation check: 39 of 39 guardrail mutations killed (an earlier placeholder table that only re-ran the tests was replaced; the first real run found 6 test gaps and 3 bugs, all fixed). Daily caps dropped (ADR 0009); scratch layout aligned (ADR 0010). No live calls made. | [results/phase-2-results.md](results/phase-2-results.md) |
 | 2026-10-30 | 1 | Phase 1 design freeze complete. THREAT_MODEL.md (G1-G37 mapped), ARCHITECTURE.md, draw.io trust-boundary diagram exported, ADRs 0002-0008, CONTRACTS.md frozen, sign-off record generated. S13 answered (Global). S15 analyzed on paper. | [results/phase-1-signoff.md](results/phase-1-signoff.md) |
 | 2026-10-30 | 0 | Phase 0 spikes complete. ~28 Bob calls total. Bob upgraded 1.0.4->1.0.6->2.0.9. v2 breaking changes found and re-probed (BOB_API_KEY, --disable-tool-groups, --workspace, bob run). Gate decisions updated for v2. S10 and S13 unresolved. | [results/spikes.md](results/spikes.md) |

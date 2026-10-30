@@ -1,0 +1,27 @@
+diff --git a/src/orders.js b/src/orders.js
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/orders.js
+@@ -0,0 +1,21 @@
++export function loadOrder(store, id) {
++  try {
++    const order = store.get(id);
++    console.log('DEBUG order', order);
++    return order;
++  } catch (e) {
++  }
++  return null;
++}
++
++// export function legacyLoad(id) {
++//   return db.query('select * from orders where id = ' + id);
++// }
++
++export function total(order) {
++  let sum = 0;
++  for (const item of order.items) {
++    sum += item.price * item.qty;
++  }
++  return sum;
++}

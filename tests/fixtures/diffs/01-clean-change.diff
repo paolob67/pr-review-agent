@@ -1,0 +1,35 @@
+diff --git a/src/clamp.js b/src/clamp.js
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/clamp.js
+@@ -0,0 +1,7 @@
++// clamp limits a number to the inclusive range [min, max].
++export function clamp(value, min, max) {
++  if (min > max) {
++    throw new RangeError('min must not exceed max');
++  }
++  return Math.min(Math.max(value, min), max);
++}
+diff --git a/test/clamp.test.js b/test/clamp.test.js
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/test/clamp.test.js
+@@ -0,0 +1,16 @@
++import { test } from 'node:test';
++import assert from 'node:assert/strict';
++import { clamp } from '../src/clamp.js';
++
++test('clamp keeps in-range values', () => {
++  assert.equal(clamp(5, 0, 10), 5);
++});
++
++test('clamp limits low and high values', () => {
++  assert.equal(clamp(-3, 0, 10), 0);
++  assert.equal(clamp(30, 0, 10), 10);
++});
++
++test('clamp rejects an inverted range', () => {
++  assert.throws(() => clamp(1, 10, 0), RangeError);
++});

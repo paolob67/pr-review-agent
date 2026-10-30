@@ -1,0 +1,1 @@
+["run","--workspace","/tmp/hostile-parent-6u8kXl/pr-review-NbpN44","--mode","reviewer","--disable-tool-groups","edit,execute","--disable-mcp","-f","json","--log-level","silent"]

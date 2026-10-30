@@ -33,9 +33,9 @@ should verify `tool_calls == 0` (or only read tools) and that no file was create
 **2. Reported usage (S7)?**
 
 `-f json` produces a single JSON line on stdout:
-`{"type":"result", "status":"success", "stats":{"session_costs": <USD float>, "max_cost": <limit>,
+`{"type":"result", "status":"success", "stats":{"session_costs": <float>, "max_cost": <limit>,
 "tool_calls": <N>, "duration_ms": <N>, "task_id": "<uuid>"}}`
-`stats.session_costs` is the per-run cost in USD. This is machine-readable and suitable for the
+`stats.session_costs` is the per-run cost figure (unit not documented; treated as Bobcoins, see ADR 0011). This is machine-readable and suitable for the
 per-PR cost record. No separate flag or debug mode is needed.
 
 **3. How will the reviewer mode and rules be delivered (S3, S14)?**
@@ -105,7 +105,7 @@ Key flags:
   - `stream-json`: one JSON line per event (message, tool_use, tool_result, result)
 - `--mode <slug>`: select mode by slug (built-in or custom)
 - `--workspace <path>`: set the working directory (controls AGENTS.md loading, file access scope)
-- `--max-cost <number>`: maximum cost limit (USD); run continues if exceeded but `max_cost` field records the limit
+- `--max-cost <number>`: maximum cost limit (unit not documented); run continues if exceeded but `max_cost` field records the limit
 - `--max-turns <number>`: turn limit (0 = unlimited)
 - `--disable-mcp`: disable MCP server initialization
 - `--disable-subagents`: disable subagent spawning
@@ -139,7 +139,7 @@ Flags removed in v2 (v1 only): `--yolo`, `--approval-mode`, `--allowed-tools`,
 **stream-json events**: `message` (role/content), `tool_use`, `tool_result`, `result`.
 
 **Conclusion**: `bob run -f json` produces a single parseable JSON line. `stats.session_costs`
-is the per-run USD cost. The job wrapper uses `bob run --workspace <scratch> --mode reviewer
+is the per-run cost figure (Bobcoins per ADR 0011, unverified). The job wrapper uses `bob run --workspace <scratch> --mode reviewer
 --disable-tool-groups edit,execute --disable-mcp -f json [prompt...]`.
 
 **Consequence for plan**: Output contract confirmed. Parser reads the single JSON line from
@@ -250,13 +250,13 @@ container secret name is `bob-creds`; it sets `BOB_API_KEY`. Do not set `BOBSHEL
 **Commands**: `bob run -f json` on multiple runs.
 
 **Observed** (v2.0.9):
-- `-f json` outputs a single JSON line per run containing `stats.session_costs` (USD float).
+- `-f json` outputs a single JSON line per run containing `stats.session_costs` (float).
   Present on every successful run (exit 0). No token-count breakdown (unlike v1).
 - `-f stream-json` streams per-message events; final `result` event contains the same stats.
 - No separate debug flag or local state file observed.
 
 **Sample costs** (v2):
-| Prompt type | session_costs (USD) |
+| Prompt type | session_costs (reported, unit per ADR 0011) |
 |-------------|---------------------|
 | Simple math | ~0.052-0.072 |
 | Write-attempt probe | ~0.159 |
@@ -264,10 +264,10 @@ container secret name is `bob-creds`; it sets `BOB_API_KEY`. Do not set `BOBSHEL
 | Custom mode canary | ~0.118 |
 | Stdin 200KB | ~0.186 |
 
-**Conclusion**: `stats.session_costs` is the per-run USD cost estimate. Used directly in the
+**Conclusion**: `stats.session_costs` is the per-run cost figure. Used directly in the
 per-PR cost record. No Bobcoin counter in v2 output.
 
-**Consequence for plan**: G14 and G37 addressed. Per-PR cost is a labelled USD estimate.
+**Consequence for plan**: G14 and G37 addressed. Per-PR cost is recorded as reported Bobcoins.
 
 ---
 
@@ -282,7 +282,7 @@ per-PR cost record. No Bobcoin counter in v2 output.
    workspace and offers alternatives. Exit code 0. A setting "Allow outside workspace tool
    requests" exists but must never be enabled in the reviewer container.
 2. **stdin as prompt**: Confirmed working. Content piped to stdin is prepended to the prompt.
-3. **Large stdin (~200KB)**: Accepted. `session_costs` ~0.186 USD. Model returned an approximation.
+3. **Large stdin (~200KB)**: Accepted. `session_costs` ~0.186. Model returned an approximation.
    No error or truncation message.
 
 **Conclusion**: PR diff must be delivered via stdin. `--workspace` defines the file access
@@ -319,7 +319,7 @@ in Phase 4.
 **Source**: Bob docs (no explicit documentation found in either v1 or v2 docs).
 
 **Observed**: No rate-limit or concurrency documentation found. No `--max-coins` in v2 (removed).
-Budget is managed via `--max-cost` (USD) per run.
+Budget is managed via `--max-cost` per run.
 
 **Conclusion**: Unresolved. Assume one-at-a-time; verify empirically in Phase 3.
 

@@ -45,9 +45,9 @@ describe('cost.js (G37)', () => {
     assert.equal(rec.bob_usage.total, 0.118);
   });
 
-  it('G37: bob_usage.unit is "usd"', () => {
+  it('G37: bob_usage.unit is "bobcoins"', () => {
     const rec = buildCostRecord(BASE_ARGS);
-    assert.equal(rec.bob_usage.unit, 'usd');
+    assert.equal(rec.bob_usage.unit, 'bobcoins');
   });
 
   it('G37: duration_seconds.total is derived from totalMs', () => {

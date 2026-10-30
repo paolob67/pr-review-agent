@@ -4,7 +4,7 @@
 
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildBobEnv, runBob } from '../../reviewer/src/runBob.js';
+import { buildBobEnv, runBob, getBobVersion } from '../../reviewer/src/runBob.js';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { mkdtempSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
@@ -157,5 +157,20 @@ describe('runBob.js - runBob process (G13)', () => {
     } finally {
       try { rmSync(scratch, { recursive: true, force: true }); } catch {}
     }
+  }, { timeout: 15000 });
+
+  it('G37: getBobVersion returns the first line of `bob --version`', async () => {
+    const v = await getBobVersion({ bobBin: FAKE_BOB, parentEnv: { PATH: process.env.PATH, FAKE_BOB_VERSION: '9.8.7' } });
+    assert.equal(v, '9.8.7');
+  }, { timeout: 15000 });
+
+  it('G37: getBobVersion returns null when the binary is missing', async () => {
+    const v = await getBobVersion({ bobBin: '/nonexistent/bob', parentEnv: { PATH: process.env.PATH } });
+    assert.equal(v, null);
+  });
+
+  it('G37: getBobVersion returns null for unparseable output', async () => {
+    const v = await getBobVersion({ bobBin: FAKE_BOB, parentEnv: { PATH: process.env.PATH, FAKE_BOB_VERSION: 'not a version!' } });
+    assert.equal(v, null);
   }, { timeout: 15000 });
 });
