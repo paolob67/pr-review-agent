@@ -1,6 +1,6 @@
 # API keys and credentials - never commit these
 pr-review-agent.json
-*-apikey*.json
+*apikey*.json
 *-key*.json
 
 # OS / editor artefacts
@@ -13,4 +13,3 @@ node_modules/
 logs/
 scripts/spikes/work/
 docs/results/raw/
-apikey*.json
