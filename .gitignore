@@ -13,3 +13,4 @@ node_modules/
 logs/
 scripts/spikes/work/
 docs/results/raw/
+apikey*.json
