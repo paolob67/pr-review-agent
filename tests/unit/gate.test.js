@@ -12,7 +12,7 @@ import {
 const SHA40 = 'a'.repeat(40);
 const SHA40B = 'b'.repeat(40);
 
-const CONFIG = { maxFiles: 50, maxDiffBytes: 102400, maxRunsPerPR: 3, maxRunsPerDay: 30, dailySpendCapUsd: 10.0 };
+const CONFIG = { maxFiles: 50, maxDiffBytes: 102400, maxRunsPerPR: 3 };
 
 function makePR(overrides = {}) {
   return {
@@ -142,32 +142,23 @@ describe('gate.js - checkPaths (G9)', () => {
 });
 
 describe('gate.js - checkBudget (G14)', () => {
-  it('G14: under all limits returns null', () => {
-    assert.equal(checkBudget(0, 0, 0, CONFIG), null);
+  it('G14: under the cap returns null', () => {
+    assert.equal(checkBudget(0, CONFIG), null);
   });
 
   it('G14: per-PR run cap reached returns skipped_gate pr_run_limit_reached', () => {
-    const result = checkBudget(3, 0, 0, CONFIG);
+    const result = checkBudget(3, CONFIG);
     assert.ok(result);
     assert.equal(result.outcome, 'skipped_gate');
     assert.equal(result.reason, 'pr_run_limit_reached');
   });
 
-  it('G14: daily run cap reached returns skipped_gate daily_run_limit', () => {
-    const result = checkBudget(0, 30, 0, CONFIG);
-    assert.ok(result);
-    assert.equal(result.outcome, 'skipped_gate');
-    assert.equal(result.reason, 'daily_run_limit');
-  });
-
-  it('G14: daily spend cap reached returns skipped_gate daily_spend_cap', () => {
-    const result = checkBudget(0, 0, 10.0, CONFIG);
-    assert.ok(result);
-    assert.equal(result.outcome, 'skipped_gate');
-    assert.equal(result.reason, 'daily_spend_cap');
-  });
-
   it('G14: 2 runs is below limit of 3', () => {
-    assert.equal(checkBudget(2, 0, 0, CONFIG), null);
+    assert.equal(checkBudget(2, CONFIG), null);
+  });
+
+  it('G14: the cap follows the configured value', () => {
+    assert.ok(checkBudget(1, { maxRunsPerPR: 1 }));
+    assert.equal(checkBudget(1, { maxRunsPerPR: 2 }), null);
   });
 });

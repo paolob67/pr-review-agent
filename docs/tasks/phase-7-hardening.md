@@ -26,7 +26,7 @@ sections 2, 6, 7; draft `SETUP.md` and `RUNBOOK.md`; all earlier results.
    - Rotate the SCM read and comment tokens.
    - Rotate the CI service ID key and the GitHub secret.
    - Kill switch: turn off in GitHub, then in Code Engine; show no review and no cost.
-   - Cap drill: exceed the per-PR and daily caps; show the quiet or short-note behaviour.
+   - Cap drill: exceed the per-PR cap; show the quiet or short-note behaviour.
    - Incident drill: a leaked CI key; revoke it, check job run history for abuse.
 2. Cost: aggregate all cost records from earlier phases (audit logs plus comments) into
    `docs/results/cost-summary.md`: per run and per PR distributions, Code Engine compute cost

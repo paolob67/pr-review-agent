@@ -37,8 +37,6 @@ Job-level configuration, set on the Code Engine job (not by the trigger):
 | `REVIEW_MAX_PROMPT_BYTES` | Size gate (G8) | `204800` (200 KiB) |
 | `REVIEW_BOB_TIMEOUT_SECONDS` | Hard timeout for the Bob process (G13) | `180` |
 | `REVIEW_MAX_RUNS_PER_PR` | Cap (G14) | `3` |
-| `REVIEW_MAX_RUNS_PER_DAY` | Cap (G14) | `30` |
-| `REVIEW_DAILY_SPEND_CAP` | Cap in USD (G14) | `10.0` |
 | `REVIEW_API_BASE` | GitHub API base URL, so tests can point at a mock | `https://api.github.com` |
 | `REVIEW_BOB_BIN` | Path of the Bob executable, so tests can use `fake-bob` | `bob` |
 
@@ -210,18 +208,17 @@ nonzero is reserved for crashes of the wrapper itself (retry limit is 0 anyway).
 ## 9. Scratch directory layout
 
 Created fresh per run by the wrapper, owned by the Bob user, marked untrusted (G28, G29). Contains
-only data from trusted code:
+only data from trusted code ([ADR 0010](adr/0010-scratch-layout-stdin.md)):
 
 ```
 scratch/
   .bob/
     custom_modes.yaml  wrapper-generated reviewer mode definition (G28, S3)
-  PROMPT.md            task instructions, output contract, untrusted-data delimiters
-  rules/               copies of the base-branch rule files
-  pr/diff.patch        the redacted unified diff
-  pr/files/<path>      full text of changed files at the head SHA, redacted, size-capped
-  pr/meta.json         title, author association, labels, base and head names (data only)
 ```
+
+The task instructions, output contract, base-branch rules, redacted diff and PR metadata (data
+only) are sent on stdin inside untrusted-data delimiters. Full changed files at the head SHA are
+not sent in Phase 2.
 
 No PR-supplied `.bob/`, `AGENTS.md`, `.env`, `.bobignore` or custom command files may exist
 anywhere under `scratch/`; the wrapper drops any changed file whose path would create one and

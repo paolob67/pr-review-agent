@@ -1,6 +1,6 @@
 # ADR 0007: Cost Record and Operational Cap Semantics
 
-Status: Accepted (frozen Phase 1)
+Status: Accepted (frozen Phase 1). Item 3 daily caps superseded by [ADR 0009](0009-drop-daily-caps.md).
 
 ## Context
 
@@ -25,8 +25,7 @@ their pull requests.
 3. **Operational Caps (Guardrail G14)**:
    * **Per-PR Run Cap**: Default maximum 3 runs per PR. Subsequent triggers on the same PR exit with
      outcome `skipped_gate` (reason: `pr_run_limit_reached`).
-   * **Daily Repo Run Cap**: Default maximum 30 runs per repository per 24-hour window.
-   * **Daily Repo Spend Cap**: Default maximum $10.00 USD estimated spend per 24-hour window.
+   * ~~Daily run cap and daily spend cap~~: dropped, see ADR 0009.
    * **Timeouts (Guardrail G13)**: Hard process timeout on `bob run` (default 180 seconds) and Code Engine
      `--maxexecutiontime` (default 300 seconds).
 

@@ -29,11 +29,9 @@ Implement multi-layer privilege separation and environment isolation inside the 
      modification, and shell command tools from the model context.
 3. **Synthetic Scratch Workspace (Guardrails G28, G29)**:
    * Bob is invoked with `--workspace <scratch>` pointing to an ephemeral, clean directory created by Stage 1.
-   * The scratch directory contains only:
-     * `.bob/custom_modes.yaml`: reviewer mode definition.
-     * `PROMPT.md`: task instructions and output contract.
-     * `rules/`: copies of base-branch rules.
-   * PR diff and changed content are piped via stdin or written to dedicated subpaths.
+   * The scratch directory contains only `.bob/custom_modes.yaml` (reviewer mode definition).
+     Amended by [ADR 0010](0010-scratch-layout-stdin.md): instructions, rules, diff and metadata go
+     on stdin.
    * PR-supplied `.bob/`, `AGENTS.md`, and `.env` files are never copied into the scratch root.
 4. **Fallback / Defense-in-Depth**:
    * If container-level sub-user switching is supported in Phase 4 (S11), Bob will run under a distinct UID.

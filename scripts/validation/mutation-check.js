@@ -35,7 +35,7 @@ export const MUTATIONS = [
   { id: 'G9b', file: 'reviewer/src/gate.js', find: 'if (allIgnored) {', replace: 'if (false) {', tests: [U('gate'), P], desc: 'Lockfile or docs-only PRs are reviewed' },
   { id: 'G10', file: 'reviewer/src/main.js', find: 'if (!config.enabled) {', replace: 'if (false) {', tests: [P], desc: 'Kill switch ignored' },
   { id: 'G13', file: 'reviewer/src/runBob.js', find: "try { child.kill('SIGKILL'); } catch { /* already exited */ }", replace: '/* kill disabled */', tests: [U('runBob')], desc: 'Timeout no longer kills the Bob process' },
-  { id: 'G14a', file: 'reviewer/src/gate.js', find: 'export function checkBudget(runs, dailyRuns, totalUsd, config) {', replace: 'export function checkBudget(runs, dailyRuns, totalUsd, config) {\n  return null;', tests: [U('gate'), P], desc: 'Budget gate always passes' },
+  { id: 'G14a', file: 'reviewer/src/gate.js', find: 'export function checkBudget(runs, config) {', replace: 'export function checkBudget(runs, config) {\n  return null;', tests: [U('gate'), P], desc: 'Budget gate always passes' },
   { id: 'G14b', file: 'reviewer/src/render.js', find: 'usd: +(priorCostUsd + (costRecord?.bob_usage?.total ?? 0)).toFixed(6),\n  };', replace: 'usd: null,\n  };', tests: [U('render'), P], desc: 'Cumulative spend is not carried into the marker' },
   { id: 'G15', file: 'reviewer/src/redact.js', find: "if (typeof diff !== 'string') return diff;", replace: 'return diff;', tests: [U('redact'), P], desc: 'Diff is not redacted' },
   { id: 'G16a', file: 'reviewer/src/validate.js', find: 'if (parsed.schema_version !== 1) {', replace: 'if (false) {', tests: [U('validate')], desc: 'schema_version not checked' },

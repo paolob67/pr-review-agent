@@ -76,8 +76,6 @@ export function getConfig(envMap = process.env) {
 
     // Budget caps (G14)
     maxRunsPerPR:    envIntL('REVIEW_MAX_RUNS_PER_PR',  caps.maxRunsPerPR),
-    maxRunsPerDay:   envIntL('REVIEW_MAX_RUNS_PER_DAY', caps.maxRunsPerDay),
-    dailySpendCapUsd: envFloatL('REVIEW_DAILY_SPEND_CAP', caps.dailySpendCapUsd),
 
     // GitHub API base URL (for tests to point at mock server)
     apiBase: envStrL('REVIEW_API_BASE', 'https://api.github.com'),

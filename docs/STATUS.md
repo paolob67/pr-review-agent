@@ -2,7 +2,7 @@
 
 Update this file at the end of every task. Newest information first within each section.
 
-Last updated: 2026-10-30. Phase 2 complete. Phase 3 is blocked on owner input. Two Phase 2 design questions need an owner decision (see Current blockers).
+Last updated: 2026-10-30. Phase 2 complete. Phase 3 is blocked on owner input (see Current blockers).
 
 ## Phase tracker
 
@@ -25,15 +25,8 @@ Status values: Not started, In progress, Blocked (say why), Done (gate met, resu
 Phase 3 requires: Bob Inference API key, Bobcoin run budget, starter team rules, and owner confirmation
 that sandbox PR code may be sent to Bob.
 
-Decisions needed from the owner (found in Phase 2, details in
-[results/phase-2-results.md](results/phase-2-results.md)):
-
-1. **Daily run and spend caps (G14) are not enforced.** The job is stateless, so only the per-PR
-   run cap and per-PR spend are real. Daily caps need shared state. Choose: drop them from the
-   contracts, or add a store (new ADR, before Phase 4).
-2. **CONTRACTS section 9 scratch layout** lists `pr/files/`, `pr/meta.json`, `PROMPT.md`, `rules/`;
-   the implementation sends diff and rules on stdin instead. Update the contract to match, or
-   implement the layout.
+No open Phase 2 design questions: daily caps dropped (ADR 0009), scratch layout aligned (ADR 0010).
+Before Phase 3 the owner must also set a quota on the Bob key, because there is no daily cap.
 
 ## Decisions log
 
@@ -44,7 +37,9 @@ Decisions needed from the owner (found in Phase 2, details in
 | 2026-10-30 | Findings contract, schema validation, single upsert comment format | [ADR 0004](adr/0004-findings-contract-and-comment-format.md) |
 | 2026-10-30 | Base-branch loading of team rules and standards via API | [ADR 0005](adr/0005-rules-location-and-base-branch-loading.md) |
 | 2026-10-30 | In-container isolation: scrubbed env, read-only tools, synthetic scratch | [ADR 0006](adr/0006-in-container-isolation.md) |
-| 2026-10-30 | Cost record schema, per-PR run cap (3), daily caps (30 runs, $10 USD) | [ADR 0007](adr/0007-cost-record-and-cap-semantics.md) |
+| 2026-10-30 | Cost record schema, per-PR run cap (3) | [ADR 0007](adr/0007-cost-record-and-cap-semantics.md) |
+| 2026-10-30 | Daily run and spend caps dropped (stateless job) | [ADR 0009](adr/0009-drop-daily-caps.md) |
+| 2026-10-30 | Prompt, rules and diff on stdin; scratch holds only the mode file | [ADR 0010](adr/0010-scratch-layout-stdin.md) |
 | 2026-10-30 | SCM identity: dedicated bot account, comment-only scope, non-blocking | [ADR 0008](adr/0008-scm-identity-for-comments.md) |
 | Planning | Bob Shell runs as a Code Engine job in `eu-de` from a prebuilt image | [ADR 0001](adr/0001-execution-environment.md) |
 | Planning | GitHub Actions is the only CI system; review starts after required CI is green | [PLAN.md](PLAN.md) section 3 |
@@ -88,7 +83,7 @@ owner for this before Phase 7.
 
 | Date | Phase | Summary | Results link |
 |---|---|---|---|
-| 2026-10-30 | 2 | Phase 2 reviewer core complete. 18 modules in reviewer/src/, fake-bob shim, mock GitHub server, 14 unit test files, 1 pipeline test file. 181 tests pass, 0 failures; make lint passes. Real mutation check: 39 of 39 guardrail mutations killed (an earlier placeholder table that only re-ran the tests was replaced; the first real run found 6 test gaps and 3 bugs, all fixed). Open: daily caps unenforced, CONTRACTS section 9 mismatch. No live calls made. | [results/phase-2-results.md](results/phase-2-results.md) |
+| 2026-10-30 | 2 | Phase 2 reviewer core complete. 18 modules in reviewer/src/, fake-bob shim, mock GitHub server, 14 unit test files, 1 pipeline test file. 180 tests pass, 0 failures; make lint passes. Real mutation check: 39 of 39 guardrail mutations killed (an earlier placeholder table that only re-ran the tests was replaced; the first real run found 6 test gaps and 3 bugs, all fixed). Daily caps dropped (ADR 0009); scratch layout aligned (ADR 0010). No live calls made. | [results/phase-2-results.md](results/phase-2-results.md) |
 | 2026-10-30 | 1 | Phase 1 design freeze complete. THREAT_MODEL.md (G1-G37 mapped), ARCHITECTURE.md, draw.io trust-boundary diagram exported, ADRs 0002-0008, CONTRACTS.md frozen, sign-off record generated. S13 answered (Global). S15 analyzed on paper. | [results/phase-1-signoff.md](results/phase-1-signoff.md) |
 | 2026-10-30 | 0 | Phase 0 spikes complete. ~28 Bob calls total. Bob upgraded 1.0.4->1.0.6->2.0.9. v2 breaking changes found and re-probed (BOB_API_KEY, --disable-tool-groups, --workspace, bob run). Gate decisions updated for v2. S10 and S13 unresolved. | [results/spikes.md](results/spikes.md) |
 | Planning | n/a | Plan, ADR 0001, architecture diagram, contracts, task briefs written | n/a |

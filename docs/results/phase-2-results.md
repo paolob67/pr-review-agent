@@ -8,9 +8,9 @@ Bob Shell version: not used (offline phase; no live calls)
 ## make test
 
 ```
-ℹ tests 181
+ℹ tests 180
 ℹ suites 24
-ℹ pass 181
+ℹ pass 180
 ℹ fail 0
 ℹ cancelled 0
 ℹ skipped 0
@@ -59,9 +59,9 @@ Other defects found and fixed while doing this:
 
 | Suite | Files | Tests |
 |---|---|---|
-| Unit | 14 | 153 |
+| Unit | 14 | 152 |
 | Pipeline | 1 | 28 |
-| Total | 15 | 181 pass, 0 fail |
+| Total | 15 | 180 pass, 0 fail |
 
 ## Guardrails
 
@@ -101,19 +101,12 @@ statuses path. The pipeline `canary:no_extra_github_endpoints` test inspects eve
 
 ## Known limitations and open design questions
 
-1. **Daily caps are not enforced.** `REVIEW_MAX_RUNS_PER_DAY` and `REVIEW_DAILY_SPEND_CAP` have no
-   store: the job is stateless, `checkBudget` is called with `dailyRuns = 0`, and the "daily spend"
-   compared against the cap is the per-PR cumulative spend from the marker. Only the per-PR run cap
-   (3) and a per-PR spend are really enforced. ADR 0007 and CONTRACTS section 1 describe daily caps
-   per repository. Enforcing them needs shared state (for example, summing cost records from the log
-   store, or a counter file on a mounted volume). Needs an owner decision and probably a new ADR
-   before Phase 4. Until then G14 is only partly implemented.
-2. **Files at the head SHA are not fetched.** CONTRACTS section 9 lists `pr/files/<path>` and
-   `pr/meta.json`, and `PROMPT.md`/`rules/`/`pr/diff.patch` in scratch. The implementation sends
-   the redacted diff and rules in the stdin prompt (as spike S8 recommended) and writes only
-   `.bob/custom_modes.yaml` to scratch. The brief and ADR 0006 say either is acceptable ("piped via
-   stdin or written to dedicated subpaths"), but CONTRACTS section 9 should be updated to match, or
-   the layout implemented, before Phase 3.
+1. **Daily caps were dropped by owner decision** ([ADR 0009](../adr/0009-drop-daily-caps.md)). G14 is
+   the per-PR run cap (3). Per-PR spend is tracked in the marker for reporting only.
+2. **Files at the head SHA are not fetched, and the prompt goes on stdin.** Decided in
+   [ADR 0010](../adr/0010-scratch-layout-stdin.md): scratch holds only `.bob/custom_modes.yaml`;
+   CONTRACTS section 9 is updated to match. Whether the model needs full files is a Phase 3
+   quality question.
 3. **Bob Shell version and image digest are `null` in the cost record and footer** until Phase 3
    (version, from `bob --version`) and Phase 4 (digest).
 4. **Line validation is added-lines only.** A finding on an unchanged context line is dropped. This

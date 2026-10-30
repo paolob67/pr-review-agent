@@ -222,7 +222,7 @@ The job therefore produces its own record for every run:
 
 The record goes to three places: a one-line cost footer in the PR comment (visible to the team and
 auditable in the PR history), a hidden machine-readable block in the same comment (feeds the
-per-PR and daily caps in G14), and the structured audit log shipped to IBM Cloud Logs (G20).
+per-PR cap in G14), and the structured audit log shipped to IBM Cloud Logs (G20).
 Reconciliation: daily sums of the records are compared with Bobalytics daily spend when it is
 available, and the article states how close the estimates are.
 
@@ -254,7 +254,7 @@ Each item names the control, its type, and the test that proves it.
 | G11 | Concurrency group per PR, cancel superseded runs | Preventive | Sandbox e2e with two quick pushes |
 | G12 | Triggers limited to completion of the required CI workflows, plus explicit re-request by label | Preventive | Sandbox e2e |
 | G13 | Hard timeout on the Bob process (in wrapper) and on the job (`--maxexecutiontime`) | Preventive | Fake-Bob "hangs" test and deploy test |
-| G14 | Budget: per-PR run cap and daily run and spend cap, enforced from the cost records (G37) | Detective + preventive | Unit tests |
+| G14 | Budget: per-PR run cap, enforced from the marker (no daily caps, ADR 0009) | Detective + preventive | Unit tests |
 | G15 | Secret redaction on the diff before it is sent | Preventive | Unit tests with seeded fake secrets |
 | G16 | Output schema validation with a strict, versioned format | Preventive | Fake-Bob malformed output tests |
 | G17 | Markdown sanitiser: strip images, raw HTML, @mentions, non-allowlisted links, control and bidi characters; cap length; code fences allowed for proposed fixes | Preventive | Unit tests and injection corpus |

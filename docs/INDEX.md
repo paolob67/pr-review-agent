@@ -24,7 +24,9 @@
 | [adr/0004-findings-contract-and-comment-format.md](adr/0004-findings-contract-and-comment-format.md) | Findings schema, line mapping, comment structure | Accepted |
 | [adr/0005-rules-location-and-base-branch-loading.md](adr/0005-rules-location-and-base-branch-loading.md) | Base-branch loading of rules and standards | Accepted |
 | [adr/0006-in-container-isolation.md](adr/0006-in-container-isolation.md) | In-container isolation and privilege separation | Accepted |
-| [adr/0007-cost-record-and-cap-semantics.md](adr/0007-cost-record-and-cap-semantics.md) | Cost record schema, per-PR and daily caps | Accepted |
+| [adr/0007-cost-record-and-cap-semantics.md](adr/0007-cost-record-and-cap-semantics.md) | Cost record schema, per-PR cap (daily caps superseded by 0009) | Accepted |
+| [adr/0009-drop-daily-caps.md](adr/0009-drop-daily-caps.md) | Daily run and spend caps dropped | Accepted |
+| [adr/0010-scratch-layout-stdin.md](adr/0010-scratch-layout-stdin.md) | Prompt on stdin; scratch holds only the mode file | Accepted |
 | [adr/0008-scm-identity-for-comments.md](adr/0008-scm-identity-for-comments.md) | Dedicated bot account, comment-only scope | Accepted |
 | [diagrams/architecture-overview.drawio](diagrams/architecture-overview.drawio) | Architecture overview (source; PNG alongside) | Current |
 | [diagrams/trust-boundaries.drawio](diagrams/trust-boundaries.drawio) | Trust boundaries diagram (source; PNG alongside) | Current |

@@ -29,8 +29,7 @@ Status: Signed Off (Phase 1 Gate Met)
 ## 4. Default Operational Caps
 * **Decision**:
   * Max runs per PR: `3` (subsequent triggers skip with `pr_run_limit_reached`).
-  * Max runs per repository per day: `30`.
-  * Daily spend cap: `$10.00 USD` (enforced via `stats.session_costs` accumulation).
+  * Daily run and spend caps: dropped in Phase 2 ([ADR 0009](../adr/0009-drop-daily-caps.md)).
   * Process timeout: `180 seconds`.
   * Code Engine max execution time: `300 seconds`.
 * **Recorded in**: [ADR 0007](../adr/0007-cost-record-and-cap-semantics.md) and [CONTRACTS.md](../CONTRACTS.md).

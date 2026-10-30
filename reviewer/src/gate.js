@@ -94,20 +94,13 @@ export function checkPaths(files) {
   return null;
 }
 
-// checkBudget enforces per-PR run cap, daily run cap, and daily spend cap. (G14)
-// runs: number of previous runs for this PR
-// totalUsd: cumulative USD spend for today
-// config: { maxRunsPerPR, maxRunsPerDay, dailySpendCapUsd }
-// dailyRuns: number of runs across all PRs today
-export function checkBudget(runs, dailyRuns, totalUsd, config) {
+// checkBudget enforces the per-PR run cap. (G14)
+// runs: number of previous runs for this PR (from the marker comment)
+// config: { maxRunsPerPR }
+// Daily run and spend caps are not implemented on purpose (ADR 0009): the job is stateless.
+export function checkBudget(runs, config) {
   if (runs >= config.maxRunsPerPR) {
     return { outcome: 'skipped_gate', reason: 'pr_run_limit_reached', detail: `runs=${runs} limit=${config.maxRunsPerPR}` };
-  }
-  if (dailyRuns >= config.maxRunsPerDay) {
-    return { outcome: 'skipped_gate', reason: 'daily_run_limit', detail: `daily_runs=${dailyRuns} limit=${config.maxRunsPerDay}` };
-  }
-  if (totalUsd >= config.dailySpendCapUsd) {
-    return { outcome: 'skipped_gate', reason: 'daily_spend_cap', detail: `total_usd=${totalUsd} cap=${config.dailySpendCapUsd}` };
   }
   return null;
 }

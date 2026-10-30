@@ -109,7 +109,7 @@ Three primary trust boundaries separate untrusted inputs from privileged operati
 
 ### AC-10: Resource and Cost Exhaustion (Denial of Wallet / DoS)
 * **Attack**: Attacker floods the repository with rapid PR pushes, massive multi-megabyte diffs, or thousands of generated files to exhaust API credits or IBM Cloud compute.
-* **Mitigation**: Size gates drop diffs exceeding byte or file count limits (G8). Skip rules filter bots, drafts, and lockfiles (G9). Budget enforcement enforces maximum runs per PR, daily run caps, and daily spend ceilings (G14, G37). Process and job timeouts kill runaway executions (G13, G21). Concurrency cancellation kills superseded jobs (G11).
+* **Mitigation**: Size gates drop diffs exceeding byte or file count limits (G8). Skip rules filter bots, drafts, and lockfiles (G9). Budget enforcement caps runs per PR (G14) and records cost per run (G37); there is no daily cap (ADR 0009), so the Bob key quota is the overall ceiling. Process and job timeouts kill runaway executions (G13, G21). Concurrency cancellation kills superseded jobs (G11).
 
 ### AC-11: Trigger Key Abuse and Malicious Job Submission
 * **Attack**: An attacker extracts `IBM_CLOUD_API_KEY` from CI or uses it to submit arbitrary Code Engine jobs across other IBM Cloud services.
@@ -146,7 +146,7 @@ The table below verifies that every guardrail from G1 through G37 is mapped to i
 | **G11** | Concurrency group per PR, cancel superseded runs | Preventive | AC-9, AC-10 |
 | **G12** | Triggers limited to completion of required CI or explicit label | Preventive | AC-9 |
 | **G13** | Hard timeout on Bob process and Code Engine job execution | Preventive | AC-5, AC-10 |
-| **G14** | Budget: per-PR run cap, daily run and spend limits | Detective / Prev. | AC-10 |
+| **G14** | Budget: per-PR run cap (no daily caps, ADR 0009) | Detective / Prev. | AC-10 |
 | **G15** | Secret redaction on the diff prior to model dispatch | Preventive | AC-13 |
 | **G16** | Output schema validation with strict versioned JSON schema | Preventive | AC-2, AC-7 |
 | **G17** | Markdown sanitizer (strip HTML, images, @mentions, control chars) | Preventive | AC-7 |

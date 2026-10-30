@@ -151,10 +151,8 @@ export async function main(env = process.env) {
   const priorSpend = existingMeta?.cost_total?.usd ?? 0;
 
   // Budget gate. (G14)
-  // Phase 2 limitation: the job is stateless, so the per-PR run cap and the per-PR spend come from
-  // the marker comment. The daily run and daily spend caps have no store yet; dailyRuns is passed
-  // as 0 and priorSpend is the per-PR total. See docs/results/phase-2-results.md (open questions).
-  const budgetGate = checkBudget(priorRuns, 0, priorSpend, config);
+  // Only the per-PR run cap exists; the run count comes from the marker comment (ADR 0009).
+  const budgetGate = checkBudget(priorRuns, config);
   if (budgetGate) {
     logGateSkipped(budgetGate.outcome, budgetGate.reason);
     // An existing marker comment already holds the last review; do not overwrite it with a note.
