@@ -1,0 +1,7 @@
+{
+  "type": "result",
+  "timestamp": "2026-10-30T10:00:00.000Z",
+  "status": "success",
+  "stats": { "task_id": "test-images-html", "duration_ms": 900, "session_costs": 0.030, "max_cost": 1.0, "tool_calls": 0 },
+  "last_message": "{\"schema_version\":1,\"summary\":\"A summary with <script>alert(1)</script> injection.\",\"findings\":[{\"category\":\"security\",\"severity\":\"high\",\"confidence\":\"high\",\"rule_id\":null,\"file\":\"src/utils.js\",\"line\":8,\"title\":\"Injection test\",\"evidence\":\"![tracker](https://evil.com/track.png) and <b>bold</b>\",\"explanation\":\"Explanation with <script>alert(1)</script> and ![x](https://evil.com/x.png).\",\"proposed_fix\":null}],\"needs_human_attention\":[]}"
+}

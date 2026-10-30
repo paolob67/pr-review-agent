@@ -1,0 +1,7 @@
+{
+  "type": "result",
+  "timestamp": "2026-10-30T10:00:00.000Z",
+  "status": "success",
+  "stats": { "task_id": "test-duplicates", "duration_ms": 1000, "session_costs": 0.035, "max_cost": 1.0, "tool_calls": 0 },
+  "last_message": "{\"schema_version\":1,\"summary\":\"Duplicate findings.\",\"findings\":[{\"category\":\"security\",\"severity\":\"high\",\"confidence\":\"high\",\"rule_id\":null,\"file\":\"src/utils.js\",\"line\":8,\"title\":\"SQL injection\",\"evidence\":\"evidence\",\"explanation\":\"explanation\",\"proposed_fix\":null},{\"category\":\"security\",\"severity\":\"high\",\"confidence\":\"high\",\"rule_id\":null,\"file\":\"src/utils.js\",\"line\":8,\"title\":\"SQL injection\",\"evidence\":\"evidence\",\"explanation\":\"explanation\",\"proposed_fix\":null},{\"category\":\"security\",\"severity\":\"high\",\"confidence\":\"high\",\"rule_id\":null,\"file\":\"src/utils.js\",\"line\":8,\"title\":\"SQL injection\",\"evidence\":\"evidence\",\"explanation\":\"explanation\",\"proposed_fix\":null},{\"category\":\"security\",\"severity\":\"high\",\"confidence\":\"high\",\"rule_id\":null,\"file\":\"src/utils.js\",\"line\":8,\"title\":\"SQL injection\",\"evidence\":\"evidence\",\"explanation\":\"explanation\",\"proposed_fix\":null}],\"needs_human_attention\":[]}"
+}

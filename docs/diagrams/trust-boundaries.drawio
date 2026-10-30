@@ -1,0 +1,115 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="trust-boundaries" name="Trust boundaries">
+    <mxGraphModel dx="1200" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="640" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Zone 1: Untrusted PR Zone -->
+        <mxCell id="zone_untrusted" value="Untrusted Zone (PR Author / Fork / External Code)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#fff1f2;strokeColor=#e11d48;fontStyle=1;startSize=30;" vertex="1" parent="1">
+          <mxGeometry x="20" y="20" width="230" height="580" as="geometry" />
+        </mxCell>
+        <mxCell id="pr_payload" value="Untrusted PR Input&#xa;&#x2022; Code diff &amp;amp; changed files&#xa;&#x2022; PR title &amp;amp; description&#xa;&#x2022; Branch &amp;amp; author name&#xa;&#x2022; Commit messages" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e11d48;" vertex="1" parent="zone_untrusted">
+          <mxGeometry x="15" y="45" width="200" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="threat_vectors" value="Threat Vectors&#xa;&#x2022; Prompt injection (AC-1, AC-2)&#xa;&#x2022; Rule tampering (AC-3)&#xa;&#x2022; Tracking pixels / HTML (AC-7)&#xa;&#x2022; Resource exhaustion (AC-10)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e11d48;" vertex="1" parent="zone_untrusted">
+          <mxGeometry x="15" y="175" width="200" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="pr_comments_feed" value="GitHub PR Discussion Feed&#xa;(Advisory Comment Only)&#xa;&#x2022; One comment updated in place&#xa;&#x2022; No approval / No merge block" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#57606a;" vertex="1" parent="zone_untrusted">
+          <mxGeometry x="15" y="440" width="200" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- Zone 2: GitHub Actions Trigger -->
+        <mxCell id="zone_trigger" value="GitHub Actions (Default Branch)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#64748b;fontStyle=1;startSize=30;" vertex="1" parent="1">
+          <mxGeometry x="270" y="20" width="180" height="580" as="geometry" />
+        </mxCell>
+        <mxCell id="tb1_box" value="TB-1: Trigger Boundary&#xa;(Validated Primitives Only)&#xa;repo, PR#, head_sha" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;fillColor=#fee2e2;strokeColor=#b91c1c;fontStyle=1;" vertex="1" parent="zone_trigger">
+          <mxGeometry x="10" y="40" width="160" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="ci_gate" value="Required CI Gate&#xa;(G12, G31)&#xa;All CI workflows green&#xa;for exact head SHA" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;" vertex="1" parent="zone_trigger">
+          <mxGeometry x="15" y="145" width="150" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="author_gate" value="Author Policy Gate&#xa;(G7)&#xa;OWNER / MEMBER /&#xa;COLLABORATOR or Label" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#2563eb;" vertex="1" parent="zone_trigger">
+          <mxGeometry x="15" y="250" width="150" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="dispatcher" value="Job Dispatcher&#xa;(G1, G24, G25)&#xa;contents: read&#xa;Submit CE Job Run" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#2563eb;" vertex="1" parent="zone_trigger">
+          <mxGeometry x="15" y="355" width="150" height="75" as="geometry" />
+        </mxCell>
+
+        <!-- Zone 3: IBM Cloud Code Engine Job -->
+        <mxCell id="zone_ce" value="IBM Cloud Code Engine Job Container (Frankfurt eu-de)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#475569;fontStyle=1;startSize=30;" vertex="1" parent="1">
+          <mxGeometry x="480" y="20" width="460" height="580" as="geometry" />
+        </mxCell>
+
+        <!-- Stage 1 -->
+        <mxCell id="stage1" value="Stage 1: Prepare (Wrapper User)&#xa;&#x2022; SCM Read Token (G2)&#xa;&#x2022; Verify Head SHA unchanged (G32)&#xa;&#x2022; Load Base Rules via API (G33)&#xa;&#x2022; Size Gates (G8) &amp;amp; Secret Redaction (G15)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#3b82d4;" vertex="1" parent="zone_ce">
+          <mxGeometry x="20" y="40" width="420" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- TB-2 -->
+        <mxCell id="tb2_box" value="TB-2: Review Sandbox Boundary&#xa;&#x2022; Fresh Scratch Directory (G28, G29)&#xa;&#x2022; env -i (Scrubbed env, BOB_API_KEY only) (G3, G23)&#xa;&#x2022; --disable-tool-groups edit,execute --disable-mcp (G4, G30)" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;fillColor=#fef3c7;strokeColor=#d97706;fontStyle=1;align=left;" vertex="1" parent="zone_ce">
+          <mxGeometry x="20" y="140" width="420" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Stage 2 -->
+        <mxCell id="stage2" value="Stage 2: Review (Bob User)&#xa;&#x2022; IBM Bob Shell (v2.0.9, bob run -f json)&#xa;&#x2022; Process Timeout (G13) &amp;amp; Hard Budget Limit (G14)&#xa;&#x2022; Purely Read-only Diff Analysis" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ede9fe;strokeColor=#7c5cd8;" vertex="1" parent="zone_ce">
+          <mxGeometry x="20" y="240" width="420" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- TB-3 -->
+        <mxCell id="tb3_box" value="TB-3: Publishing Output Boundary&#xa;&#x2022; Strict JSON Schema Validation (G16, G36)&#xa;&#x2022; Line in Diff &amp;amp; Rule ID Verification (G36)&#xa;&#x2022; Markdown Sanitizer (G17) &amp;amp; Advisory Header/Footer (G19, G35)" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;fillColor=#fef3c7;strokeColor=#d97706;fontStyle=1;align=left;" vertex="1" parent="zone_ce">
+          <mxGeometry x="20" y="340" width="420" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Stage 3 -->
+        <mxCell id="stage3" value="Stage 3: Publish (Wrapper User)&#xa;&#x2022; SCM Comment Token (G2, G34)&#xa;&#x2022; Single Upsert Marker Comment (G18)&#xa;&#x2022; Cost Record Output (G37) &amp;amp; Scrubbed Audit Log (G20, G27)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#16a34a;" vertex="1" parent="zone_ce">
+          <mxGeometry x="20" y="440" width="420" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Zone 4: External Bob Service -->
+        <mxCell id="zone_bob" value="IBM Bob Service (Global)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f3e8ff;strokeColor=#9333ea;fontStyle=1;startSize=30;" vertex="1" parent="1">
+          <mxGeometry x="970" y="200" width="210" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="bob_backend" value="IBM Bob Inference API&#xa;&#x2022; Model reasoning&#xa;&#x2022; Egress from eu-de to Global&#xa;&#x2022; Returns single JSON result line" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9333ea;" vertex="1" parent="zone_bob">
+          <mxGeometry x="15" y="45" width="180" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- Connecting Arrows -->
+        <mxCell id="e1" value="PR Event" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="pr_payload" target="tb1_box">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" value="Passes" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="zone_trigger" source="tb1_box" target="ci_gate">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2b" value="CI Green" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="zone_trigger" source="ci_gate" target="author_gate">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2c" value="Authorized" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="zone_trigger" source="author_gate" target="dispatcher">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" value="Dispatch Job" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="dispatcher" target="stage1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" value="Prepares Scratch" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="zone_ce" source="stage1" target="tb2_box">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" value="Spawns Isolated Bob" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="zone_ce" source="tb2_box" target="stage2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" value="HTTPS (BOB_API_KEY)" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="stage2" target="bob_backend">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" value="Captures Stdout" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="zone_ce" source="stage2" target="tb3_box">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" value="Validated Findings" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="zone_ce" source="tb3_box" target="stage3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" value="Post / Upsert Advisory Comment" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;entryX=1;entryY=0.5;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="stage3" target="pr_comments_feed">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

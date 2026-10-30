@@ -1,0 +1,7 @@
+{
+  "type": "result",
+  "timestamp": "2026-10-30T10:00:00.000Z",
+  "status": "success",
+  "stats": { "task_id": "test-task-003", "duration_ms": 1100, "session_costs": 0.038, "max_cost": 1.0, "tool_calls": 0 },
+  "last_message": "Summary: The review has completed.\n\n{\"schema_version\":1,\"summary\":\"Review complete.\",\"findings\":[{\"category\":\"security\",\"severity\":\"high\",\"confidence\":\"high\",\"rule_id\":null,\"file\":\"src/utils.js\",\"line\":8,\"title\":\"SQL injection\",\"evidence\":\"db.query + id\",\"explanation\":\"Unsanitised input in query.\",\"proposed_fix\":null}],\"needs_human_attention\":[]}\n\nEnd of review."
+}

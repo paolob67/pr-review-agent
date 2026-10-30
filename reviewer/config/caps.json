@@ -1,0 +1,11 @@
+{
+  "maxFilesPerPR": 50,
+  "maxDiffBytes": 102400,
+  "maxPromptBytes": 204800,
+  "maxRunsPerPR": 3,
+  "maxRunsPerDay": 30,
+  "dailySpendCapUsd": 10.0,
+  "maxFindingsTotal": 15,
+  "maxFindingsPerCategory": 5,
+  "bobTimeoutSeconds": 180
+}

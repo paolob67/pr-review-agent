@@ -1,0 +1,13 @@
+{
+  "type": "result",
+  "timestamp": "2026-10-30T10:00:00.000Z",
+  "status": "success",
+  "stats": {
+    "task_id": "test-bidi",
+    "duration_ms": 900,
+    "session_costs": 0.03,
+    "max_cost": 1,
+    "tool_calls": 0
+  },
+  "last_message": "{\"schema_version\":1,\"summary\":\"Bidi test.\",\"findings\":[{\"category\":\"security\",\"severity\":\"high\",\"confidence\":\"high\",\"rule_id\":null,\"file\":\"src/utils.js\",\"line\":8,\"title\":\"Bidi test\",\"evidence\":\"db.query‮ injected bidi char\",\"explanation\":\"Contains bidi control character.\",\"proposed_fix\":null}],\"needs_human_attention\":[]}"
+}

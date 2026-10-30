@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "note": "Code Engine compute cost rates; not yet populated (Phase 4).",
+  "ratesVersion": "1.0.0",
+  "vcpu": null,
+  "memoryGbPerHour": null
+}

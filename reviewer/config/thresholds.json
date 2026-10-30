@@ -1,0 +1,4 @@
+{
+  "confidenceDropBelow": "medium",
+  "ruleSizeLimitBytes": { "standards": 32768, "projectRules": 32768, "security": 16384, "config": 4096 }
+}

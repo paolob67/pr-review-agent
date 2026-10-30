@@ -1,0 +1,7 @@
+{
+  "type": "result",
+  "timestamp": "2026-10-30T10:00:00.000Z",
+  "status": "success",
+  "stats": { "task_id": "test-env-print", "duration_ms": 800, "session_costs": 0.021, "max_cost": 1.0, "tool_calls": 0 },
+  "last_message": "{\"schema_version\":1,\"summary\":\"Normal result for env print canary test.\",\"findings\":[],\"needs_human_attention\":[]}"
+}

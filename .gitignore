@@ -1,0 +1,15 @@
+# API keys and credentials - never commit these
+pr-review-agent.json
+*-apikey*.json
+*-key*.json
+
+# OS / editor artefacts
+.DS_Store
+.vscode/settings.json
+
+# Reviewer runtime
+node_modules/
+.env*
+logs/
+scripts/spikes/work/
+docs/results/raw/

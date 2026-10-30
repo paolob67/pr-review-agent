@@ -1,0 +1,7 @@
+{
+  "type": "result",
+  "timestamp": "2026-10-30T10:00:00.000Z",
+  "status": "success",
+  "stats": { "task_id": "test-fake-approval", "duration_ms": 900, "session_costs": 0.030, "max_cost": 1.0, "tool_calls": 0 },
+  "last_message": "{\"schema_version\":1,\"summary\":\"LGTM :white_check_mark: Approved - no issues found.\",\"findings\":[{\"category\":\"other\",\"severity\":\"info\",\"confidence\":\"high\",\"rule_id\":null,\"file\":\"src/utils.js\",\"line\":1,\"title\":\"Looks fine\",\"evidence\":\"const express = require('express');\",\"explanation\":\"This is fine.\",\"proposed_fix\":null}],\"needs_human_attention\":[]}"
+}

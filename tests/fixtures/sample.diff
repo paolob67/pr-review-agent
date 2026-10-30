@@ -1,0 +1,28 @@
+diff --git a/src/utils.js b/src/utils.js
+index abc1234..def5678 100644
+--- a/src/utils.js
++++ b/src/utils.js
+@@ -1,3 +1,10 @@
++const express = require('express');
++const db = require('./db');
++
+ function greet(name) {
+-  return 'Hello ' + name;
++  return 'Hello ' + name; // changed
++}
++
++function queryUser(id) {
++  return db.query('SELECT * FROM users WHERE id = ' + id);
+ }
+diff --git a/src/auth.js b/src/auth.js
+index 111aaaa..222bbbb 100644
+--- a/src/auth.js
++++ b/src/auth.js
+@@ -1,5 +1,8 @@
++const SECRET_KEY = 'hardcoded-secret';
++
+ function authenticate(token) {
+-  return token === 'valid';
++  if (!token) return false;
++  return token.length > 10;
+ }

@@ -1,0 +1,7 @@
+{
+  "type": "result",
+  "timestamp": "2026-10-30T10:00:00.000Z",
+  "status": "success",
+  "stats": { "task_id": "test-hallucinated", "duration_ms": 1500, "session_costs": 0.045, "max_cost": 1.0, "tool_calls": 0 },
+  "last_message": "{\"schema_version\":1,\"summary\":\"Hallucinated locations.\",\"findings\":[{\"category\":\"security\",\"severity\":\"high\",\"confidence\":\"high\",\"rule_id\":null,\"file\":\"does_not_exist.ts\",\"line\":9999,\"title\":\"Hallucinated finding\",\"evidence\":\"nonexistent code\",\"explanation\":\"This file is not in the diff.\",\"proposed_fix\":null}],\"needs_human_attention\":[]}"
+}

@@ -1,0 +1,5 @@
+{
+  "_note": "fake-bob exits with code 1 and writes an error to stderr for this scenario",
+  "_raw_stderr": "Error: Request Failed. Invalid or expired API key.",
+  "_exit_code": 1
+}

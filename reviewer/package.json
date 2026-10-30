@@ -1,0 +1,15 @@
+{
+  "name": "pr-review-agent-reviewer",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "IBM Bob PR Review Agent reviewer core",
+  "main": "src/main.js",
+  "bin": { "reviewer": "bin/reviewer.js" },
+  "engines": { "node": ">=22.15.0" },
+  "scripts": {
+    "test": "node --test ../tests/unit/**/*.test.js ../tests/pipeline/**/*.test.js",
+    "lint": "node ../scripts/validation/lint.js"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

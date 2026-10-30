@@ -1,0 +1,4 @@
+{
+  "_note": "fake-bob sleeps for 30 seconds to trigger the timeout guardrail",
+  "_sleep_seconds": 30
+}

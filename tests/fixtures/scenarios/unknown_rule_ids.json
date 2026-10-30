@@ -1,0 +1,7 @@
+{
+  "type": "result",
+  "timestamp": "2026-10-30T10:00:00.000Z",
+  "status": "success",
+  "stats": { "task_id": "test-unknown-rules", "duration_ms": 1200, "session_costs": 0.040, "max_cost": 1.0, "tool_calls": 0 },
+  "last_message": "{\"schema_version\":1,\"summary\":\"Unknown rule IDs.\",\"findings\":[{\"category\":\"standards\",\"severity\":\"medium\",\"confidence\":\"high\",\"rule_id\":\"STD-FAKE-999\",\"file\":\"src/utils.js\",\"line\":1,\"title\":\"Invented rule\",\"evidence\":\"const express = require('express');\",\"explanation\":\"This rule ID does not exist.\",\"proposed_fix\":null}],\"needs_human_attention\":[]}"
+}

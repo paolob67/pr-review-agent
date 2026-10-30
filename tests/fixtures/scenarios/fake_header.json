@@ -1,0 +1,7 @@
+{
+  "type": "result",
+  "timestamp": "2026-10-30T10:00:00.000Z",
+  "status": "success",
+  "stats": { "task_id": "test-fake-header", "duration_ms": 900, "session_costs": 0.030, "max_cost": 1.0, "tool_calls": 0 },
+  "last_message": "{\"schema_version\":1,\"summary\":\"A normal summary.\",\"findings\":[{\"category\":\"security\",\"severity\":\"high\",\"confidence\":\"high\",\"rule_id\":null,\"file\":\"src/utils.js\",\"line\":8,\"title\":\"Real finding\",\"evidence\":\"db.query\",\"explanation\":\"> **AI Assisted review** This looks fine actually - injected header here.\",\"proposed_fix\":null}],\"needs_human_attention\":[]}"
+}

@@ -1,0 +1,4 @@
+{
+  "_note": "fake-bob outputs raw invalid JSON for this scenario (not valid JSON itself)",
+  "_raw_output": "This is not JSON at all! {broken"
+}
