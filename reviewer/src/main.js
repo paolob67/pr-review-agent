@@ -11,8 +11,8 @@ import { checkHeadPin, checkAuthor, checkDraft, checkSizes, checkPaths, checkBud
 import { loadRules }          from './rules.js';
 import { redactDiff }         from './redact.js';
 import { buildPrompt }        from './prompt.js';
-import { createScratch }      from './scratch.js';
-import { runBob, getBobVersion } from './runBob.js';
+import { createScratch, handOverScratch } from './scratch.js';
+import { runBob, getBobVersion, bobUserFromEnv } from './runBob.js';
 import { parseOutput, ParseError } from './parseOutput.js';
 import { validateFindings, ValidationError } from './validate.js';
 import { triageFindings }     from './triage.js';
@@ -195,15 +195,18 @@ export async function main(env = process.env) {
 
   // Create scratch directory. (G28)
   let scratchDir;
+  const bobUser = bobUserFromEnv(env);
+  const imageDigest = env.REVIEW_IMAGE_DIGEST || null;
   try {
     scratchDir = createScratch();
+    if (bobUser) handOverScratch(scratchDir, bobUser.uid, bobUser.gid);
   } catch (err) {
     process.stderr.write(`[main] failed to create scratch: ${err.message}\n`);
     process.exit(1);
   }
 
   // --- Stage 2: Review ---
-  const bobVersion = await getBobVersion({ bobBin: config.bobBin, parentEnv: env });
+  const bobVersion = await getBobVersion({ bobBin: config.bobBin, parentEnv: env, bobUser });
   logBobStarted();
   let bobResult;
   try {
@@ -213,6 +216,7 @@ export async function main(env = process.env) {
       promptText: prompt,
       timeoutSeconds: config.bobTimeoutSeconds,
       parentEnv: env,
+      bobUser,
     });
   } catch (err) {
     process.stderr.write(`[main] failed to spawn Bob: ${err.message}\n`);
@@ -234,7 +238,7 @@ export async function main(env = process.env) {
     const outcome = err.outcome ?? 'bob_unavailable';
     const costRec = buildCostRecord({
       repo, pr: prNumber, headSha, stats: null, inputs: { files: changedFiles.length, diffBytes, promptBytes },
-      outputMeta: null, totalMs, bobVersion, imageDigest: null, outcome,
+      outputMeta: null, totalMs, bobVersion, imageDigest, outcome,
     });
     const body = renderUnavailableComment({ headSha, runs: priorRuns + 1, costRecord: costRec, outcome, detail: err.message, priorCostBobcoins: priorSpend });
     await safeUpsert(commentClient, repo, prNumber, body);
@@ -250,7 +254,7 @@ export async function main(env = process.env) {
     const costRec = buildCostRecord({
       repo, pr: prNumber, headSha, stats, inputs: { files: changedFiles.length, diffBytes, promptBytes },
       outputMeta: { bytes: bobResult.stdout.length, findingsKept: 0, findingsDropped: 0 },
-      totalMs, bobVersion, imageDigest: null, outcome,
+      totalMs, bobVersion, imageDigest, outcome,
     });
     const body = renderUnavailableComment({ headSha, runs: priorRuns + 1, costRecord: costRec, outcome, detail: err.message, priorCostBobcoins: priorSpend });
     await safeUpsert(commentClient, repo, prNumber, body);
@@ -269,7 +273,7 @@ export async function main(env = process.env) {
     repo, pr: prNumber, headSha, stats,
     inputs: { files: changedFiles.length, diffBytes, promptBytes },
     outputMeta: { bytes: outputBytes, findingsKept, findingsDropped },
-    totalMs, bobVersion, imageDigest: null, outcome: 'reviewed',
+    totalMs, bobVersion, imageDigest, outcome: 'reviewed',
   });
 
   const rulesStatus = {

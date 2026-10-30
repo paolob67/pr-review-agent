@@ -4,7 +4,7 @@
 
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildBobEnv, runBob, getBobVersion } from '../../reviewer/src/runBob.js';
+import { buildBobEnv, runBob, getBobVersion, bobUserFromEnv } from '../../reviewer/src/runBob.js';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { mkdtempSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
@@ -54,6 +54,29 @@ describe('runBob.js - buildBobEnv (G2, G3)', () => {
     // buildBobEnv should NOT include the canary var (it's not in the allowlist)
     const env = buildBobEnv(parent);
     assert.ok(!('CANARY_BOB_MUST_NOT_APPEAR' in env));
+  });
+});
+
+describe('runBob.js - bobUserFromEnv and Bob identity (S11, G23)', () => {
+  it('G23: no identity when the image variables are unset (local runs)', () => {
+    assert.equal(bobUserFromEnv({}), null);
+  });
+
+  it('G23: identity is read from the image variables', () => {
+    const u = bobUserFromEnv({ REVIEW_BOB_UID: '10002', REVIEW_BOB_GID: '10003', REVIEW_BOB_HOME: '/home/x' });
+    assert.deepEqual(u, { uid: 10002, gid: 10003, home: '/home/x' });
+  });
+
+  it('G23: uid 0 or malformed values are refused (never run Bob as root)', () => {
+    assert.equal(bobUserFromEnv({ REVIEW_BOB_UID: '0', REVIEW_BOB_GID: '10002' }), null);
+    assert.equal(bobUserFromEnv({ REVIEW_BOB_UID: '10002', REVIEW_BOB_GID: '0' }), null);
+    assert.equal(bobUserFromEnv({ REVIEW_BOB_UID: 'abc', REVIEW_BOB_GID: '10002' }), null);
+  });
+
+  it('G23: Bob gets its own HOME, not the wrapper HOME', () => {
+    const env = buildBobEnv({ PATH: '/bin', HOME: '/root', BOB_API_KEY: 'k' }, { uid: 10002, gid: 10002, home: '/home/bobrun' });
+    assert.equal(env.HOME, '/home/bobrun');
+    assert.equal(env.BOB_API_KEY, 'k');
   });
 });
 

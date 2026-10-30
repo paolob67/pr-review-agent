@@ -28,6 +28,9 @@ export const MUTATIONS = [
   { id: 'G2', file: 'reviewer/src/runBob.js', find: "new Set(['BOB_API_KEY', 'PATH', 'HOME', 'NODE_ENV'])", replace: "new Set(['BOB_API_KEY', 'PATH', 'HOME', 'NODE_ENV', 'SCM_READ_TOKEN', 'SCM_COMMENT_TOKEN'])", tests: [U('runBob')], desc: 'Allow SCM tokens into the Bob env allowlist' },
   { id: 'G3', file: 'reviewer/src/runBob.js', find: 'for (const key of ALLOWED_ENV_VARS) {', replace: 'for (const key of Object.keys(parentEnv)) {', tests: [U('runBob'), P], desc: 'Pass the whole parent env instead of the allowlist' },
   { id: 'G4', file: 'reviewer/src/runBob.js', find: "'--disable-tool-groups', 'edit,execute',", replace: "'--disable-tool-groups', 'subagent',", tests: [U('runBob')], desc: 'Edit and execute tool groups no longer disabled' },
+  { id: 'G23a', file: 'reviewer/src/runBob.js', find: 'env.HOME = bobUser.home;', replace: '/* wrapper HOME kept */', tests: [U('runBob')], desc: 'Bob keeps the wrapper HOME instead of its own' },
+  { id: 'G23b', file: 'reviewer/src/runBob.js', find: 'uid <= 0 || gid <= 0', replace: 'uid < 0 || gid < 0', tests: [U('runBob')], desc: 'Bob identity may be root' },
+
   { id: 'G30', file: 'reviewer/src/runBob.js', find: "    '--disable-mcp',\n", replace: '', tests: [U('runBob')], desc: 'MCP no longer disabled' },
   { id: 'G7', file: 'reviewer/src/gate.js', find: 'if (!ALLOWED_ASSOCIATIONS.has(assoc)) {', replace: 'if (false) {', tests: [U('gate')], desc: 'Disable the author association check' },
   { id: 'G8', file: 'reviewer/src/gate.js', find: 'export function checkSizes(fileCount, diffBytes, config) {', replace: 'export function checkSizes(fileCount, diffBytes, config) {\n  return null;', tests: [U('gate'), P], desc: 'Size gate always passes' },

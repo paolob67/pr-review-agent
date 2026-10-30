@@ -4,7 +4,7 @@
 // Verifies no forbidden files (AGENTS.md, .env*, .bob/settings.json) are present.
 // No runtime dependencies.
 
-import { mkdtempSync, mkdirSync, writeFileSync, existsSync, readdirSync, statSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, existsSync, readdirSync, statSync, chownSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { readFileSync } from 'node:fs';
@@ -78,6 +78,18 @@ export function checkForbiddenPaths(scratchDir) {
   if (found.length > 0) {
     throw new Error(`Forbidden paths found in scratch directory: ${found.join(', ')}`);
   }
+}
+
+// handOverScratch gives the scratch tree to the unprivileged Bob user so Bob can read it. (S11, G23)
+// Only called when the wrapper runs as root; the tree holds nothing but wrapper-generated files.
+export function handOverScratch(scratchDir, uid, gid) {
+  const walk = (p) => {
+    chownSync(p, uid, gid);
+    if (statSync(p).isDirectory()) {
+      for (const e of readdirSync(p)) walk(join(p, e));
+    }
+  };
+  walk(scratchDir);
 }
 
 // assertNoBobSettingsJson is exported for tests that verify a specific forbidden path.

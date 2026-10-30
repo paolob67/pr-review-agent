@@ -339,9 +339,9 @@ Pay-as-you-Go account. The names below are placeholders; change freely before Ph
 | Item | Value |
 |---|---|
 | Region | Frankfurt, `eu-de` (Code Engine is available there, multizone region) |
-| Resource group | `bob-pr-reviewer-rg` (created ad hoc) |
+| Resource group | `eid-6ae4f3be2e6256f0f91842aa` (existing and shared; the account does not allow creating one, decided 2026-10-30; scripts never create or delete it) |
 | Code Engine project | `bob-pr-reviewer` |
-| Container Registry namespace | `bob-pr-reviewer` (regional registry for `eu-de`; confirm domain in Phase 4) |
+| Container Registry namespace | `bob-pr-reviewer` (regional registry for `eu-de`, domain `de.icr.io`, confirmed 2026-10-30; created) |
 | Image | `pr-reviewer` |
 | Job | `pr-reviewer` |
 | Secrets | `bob-creds` (Bob key), `scm-creds` (read-only token and comment token, two keys; see [CONTRACTS.md](CONTRACTS.md)) |
@@ -352,7 +352,10 @@ The CI service ID API key is the one IBM credential stored in GitHub (as an Acti
 
 Local tooling already present on this machine: `ibmcloud` CLI, `gh`, `node` (v26.3.1) and `bob`.
 `docker` is absent, so images are built remotely with `ibmcloud ce buildrun submit --source .`.
-Login state of the IBM Cloud CLI has not been checked yet.
+IBM Cloud CLI is logged in (account `itz-saas-358`, Pay-as-you-Go, region `eu-de`). Phase 4 status: project and
+namespace created; IAM policy creation is denied for this user, which blocks the registry push, the CI service ID
+(G25) and S12. See [results/phase-4-code-engine.md](results/phase-4-code-engine.md) for the resume checklist.
+`podman` 6.0.0 is installed, but its VM fails image builds with a storage error, so builds still go to Code Engine.
 
 Resources are created in Phase 4 by scripts under `integrations/code-engine/`, so the setup is
 reproducible and can be torn down in one command.

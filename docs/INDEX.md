@@ -13,7 +13,7 @@
 | [tasks/phase-1-design-freeze.md](tasks/phase-1-design-freeze.md) | Brief: threat model, ADRs, architecture freeze | Done |
 | [tasks/phase-2-reviewer-core.md](tasks/phase-2-reviewer-core.md) | Brief: reviewer core with offline tests | Ready |
 | [tasks/phase-3-real-bob.md](tasks/phase-3-real-bob.md) | Brief: real Bob integration, local | Ready |
-| [tasks/phase-4-code-engine.md](tasks/phase-4-code-engine.md) | Brief: Code Engine foundation in eu-de | Ready |
+| [tasks/phase-4-code-engine.md](tasks/phase-4-code-engine.md) | Brief: Code Engine foundation in eu-de | In progress, blocked |
 | [tasks/phase-5-github-trigger.md](tasks/phase-5-github-trigger.md) | Brief: GitHub trigger and end-to-end matrix | Ready |
 | [tasks/phase-6-redteam-evals.md](tasks/phase-6-redteam-evals.md) | Brief: red team and quality evals | Ready |
 | [tasks/phase-7-hardening.md](tasks/phase-7-hardening.md) | Brief: operational hardening and cost reconciliation | Ready |
@@ -41,6 +41,7 @@
 | [results/phase-3-runs.md](results/phase-3-runs.md) | Phase 3 real-Bob runs: pass rate, usage, latency, hostile-config check | Phase 3 done 2026-10-30 |
 | [results/phase-3-evidence/](results/phase-3-evidence/) | Saved comment, result and argv per run, plus the budget ledger | Phase 3 done 2026-10-30 |
 | [results/mutation-check.md](results/mutation-check.md) | Mutation check results (real patch-and-run, 39 mutations) | Phase 2 done 2026-10-30 |
+| [results/phase-4-code-engine.md](results/phase-4-code-engine.md) | Phase 4 resume checklist, live state, IAM blocker, build notes | In progress, blocked 2026-10-30 |
 | [scripts/spikes/s1-installer.sh](../scripts/spikes/s1-installer.sh) | S1: installer inspection script | Phase 0 |
 | [scripts/spikes/s2-s5-readonly.sh](../scripts/spikes/s2-s5-readonly.sh) | S2/S5: non-interactive flags and read-only enforcement | Phase 0 |
 | [scripts/spikes/s3-custom-mode.sh](../scripts/spikes/s3-custom-mode.sh) | S3: custom mode YAML and --chat-mode | Phase 0 |
