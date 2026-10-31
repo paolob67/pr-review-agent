@@ -11,7 +11,7 @@ unknowns S1 to S10, S13 and S14 from [PLAN.md](../PLAN.md#5-known-unknowns-to-ve
   `/usr/local/bin/bob`). Check with `bob --version`.
 - A small Bobcoin allowance. The owner has accepted real calls under their own session for this
   phase; they are tiny and use only synthetic content.
-- No cloud, GitHub or API key needed. If an API-key test is wanted (S6 auth failure), use a
+- No GitHub or API key needed. If an API-key test is wanted (S6 auth failure), use a
   deliberately invalid key; do not ask for the real one yet.
 
 ## Inputs to read
@@ -31,7 +31,7 @@ unknowns S1 to S10, S13 and S14 from [PLAN.md](../PLAN.md#5-known-unknowns-to-ve
    consequence for the plan. Use "unresolved, assume worst case" where a probe cannot decide.
    - S1: read the installer script (`curl -fsSL https://bob.ibm.com/download/bobshell.sh`, view it,
      do not pipe to a shell) and the releases page; record install location, version pinning, and
-     any checksum. The container install itself is tested in Phase 4 because `docker` is absent.
+     any checksum. The container install itself is tested in Phase 4 with podman because `docker` is absent.
    - S2: `bob --help` and the non-interactive docs: read-only flags, `--allowed-tools`,
      `--approval-mode`, any output format option. Try `-p` with a trivial prompt and a JSON-only
      instruction; record whether the output is clean enough to parse.

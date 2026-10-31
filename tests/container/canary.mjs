@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // tests/container/canary.mjs
-// S11 / G23 canary test, run INSIDE the container (locally under podman, or as a Code Engine job run
-// with the command overridden). The wrapper side holds canary SCM tokens; a probe is started the way
+// S11 / G23 canary test, run INSIDE the container (locally under podman, or on a GitHub-hosted
+// runner with the command overridden). The wrapper side holds canary SCM tokens; a probe is started the way
 // the reviewer starts Bob (reviewer/src/runBob.js, scratch handed over by scratch.js). The probe
 // reports what it can see; this script asserts that none of the wrapper's secrets are reachable.
 //
@@ -15,7 +15,8 @@ import { rmSync, chmodSync } from 'node:fs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const probe = join(here, 'probe-bob.mjs');
-chmodSync(probe, 0o755);
+// The image sets the executable bit; chmod only helps local runs, and fails on a read-only rootfs.
+try { chmodSync(probe, 0o755); } catch { /* read-only rootfs: rely on the image */ }
 
 // Canary values replace whatever the job had; the real secrets are never used by this test.
 const parentEnv = {

@@ -75,7 +75,7 @@ Not covered offline, and why:
 | G1, G6, G11, G12, G31 | GitHub Actions workflow and trigger behaviour; Phase 5 |
 | G5, G29 (live part) | Need real Bob; Phase 3 |
 | G4, G30 (live part) | The offline test asserts the argument list (`--disable-tool-groups edit,execute`, `--disable-mcp`, `--workspace`, `--mode reviewer`, `-f json`, no `--yolo`/`--trust`). That the flags actually remove the tools is recorded for Bob 2.0.9 in spikes.md S5 and S14; the live test is Phase 3 |
-| G21, G22, G25, G26 | Code Engine job config, image pinning, IAM, cleanup; Phase 4 |
+| G21, G22, G25, G26 | Workflow job config, image and runner pinning, token and environment scoping, artifact retention; Phase 4 |
 | G23 | Needs the in-container user separation; Phase 4. Env scrubbing (G2, G3) is covered |
 
 G29 is partly covered: the scratch tests show no `AGENTS.md`, `.env` or `.bob/settings.json` is

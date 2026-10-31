@@ -2,26 +2,18 @@
 // Guardrails: G37 (per-PR cost record produced for every run)
 // Builds the cost record JSON as defined in CONTRACTS section 6.
 // bob_usage.total comes from stats.session_costs in Bob JSON output (confirmed S7).
-// Compute costs stay null until rates are loaded in Phase 4.
+// Runner compute is recorded as time, not currency (ADR 0012): the runner label and, once the
+// workflow reports it, the billed minutes.
 // No runtime dependencies.
 
-import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
-import { join, dirname } from 'node:path';
+const RUNNER_LABEL = 'ubuntu-24.04';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const COST_RATES_PATH = join(__dirname, '..', 'config', 'cost-rates.json');
-
-let _rates = null;
-function getRates() {
-  if (!_rates) {
-    try {
-      _rates = JSON.parse(readFileSync(COST_RATES_PATH, 'utf8'));
-    } catch {
-      _rates = { ratesVersion: 'unknown', vcpu: null, memoryGbPerHour: null };
-    }
-  }
-  return _rates;
+// runIdFromEnv returns "<GITHUB_RUN_ID>-<GITHUB_RUN_ATTEMPT>" on a runner, or a placeholder locally.
+export function runIdFromEnv(env = process.env) {
+  const id = env.GITHUB_RUN_ID;
+  if (!id || !/^[0-9]{1,20}$/.test(id)) return 'local-test';
+  const attempt = /^[0-9]{1,4}$/.test(env.GITHUB_RUN_ATTEMPT ?? '') ? env.GITHUB_RUN_ATTEMPT : '1';
+  return `${id}-${attempt}`;
 }
 
 // buildCostRecord constructs a CONTRACTS-section-6 cost record. (G37)
@@ -41,9 +33,7 @@ export function buildCostRecord({
   repo, pr, headSha, stats, inputs, outputMeta,
   totalMs, bobVersion, imageDigest, outcome,
 }) {
-  const rates = getRates();
-  // CE_JOBRUN is injected by Code Engine. In tests it is absent; use a placeholder.
-  const runId = process.env.CE_JOBRUN ?? 'local-test';
+  const runId = runIdFromEnv(process.env);
 
   const bobUsage = stats
     ? {
@@ -83,10 +73,8 @@ export function buildCostRecord({
       bob: bobSec,
     },
     compute: {
-      vcpu: rates.vcpu ?? 1,
-      memory_gb: 4,
-      estimated_cost_usd: null,
-      rates_version: rates.ratesVersion ?? '1.0.0',
+      runner: RUNNER_LABEL,
+      runner_minutes: null,
     },
     outcome,
   };

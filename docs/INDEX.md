@@ -13,12 +13,12 @@
 | [tasks/phase-1-design-freeze.md](tasks/phase-1-design-freeze.md) | Brief: threat model, ADRs, architecture freeze | Done |
 | [tasks/phase-2-reviewer-core.md](tasks/phase-2-reviewer-core.md) | Brief: reviewer core with offline tests | Ready |
 | [tasks/phase-3-real-bob.md](tasks/phase-3-real-bob.md) | Brief: real Bob integration, local | Ready |
-| [tasks/phase-4-code-engine.md](tasks/phase-4-code-engine.md) | Brief: Code Engine foundation in eu-de | In progress, blocked |
+| [tasks/phase-4-runner-foundation.md](tasks/phase-4-runner-foundation.md) | Brief: runner foundation (container, stage split, secrets wiring) | Part A done, Part B waiting for owner |
 | [tasks/phase-5-github-trigger.md](tasks/phase-5-github-trigger.md) | Brief: GitHub trigger and end-to-end matrix | Ready |
 | [tasks/phase-6-redteam-evals.md](tasks/phase-6-redteam-evals.md) | Brief: red team and quality evals | Ready |
 | [tasks/phase-7-hardening.md](tasks/phase-7-hardening.md) | Brief: operational hardening and cost reconciliation | Ready |
 | [tasks/phase-8-docs-article.md](tasks/phase-8-docs-article.md) | Brief: documentation, article, final validation | Ready |
-| [adr/0001-execution-environment.md](adr/0001-execution-environment.md) | Decision to run Bob Shell on IBM Cloud Code Engine (eu-de) | Accepted |
+| [adr/0001-execution-environment.md](adr/0001-execution-environment.md) | Decision to run Bob Shell on IBM Cloud Code Engine (eu-de) | Superseded by 0012 |
 | [adr/0002-author-and-fork-policy.md](adr/0002-author-and-fork-policy.md) | Role-based author policy and maintainer label gate | Accepted |
 | [adr/0003-trigger-after-ci.md](adr/0003-trigger-after-ci.md) | Trigger after CI and definition of required CI | Accepted |
 | [adr/0004-findings-contract-and-comment-format.md](adr/0004-findings-contract-and-comment-format.md) | Findings schema, line mapping, comment structure | Accepted |
@@ -28,7 +28,9 @@
 | [adr/0009-drop-daily-caps.md](adr/0009-drop-daily-caps.md) | Daily run and spend caps dropped | Accepted |
 | [adr/0010-scratch-layout-stdin.md](adr/0010-scratch-layout-stdin.md) | Prompt on stdin; scratch holds only the mode file | Accepted |
 | [adr/0011-bobcoins-as-usage-unit.md](adr/0011-bobcoins-as-usage-unit.md) | Bob usage recorded in Bobcoins, no currency conversion | Accepted |
-| [adr/0008-scm-identity-for-comments.md](adr/0008-scm-identity-for-comments.md) | Dedicated bot account, comment-only scope | Accepted |
+| [adr/0008-scm-identity-for-comments.md](adr/0008-scm-identity-for-comments.md) | Dedicated bot account, comment-only scope | Accepted (amended by 0013) |
+| [adr/0012-github-hosted-runner-execution.md](adr/0012-github-hosted-runner-execution.md) | Run Bob Shell on GitHub-hosted runners, three jobs | Accepted |
+| [adr/0013-secrets-and-credentials-on-github.md](adr/0013-secrets-and-credentials-on-github.md) | Secrets and credentials on GitHub | Accepted |
 | [diagrams/architecture-overview.drawio](diagrams/architecture-overview.drawio) | Architecture overview (source; PNG alongside) | Current |
 | [diagrams/trust-boundaries.drawio](diagrams/trust-boundaries.drawio) | Trust boundaries diagram (source; PNG alongside) | Current |
 | [TESTING.md](TESTING.md) | How to run each test suite and read results | Phase 2 done 2026-10-30 |
@@ -41,7 +43,8 @@
 | [results/phase-3-runs.md](results/phase-3-runs.md) | Phase 3 real-Bob runs: pass rate, usage, latency, hostile-config check | Phase 3 done 2026-10-30 |
 | [results/phase-3-evidence/](results/phase-3-evidence/) | Saved comment, result and argv per run, plus the budget ledger | Phase 3 done 2026-10-30 |
 | [results/mutation-check.md](results/mutation-check.md) | Mutation check results (real patch-and-run, 39 mutations) | Phase 2 done 2026-10-30 |
-| [results/phase-4-code-engine.md](results/phase-4-code-engine.md) | Phase 4 resume checklist, live state, IAM blocker, build notes | In progress, blocked 2026-10-30 |
+| [results/runner-facts.md](results/runner-facts.md) | GitHub runner, secrets and workflow_run documentation facts | 2026-10-30 |
+| [results/phase-4-container.md](results/phase-4-container.md) | Phase 4 Part A: podman reset, image digest, S11 canary, validation | Part A done 2026-10-31 |
 | [scripts/spikes/s1-installer.sh](../scripts/spikes/s1-installer.sh) | S1: installer inspection script | Phase 0 |
 | [scripts/spikes/s2-s5-readonly.sh](../scripts/spikes/s2-s5-readonly.sh) | S2/S5: non-interactive flags and read-only enforcement | Phase 0 |
 | [scripts/spikes/s3-custom-mode.sh](../scripts/spikes/s3-custom-mode.sh) | S3: custom mode YAML and --chat-mode | Phase 0 |

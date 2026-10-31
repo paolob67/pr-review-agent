@@ -2,8 +2,9 @@
 
 Update this file at the end of every task. Newest information first within each section.
 
-Last updated: 2026-10-30. Phases 0 to 3 complete. Phase 4 (Code Engine) is IN PROGRESS and BLOCKED on IAM
-rights; resume from [results/phase-4-code-engine.md](results/phase-4-code-engine.md) ("Resume checklist").
+Last updated: 2026-10-31. Phases 0 to 3 complete. Phase 4 (runner foundation) Part A is DONE; Part B is
+waiting for the owner (see Current blockers). Execution moved from Code Engine to GitHub-hosted runners
+([ADR 0012](adr/0012-github-hosted-runner-execution.md)).
 
 ## Phase tracker
 
@@ -13,7 +14,7 @@ rights; resume from [results/phase-4-code-engine.md](results/phase-4-code-engine
 | 1. Threat model, ADRs, architecture freeze | [phase-1-design-freeze.md](tasks/phase-1-design-freeze.md) | Done | Yes | n/a (Sign-off complete) |
 | 2. Reviewer core with offline tests | [phase-2-reviewer-core.md](tasks/phase-2-reviewer-core.md) | Done | Yes | n/a |
 | 3. Real Bob integration (local) | [phase-3-real-bob.md](tasks/phase-3-real-bob.md) | Done | Yes | n/a (key, 30 Bobcoin budget, rules direction and data consent supplied) |
-| 4. Code Engine foundation (eu-de) | [phase-4-code-engine.md](tasks/phase-4-code-engine.md) | Blocked (IAM) | No | Right to create IAM access policies (or pre-created access), SCM tokens, Bob key in env; see Current blockers |
+| 4. Runner foundation (container, stage split, secrets wiring) | [phase-4-runner-foundation.md](tasks/phase-4-runner-foundation.md) | Part A done, Part B waiting for owner | No (Part B open) | GitHub plan and visibility of the sandbox repo, permission to create environment/secret/variables, Bob key entered by the owner, S20 and S17 decisions; see Current blockers |
 | 5. GitHub trigger and end-to-end matrix | [phase-5-github-trigger.md](tasks/phase-5-github-trigger.md) | Not started | No | Sandbox GitHub repo, second account, bot account |
 | 6. Red team and quality evals | [phase-6-redteam-evals.md](tasks/phase-6-redteam-evals.md) | Not started | No | Eval and red-team run budget |
 | 7. Operational hardening and cost reconciliation | [phase-7-hardening.md](tasks/phase-7-hardening.md) | Not started | No | Optional: Bobalytics access (see below) |
@@ -23,31 +24,33 @@ Status values: Not started, In progress, Blocked (say why), Done (gate met, resu
 
 ## Current blockers
 
-**Phase 4 is blocked on IAM rights (2026-10-30).** The account `itz-saas-358` is Pay-as-you-Go and the
-`ibmcloud` login works (user `paolo_bianchini@it.ibm.com`, region `eu-de`), but the user cannot create IAM
-access policies or a resource group. That prevents the registry push, the job image pull, the scoped CI
-service ID (G25) and the S12 test. Exact errors and the three ways forward (A: get policy-creation rights
-from the account owner `dtead02@us.ibm.com`; B: an admin pre-creates registry and CI access and hands over
-keys; C: fix the local Podman VM for the canary only) are in
-[results/phase-4-code-engine.md](results/phase-4-code-engine.md). Owner must also export `BOB_API_KEY`,
-`SCM_READ_TOKEN` and `SCM_COMMENT_TOKEN` (fine-grained PATs on `paolob67/notes-sandbox`) for `setup.sh`.
+**Phase 4 Part B needs the owner (2026-10-31).** Part A is complete and recorded in
+[results/phase-4-container.md](results/phase-4-container.md): image built on a clean podman store, S11 canary
+13 of 13 under the hardened flags, `make test` (227), `make lint` and `make mutation` (52 of 52) green.
+Part B creates GitHub resources and uses Bob, so it does not start until the owner supplies:
 
-Live resources that exist now (cost effectively zero): registry namespace `bob-pr-reviewer` (`de.icr.io`) and
-Code Engine project `bob-pr-reviewer` in resource group `eid-6ae4f3be2e6256f0f91842aa` (shared, pre-existing,
-never created or deleted by the scripts). Project `ce-50e8v73tt8` in that group is not ours and is untouched.
-`integrations/code-engine/teardown.sh --yes` removes what we created.
+1. The sandbox repo and its GitHub plan and visibility (decides S18: environment secrets need a paid plan
+   on private repos).
+2. Permission to create the `bob-review` environment, one secret and the repo variables there.
+3. The Bob key, entered by the owner with `gh secret set BOB_API_KEY --env bob-review` (the agent never
+   reads, prints or stores it).
+4. Decisions on S20 (how reviewer code and image reach the jobs) and S17 (comment identity; default is
+   `github-actions[bot]`).
+5. Confirmation that `gh` is logged in with rights on the sandbox repo (login state not yet checked).
 
-Local tooling: `podman` 6.0.0 is installed but its VM fails builds with a storage error
-(`readlink .../overlay/diff`); the machine is stopped. `docker` is absent.
+Local tooling note: podman needed a reset on 2026-10-31 (empty `/etc/subuid` in the VM, stale overlay temp
+dirs). Details and the fix are in [results/phase-4-container.md](results/phase-4-container.md) section 1.
+When run from the agent's shell the podman VM must be started detached or it stops when the command ends.
+`podman image prune` clears the `<none>` images each rebuild leaves behind.
 
-Open follow-ups for the owner (none block Phase 4 beyond the above):
+Open follow-ups for the owner (none block Part B beyond the above):
 
 1. **Verify the usage unit.** Compare the Bobcoin balance (or Bobalytics) with the Phase 3 ledger total
    of 0.9428 (21 calls). Until then `session_costs` is "reported by Bob, unit unverified" (ADR 0011).
 2. **The Bob key has no spending limit set by this project.** With no daily cap (ADR 0009), the Bobcoin
    budget on the account is the only ceiling. Confirm who watches it.
-3. The key in `pr-review-agent.json` expires 2026-12-30. Phase 4 puts it into a Code Engine secret; do not
-   paste it anywhere else.
+3. The key in `pr-review-agent.json` expires 2026-12-30. Part B puts it into a GitHub environment secret;
+   do not paste it anywhere else.
 
 ## Decisions log
 
@@ -85,8 +88,8 @@ answered; link to the entry in `docs/results/`.
 | S8 | Answered 2026-10-30 | [spikes.md S8](results/spikes.md#s8-file-referencing-and-large-stdin) |
 | S9 | Answered 2026-10-30 | [spikes.md S9](results/spikes.md#s9-system-dependencies) |
 | S10 | Unresolved | Phase 3 empirical test; assume one-at-a-time |
-| S11 | Open | Phase 4: mechanism implemented and canary written, not run ([results](results/phase-4-code-engine.md)) |
-| S12 | Open | Phase 4: blocked on IAM policy creation ([results](results/phase-4-code-engine.md)) |
+| S11 | Local pass 2026-10-31, runner open | Podman 6.0.0 arm64: canary 13 of 13 ([results](results/phase-4-container.md#3-s11-uid-split-under-the-hardened-flags)); Docker on the runner is Part B |
+| S12 | Withdrawn | Code Engine IAM question; superseded by [ADR 0012](adr/0012-github-hosted-runner-execution.md) |
 | S13 | Answered 2026-10-30 | Portal confirmed: Bob subscription region is `Global`. Compute in `eu-de`, egress to Global. |
 | S14 | Answered 2026-10-30 | [spikes.md S14](results/spikes.md#s14-settings-format-useagentrules-env-loading-tool-approvals) |
 | S15 | Analyzed (paper) | [ARCHITECTURE.md Section 4](ARCHITECTURE.md#4-github-trigger-and-workflow_run-paper-analysis-s15); live test Phase 5 |
@@ -106,7 +109,8 @@ owner for this before Phase 7.
 
 | Date | Phase | Summary | Results link |
 |---|---|---|---|
-| 2026-10-30 | 4 (partial) | Phase 4 started, stopped at an IAM blocker. Written: `integrations/code-engine/` (config, Dockerfile pinned by digest with Bob 2.0.9, setup, build, run, cleanup-runs, teardown, ci-identity), `tests/container/` canary (S11/G23, not run), reviewer change so the wrapper runs Bob as a separate unprivileged UID (+4 tests, +2 mutations killed; 191 tests, lint pass). Live: created registry namespace and Code Engine project only; resource group creation and all IAM policy creation were denied, so no image was built or run. Owner chose to use the existing resource group. No job runs used (0 of 10). | [results/phase-4-code-engine.md](results/phase-4-code-engine.md) |
+| 2026-10-31 | 4 (Part A) | Part A complete. Podman pruned and reset at the owner's request (25 images and 1 unrelated volume removed; two VM faults fixed: stale overlay temp dirs, empty `/etc/subuid`). Image rebuilt from scratch on `ubuntu:24.04` (pinned digest), Node 22.23.4, Bob 2.0.9, uid 10002 for Bob; manifest digest `sha256:0d0a9f44...d6adb`, 443 MB. S11 canary passes 13 of 13 under read-only rootfs, caps dropped, no-new-privileges. Verified existing stage subcommands, cost record change, workflow and policy check: 227 tests, lint, 52 of 52 mutations. No Bob calls (0 of 5), no GitHub resources. | [results/phase-4-container.md](results/phase-4-container.md) |
+| 2026-10-30 | 4 (superseded) | Code Engine attempt (now removed, ADR 0012). Phase 4 started, stopped at an IAM blocker. Written: `integrations/code-engine/` (config, Dockerfile pinned by digest with Bob 2.0.9, setup, build, run, cleanup-runs, teardown, ci-identity), `tests/container/` canary (S11/G23, not run), reviewer change so the wrapper runs Bob as a separate unprivileged UID (+4 tests, +2 mutations killed; 191 tests, lint pass). Live: created registry namespace and Code Engine project only; resource group creation and all IAM policy creation were denied, so no image was built or run. Owner chose to use the existing resource group. No job runs used (0 of 10). | n/a (file removed) |
 | 2026-10-30 | 4 (prep) | Sandbox app written in `examples/sandbox-repo/` (in-memory notes API, 3 passing tests, CI workflow, sample `.bob-review/` rules). `scripts/dev/publish-sandbox.sh <owner>/<repo>` publishes it as a private repo and opens one PR with seeded flaws. Not run: `gh` and `ibmcloud` are not logged in. Phase 4 itself not started. | n/a |
 | 2026-10-30 | 3 | Phase 3 real Bob integration complete. Real Bob 2.0.9 through the full pipeline against a mock GitHub: 20 pipeline runs over 9 fixtures plus 2 gate-skipped, all schema-valid first time, expected rules and lines cited; 21 Bob calls, 0.9428 Bobcoins reported (unit unverified). One prompt change (proposed_fix is code only: prose blocks 12 of 31 to 0 of 29). Hostile-parent check passed with a positive control. 187 offline tests, lint, 39 of 39 mutations killed. | [results/phase-3-runs.md](results/phase-3-runs.md) |
 | 2026-10-30 | 2 | Phase 2 reviewer core complete. 18 modules in reviewer/src/, fake-bob shim, mock GitHub server, 14 unit test files, 1 pipeline test file. 180 tests pass, 0 failures; make lint passes. Real mutation check: 39 of 39 guardrail mutations killed (an earlier placeholder table that only re-ran the tests was replaced; the first real run found 6 test gaps and 3 bugs, all fixed). Daily caps dropped (ADR 0009); scratch layout aligned (ADR 0010). No live calls made. | [results/phase-2-results.md](results/phase-2-results.md) |

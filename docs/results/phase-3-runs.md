@@ -146,3 +146,11 @@ node scripts/dev/review-local.js --status        # ledger
 
 Raw output (full Bob stdout) is in `docs/results/raw/` and is git-ignored; the comment, result and argv of
 every run are kept in `docs/results/phase-3-evidence/`.
+
+## Note on the evidence files (added 2026-10-30)
+
+The `result.json` files under `phase-3-evidence/` are historical. They use the cost record shape of
+the time, with `vcpu`, `memory_gb`, `rates_version` and `estimated_cost_usd` fields that belonged
+to the replaced compute design ([ADR 0012](../adr/0012-github-hosted-runner-execution.md)). The
+current shape is in [CONTRACTS.md](../CONTRACTS.md) section 8. The Bob usage figures (Bobcoins,
+tool call counts, findings) in those files remain valid.

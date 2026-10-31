@@ -3,7 +3,7 @@
 ## Goal
 
 Implement the reviewer pipeline (prepare, review, publish) and every offline-testable guardrail,
-with a `fake-bob` stand-in, so the whole thing runs and is tested without Bob, IBM Cloud or GitHub.
+with a `fake-bob` stand-in, so the whole thing runs and is tested without Bob or GitHub.
 
 ## Prerequisites
 
@@ -50,7 +50,7 @@ with a `fake-bob` stand-in, so the whole thing runs and is tested without Bob, I
 
 ## Do not
 
-- Do not call real Bob, GitHub or IBM Cloud. Tests must pass with no network.
+- Do not call real Bob or GitHub. Tests must pass with no network.
 - Do not add runtime dependencies without a written reason in the module header and the PR notes;
   prefer the Node standard library.
 - Do not make the wrapper depend on how the comment looks to a human beyond CONTRACTS section 5.

@@ -3,7 +3,7 @@
 // Guardrails covered: G2, G3, G7, G8, G9, G13, G14, G15, G16, G17, G18, G19, G20,
 //                     G24, G27, G28, G32, G33, G34, G35, G36, G37
 //
-// All tests are offline: no real Bob, no real GitHub, no real IBM Cloud.
+// All tests are offline: no real Bob, no real GitHub.
 
 import { describe, it, before, after, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';

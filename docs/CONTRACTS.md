@@ -1,8 +1,10 @@
 # Contracts
 
-Shared interfaces between the trigger, the container, the reviewer modules and the tests.
-Status: Frozen (Phase 1 design freeze, 2026-10-30). Change these contracts only through an ADR and
-update every consumer and test in the same task.
+Shared interfaces between the workflow, the container, the reviewer modules and the tests.
+Status: Frozen (Phase 1 design freeze, 2026-10-30). Amended 2026-10-30 for GitHub-hosted runners
+([ADR 0012](adr/0012-github-hosted-runner-execution.md),
+[ADR 0013](adr/0013-secrets-and-credentials-on-github.md)). Change these contracts only through an
+ADR and update every consumer and test in the same task.
 
 Contents:
 
@@ -18,8 +20,9 @@ Contents:
 
 ## 1. Job inputs and configuration
 
-The trigger passes three values to the job run as environment variables. Nothing else from the PR
-is passed.
+The `prepare` job derives three values from the `workflow_run` payload and the API and passes them
+to the reviewer as environment variables (never through a shell string, workflow expression in
+`run:`, or command line). Nothing else from the PR is passed.
 
 | Name | Format | Validation (G24) |
 |---|---|---|
@@ -27,7 +30,7 @@ is passed.
 | `REVIEW_PR_NUMBER` | positive integer | `^[1-9][0-9]{0,8}$` |
 | `REVIEW_HEAD_SHA` | 40 lowercase hex | `^[0-9a-f]{40}$` |
 
-Job-level configuration, set on the Code Engine job (not by the trigger):
+Job-level configuration, set in the workflow `env:` or from repository variables (not by the PR):
 
 | Name | Meaning | Default |
 |---|---|---|
@@ -40,28 +43,41 @@ Job-level configuration, set on the Code Engine job (not by the trigger):
 | `REVIEW_API_BASE` | GitHub API base URL, so tests can point at a mock | `https://api.github.com` |
 | `REVIEW_BOB_BIN` | Path of the Bob executable, so tests can use `fake-bob` | `bob` |
 
-The caller can only set the three inputs. The wrapper rejects any value that fails validation and
-exits with outcome `rejected_input` before any API call.
+The PR author can only influence the three inputs. The wrapper rejects any value that fails
+validation and exits with outcome `rejected_input` before any API call.
 
 ## 2. Secrets
 
-| Code Engine secret | Key | Env var in the job | Held by |
+The reviewer code reads three environment variable names. Each exists in exactly one job (G2, G23,
+G25). Source and scoping are in [ADR 0013](adr/0013-secrets-and-credentials-on-github.md).
+
+| Env var in the process | Source on GitHub | Present in job | Held by |
 |---|---|---|---|
-| `bob-creds` | `BOB_API_KEY` | `BOB_API_KEY` | Bob process only (G2) |
-| `scm-creds` | `SCM_READ_TOKEN` | `SCM_READ_TOKEN` | Prepare stage |
-| `scm-creds` | `SCM_COMMENT_TOKEN` | `SCM_COMMENT_TOKEN` | Publish stage |
+| `BOB_API_KEY` | Environment secret `BOB_API_KEY` in environment `bob-review` (default branch only) | `review` | Bob process only (G2) |
+| `SCM_READ_TOKEN` | The `prepare` job's `GITHUB_TOKEN` (`contents: read`, `pull-requests: read`, `actions: read`) | `prepare` | Prepare stage |
+| `SCM_COMMENT_TOKEN` | The `publish` job's `GITHUB_TOKEN` (`issues: write` only), or environment secret `BOB_COMMENT_TOKEN` if a dedicated bot is used (S17) | `publish` | Publish stage |
 
-How the three reach the right process while staying invisible to the others is decided by the
-isolation mechanism (S11, G23) and recorded in an ADR in Phase 1 and Phase 4.
+Rules: a secret is referenced only in the `env:` of the one step that needs it; never in `run:`,
+`if:`, `with:`, matrix, outputs or artifacts; set with `gh secret set NAME --env bob-review < file`
+(never `--body`); one secret per value. The container for `review` receives `BOB_API_KEY` by name
+(`-e BOB_API_KEY`), not by value on the command line.
 
-GitHub Actions secrets and variables (set in the repository that is reviewed):
+GitHub repository variables (set in the repository that is reviewed; no secrets):
 
 | Name | Kind | Purpose |
 |---|---|---|
-| `IBM_CLOUD_API_KEY` | secret | API key of the service ID `bob-pr-reviewer-ci` (G25) |
 | `BOB_REVIEW_ENABLED` | variable | Kill switch (G10) |
 | `BOB_REVIEW_REQUIRED_WORKFLOWS` | variable | Comma-separated names of the CI workflows that must be green (G31) |
-| `BOB_REVIEW_CE_PROJECT`, `BOB_REVIEW_CE_REGION`, `BOB_REVIEW_CE_JOB` | variables | Where to submit the job run |
+
+Artifacts exchanged between jobs (data only; `publish` treats `result` as untrusted):
+
+| Artifact | Produced by | Consumed by | Content |
+|---|---|---|---|
+| `prompt` | `prepare` | `review` | Redacted prompt text and a small JSON of validated identifiers and prepare-stage measurements |
+| `result` | `review` | `publish` | Raw Bob stdout, exit code, timed-out flag, duration, Bob version, image digest |
+| `audit` | `publish` | humans | Audit log lines and the cost record |
+
+All artifacts have a short `retention-days` (G26).
 
 ## 3. Reviewer file inputs from the base branch
 
@@ -161,13 +177,13 @@ One JSON object per run, built by the wrapper (G37).
 ```json
 {
   "schema_version": 1,
-  "repo": "owner/name", "pr": 42, "head_sha": "<sha>", "run_id": "<job run name>",
+  "repo": "owner/name", "pr": 42, "head_sha": "<sha>", "run_id": "<GITHUB_RUN_ID>-<GITHUB_RUN_ATTEMPT>",
   "bob_shell_version": "2.0.9", "image_digest": "sha256:...",
   "inputs": { "files": 7, "diff_bytes": 18234, "prompt_bytes": 61234 },
   "output": { "bytes": 5120, "findings_kept": 6, "findings_dropped": 2 },
   "bob_usage": { "source": "reported", "unit": "bobcoins", "input": null, "output": null, "total": 0.118 },
   "duration_seconds": { "total": 24.2, "bob": 18.4 },
-  "compute": { "vcpu": 1, "memory_gb": 4, "estimated_cost_usd": null, "rates_version": "1.0.0" },
+  "compute": { "runner": "ubuntu-24.04", "runner_minutes": null },
   "outcome": "reviewed"
 }
 ```
@@ -176,9 +192,11 @@ Bob usage is measured in Bobcoins, never converted to currency ([ADR 0011](adr/0
 `bob_usage.total` is `stats.session_costs` from Bob Shell v2 output, recorded with
 `source = "reported"` and `unit = "bobcoins"`. Bob's documentation does not state the unit of
 `session_costs`; treating it as Bobcoins is unverified until reconciled with the Bobcoin balance
-(Phase 3 results). Only `compute.estimated_cost_usd` is a currency figure (Code Engine compute,
-`null` until rates are looked up and put in `reviewer/config/`). The hidden marker keeps cumulative
-totals only (runs, summed `bob_usage.total` as `cost_total.bobcoins`, summed seconds).
+(Phase 3 results). Runner compute is recorded as time, not currency ([ADR 0012](adr/0012-github-hosted-runner-execution.md)):
+`compute.runner` is the pinned runner label and `compute.runner_minutes` is the sum of job
+durations rounded up per job, `null` while the jobs are still running (the pipeline seconds in
+`duration_seconds` are always set). The hidden marker keeps cumulative totals only (runs, summed
+`bob_usage.total` as `cost_total.bobcoins`, summed seconds).
 
 ## 7. Audit log line
 
@@ -190,12 +208,14 @@ One JSON line on stdout per stage event and one summary line at the end. No PR c
 
 Events: `run_start`, `input_rejected`, `gate_skipped` (with `reason`), `prepare_done`,
 `bob_started`, `bob_finished`, `publish_done`, `run_summary`. A log scrubber removes values that
-match the configured secret patterns and the live secret values (G27).
+match the configured secret patterns and the live secret values (G27). The `publish` job also
+writes the lines to the job summary and the `audit` artifact (G20).
 
 ## 8. Job outcomes and exit codes
 
-The job always exits 0 after an expected outcome so Code Engine does not retry or mark noise;
-nonzero is reserved for crashes of the wrapper itself (retry limit is 0 anyway).
+The reviewer always exits 0 after an expected outcome so the workflow does not show a failed run
+for noise; nonzero is reserved for crashes of the wrapper itself. No retry is configured. A failed
+step in `prepare` or `review` stops the dependent jobs; the workflow is never a required check.
 
 | Outcome | Meaning | Comment posted |
 |---|---|---|

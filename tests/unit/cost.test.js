@@ -83,15 +83,29 @@ describe('cost.js (G37)', () => {
     assert.equal(rec.output.findings_dropped, 2);
   });
 
-  it('G37: run_id is CE_JOBRUN when set', () => {
-    const orig = process.env.CE_JOBRUN;
-    process.env.CE_JOBRUN = 'test-run-001';
+  it('G37: run_id is GITHUB_RUN_ID-GITHUB_RUN_ATTEMPT when set', () => {
+    const saved = { id: process.env.GITHUB_RUN_ID, attempt: process.env.GITHUB_RUN_ATTEMPT };
+    process.env.GITHUB_RUN_ID = '123456789';
+    process.env.GITHUB_RUN_ATTEMPT = '2';
     try {
       const rec = buildCostRecord(BASE_ARGS);
-      assert.equal(rec.run_id, 'test-run-001');
+      assert.equal(rec.run_id, '123456789-2');
     } finally {
-      if (orig === undefined) delete process.env.CE_JOBRUN;
-      else process.env.CE_JOBRUN = orig;
+      for (const [k, v] of [['GITHUB_RUN_ID', saved.id], ['GITHUB_RUN_ATTEMPT', saved.attempt]]) {
+        if (v === undefined) delete process.env[k]; else process.env[k] = v;
+      }
+    }
+  });
+
+  it('G37: run_id is a placeholder and compute has no currency fields', () => {
+    const saved = process.env.GITHUB_RUN_ID;
+    delete process.env.GITHUB_RUN_ID;
+    try {
+      const rec = buildCostRecord(BASE_ARGS);
+      assert.equal(rec.run_id, 'local-test');
+      assert.deepEqual(rec.compute, { runner: 'ubuntu-24.04', runner_minutes: null });
+    } finally {
+      if (saved !== undefined) process.env.GITHUB_RUN_ID = saved;
     }
   });
 });

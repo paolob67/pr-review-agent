@@ -26,14 +26,16 @@ their pull requests.
    * **Per-PR Run Cap**: Default maximum 3 runs per PR. Subsequent triggers on the same PR exit with
      outcome `skipped_gate` (reason: `pr_run_limit_reached`).
    * ~~Daily run cap and daily spend cap~~: dropped, see ADR 0009.
-   * **Timeouts (Guardrail G13)**: Hard process timeout on `bob run` (default 180 seconds) and Code Engine
-     `--maxexecutiontime` (default 300 seconds).
+   * **Timeouts (Guardrail G13)**: Hard process timeout on `bob run` (default 180 seconds) and the
+     Actions `timeout-minutes` on the `review` job (default 5 minutes). Amended by
+     [ADR 0012](0012-github-hosted-runner-execution.md).
 
 ## Reasons
 
 1. **Budget Predictability**: Enforces hard boundaries against runaway loops, automated re-pushes, and large batch diffs.
 2. **Transparency**: Developers and maintainers see exact per-PR and aggregate costs directly in review comments and audit logs.
-3. **Auditability**: Structured cost records flow into IBM Cloud Logs for historical analysis and reconciliation.
+3. **Auditability**: Structured cost records go to the job summary and a retained artifact for
+   historical analysis and reconciliation.
 
 ## Consequences
 

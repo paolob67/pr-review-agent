@@ -41,7 +41,6 @@ function envStr(name, fallback) {
 export function getConfig(envMap = process.env) {
   const caps = loadJson('caps.json');
   const thresholds = loadJson('thresholds.json');
-  const costRates = loadJson('cost-rates.json');
 
   function envStrL(name, fallback) {
     const v = envMap[name];
@@ -90,9 +89,6 @@ export function getConfig(envMap = process.env) {
     // Confidence threshold: findings below this level move to needs_human_attention
     confidenceDropBelow: thresholds.confidenceDropBelow,
     ruleSizeLimitBytes: thresholds.ruleSizeLimitBytes,
-
-    // Cost rates (G37) - may be null until Phase 4
-    costRates,
   };
 }
 

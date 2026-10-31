@@ -10,11 +10,14 @@ Status: Signed Off (Phase 1 Gate Met)
 
 ## 2. Data-Egress Stance and Bob Service Region (S13)
 * **Decision**:
-  * Compute execution: IBM Cloud Code Engine job in Frankfurt (`eu-de`).
   * Inference egress: IBM Bob service with Global subscription region (`https://bob.ibm.com`).
-  * Data residency statement: Code diffs egress from `eu-de` container runtime to Global IBM Bob inference endpoint.
+  * Amended 2026-10-30 ([ADR 0012](../adr/0012-github-hosted-runner-execution.md)): the original
+    sign-off named a selectable compute region. Compute now runs on GitHub-hosted runners, whose
+    location is not selectable, so no compute-region statement can be made. The Bob service region
+    statement stands; the combined residency statement is withdrawn and S13 is open again. The
+    owner is asked to confirm the new stance.
 * **Recorded in**: [spikes.md](spikes.md#s13-service-region-and-data-residency), [ARCHITECTURE.md](../ARCHITECTURE.md), and [THREAT_MODEL.md](../THREAT_MODEL.md).
-* **Sign-off**: Confirmed via Bob subscription portal verification on 2026-10-30.
+* **Sign-off**: Bob service region confirmed via Bob subscription portal verification on 2026-10-30; compute-location part withdrawn the same day, awaiting owner confirmation.
 
 ## 3. Review Scope and Findings Contract
 * **Decision**:
@@ -31,7 +34,7 @@ Status: Signed Off (Phase 1 Gate Met)
   * Max runs per PR: `3` (subsequent triggers skip with `pr_run_limit_reached`).
   * Daily run and spend caps: dropped in Phase 2 ([ADR 0009](../adr/0009-drop-daily-caps.md)).
   * Process timeout: `180 seconds`.
-  * Code Engine max execution time: `300 seconds`.
+  * Job `timeout-minutes` (outer limit, G13): set in Phase 4 as a few minutes above the process timeout (amended 2026-10-30, ADR 0012).
 * **Recorded in**: [ADR 0007](../adr/0007-cost-record-and-cap-semantics.md) and [CONTRACTS.md](../CONTRACTS.md).
 * **Sign-off**: Confirmed.
 

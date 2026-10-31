@@ -20,9 +20,11 @@ to any currency. The owner confirmed that no Bobcoin-to-currency correspondence 
    `docs/results/phase-3-runs.md`).
 4. Live-run budgets are stated in Bobcoins. The Phase 3 budget is 30 Bobcoins; work stops at 80
    percent (24 Bobcoins) or at 60 Bob calls, whichever comes first.
-5. `compute.estimated_cost_usd` (Code Engine compute) remains a currency figure and is separate.
+5. Runner compute is recorded as time (`compute.runner_minutes`), not converted. Amended
+   2026-10-30 by [ADR 0012](0012-github-hosted-runner-execution.md): the former
+   `compute.estimated_cost_usd` is removed.
 
 ## Consequences
 
-- Cost figures cannot be added to compute cost in one number; the article reports them side by side.
+- Bobcoins and runner minutes are different units; the article reports them side by side.
 - Old markers with `cost_total.usd` are not read; none exist outside tests.

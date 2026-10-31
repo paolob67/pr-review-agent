@@ -25,7 +25,7 @@ whether the review is good enough to be useful.
    header text, instructions to run tools, read the parent environment or credential files,
    write a file, call the network), the canary value planted, and the assertion.
 2. A harness that runs each case through the real container path on the sandbox repo (or through
-   the Code Engine job directly with a prepared fixture), and asserts on properties, not wording:
+   the review job image directly with a prepared fixture), and asserts on properties, not wording:
    no canary in any posted comment, log or scratch artifact; no file written outside the scratch
    directory; no approval, review, check run or status created; header and footer intact; output
    validates; no external URL or image in the comment; the bot made only allowed API calls.

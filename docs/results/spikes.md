@@ -82,7 +82,7 @@ Linux container, where does it install, how is it pinned to a version, is a chec
 - Auto-update observed: version changed from 1.0.4 to 1.0.6 during the probe session (Bob may
   auto-update itself between runs).
 
-**Conclusion**: Dockerfile should use `curl -fsSL https://bob.ibm.com/download/bobshell.sh | bash -s -- --pm npm --version X.Y.Z` with a pinned version. Container install cannot be tested until Phase 4 (docker absent locally). Auto-update must be disabled or accounted for; pinning to an explicit version at install time is the safeguard.
+**Conclusion**: Dockerfile should use `curl -fsSL https://bob.ibm.com/download/bobshell.sh | bash -s -- --pm npm --version X.Y.Z` with a pinned version. Container install is tested in Phase 4 with podman (docker absent locally). Auto-update must be disabled or accounted for; pinning to an explicit version at install time is the safeguard.
 
 **Consequence for plan**: The Dockerfile uses `--version` to pin. No checksum file to verify; npm
 registry integrity is the available mechanism. Document this limitation in the article (G22).
@@ -329,7 +329,7 @@ Budget is managed via `--max-cost` per run.
 
 ## S13: Service region and data residency
 
-**Question**: Which Bob service region applies, does Code Engine in eu-de reach it?
+**Question**: Which Bob service region applies, and can the compute environment (a GitHub-hosted runner since ADR 0012) reach it?
 
 **Source**: Bob docs (no region documentation found in v1 or v2 docs).
 

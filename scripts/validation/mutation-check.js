@@ -22,6 +22,8 @@ const OUT = join(ROOT, 'docs', 'results', 'mutation-check.md');
 
 const U = (n) => `tests/unit/${n}.test.js`;
 const P = 'tests/pipeline/pipeline.test.js';
+const S = 'tests/pipeline/stages.test.js';
+const W = 'tests/unit/workflowPolicy.test.js';
 
 // Each mutation: id, guardrail, file, find (must occur exactly once), replace, tests, description.
 export const MUTATIONS = [
@@ -55,7 +57,7 @@ export const MUTATIONS = [
   { id: 'G27', file: 'reviewer/src/audit.js', find: "out = out.split(s).join('[SCRUBBED]');", replace: 'out = out;', tests: [U('audit')], desc: 'Log scrubber disabled' },
   { id: 'G28', file: 'reviewer/src/scratch.js', find: 'const found = walkForbidden(scratchDir, scratchDir);', replace: 'const found = [];', tests: [U('scratch')], desc: 'Forbidden path check disabled' },
   { id: 'G32', file: 'reviewer/src/gate.js', find: 'if (pr.head?.sha !== headSha) {', replace: 'if (false) {', tests: [U('gate'), P], desc: 'Head pinning disabled' },
-  { id: 'G33a', file: 'reviewer/src/main.js', find: 'loadRules(readClient, repo, pr.base.ref)', replace: 'loadRules(readClient, repo, pr.head.ref)', tests: [P], desc: 'Rules read from the PR head branch' },
+  { id: 'G33a', file: 'reviewer/src/stages.js', find: 'loadRules(readClient, repo, pr.base.ref)', replace: 'loadRules(readClient, repo, pr.head.ref)', tests: [P], desc: 'Rules read from the PR head branch' },
   { id: 'G33b', file: 'reviewer/src/rules.js', find: "'.bob-review/standards.md', baseBranch)", replace: "'.bob-review/standards.md', 'HEAD')", tests: [U('rules')], desc: 'Standards read from a fixed ref instead of the base branch' },
   { id: 'G34a', file: 'reviewer/src/github.js', find: "request('POST', `${base}/repos/${repo}/issues/${prNumber}/comments`", replace: "request('POST', `${base}/repos/${repo}/pulls/${prNumber}/reviews`", tests: [U('github'), P], desc: 'Publisher posts to the pull request reviews endpoint' },
   { id: 'G34b', file: 'reviewer/src/github.js', find: 'return { getPR, getPRDiff, getFileContents, listComments, createComment, updateComment };', replace: 'return { getPR, getPRDiff, getFileContents, listComments, createComment, updateComment, submitReview: async () => {} };', tests: [U('github')], desc: 'Client exposes an extra (review) operation' },
@@ -65,7 +67,18 @@ export const MUTATIONS = [
   { id: 'G36b', file: 'reviewer/src/triage.js', find: 'if (categoryCounts[cat] <= maxPerCategory) {', replace: 'if (true) {', tests: [U('triage')], desc: 'Per-category cap removed' },
   { id: 'G36c', file: 'reviewer/src/triage.js', find: 'if (!seen.has(key)) {', replace: 'if (true) {', tests: [U('triage')], desc: 'De-duplication removed' },
   { id: 'G36d', file: 'reviewer/src/validate.js', find: 'if (!ruleIds.has(f.rule_id)) {', replace: 'if (false) {', tests: [U('validate')], desc: 'Unknown rule IDs accepted' },
-  { id: 'G14c', file: 'reviewer/src/main.js', find: 'const priorSpend = existingMeta?.cost_total?.bobcoins ?? 0;', replace: 'const priorSpend = 0;', tests: [P], desc: 'Prior spend ignored when counting the per-PR total' },
+  { id: 'G14c', file: 'reviewer/src/stages.js', find: 'const priorSpend = existingMeta?.cost_total?.bobcoins ?? 0;', replace: 'const priorSpend = 0;', tests: [P], desc: 'Prior spend ignored when counting the per-PR total' },
+  { id: 'G25a', file: 'reviewer/src/stages.js', find: "const commentClient = makeGithubClient(config.apiBase, env.SCM_COMMENT_TOKEN);", replace: "const commentClient = makeGithubClient(config.apiBase, env.SCM_READ_TOKEN);", tests: [S], desc: 'Publish stage uses the read token instead of the comment token' },
+  { id: 'G25b', file: 'reviewer/src/stages.js', find: "const readClient = makeGithubClient(config.apiBase, env.SCM_READ_TOKEN);", replace: "const readClient = makeGithubClient(config.apiBase, env.SCM_COMMENT_TOKEN);", tests: [S], desc: 'Prepare stage uses the comment token instead of the read token' },
+  { id: 'G16d', file: 'reviewer/src/stages.js', find: "if (typeof stdout !== 'string') return { error: 'stdout is not a string' };", replace: "", tests: [S], desc: 'Untrusted result: stdout type not checked' },
+  { id: 'G16e', file: 'reviewer/src/stages.js', find: "if (Buffer.byteLength(stdout, 'utf8') > MAX_RESULT_BYTES) return { error: 'result is too large' };", replace: "", tests: [S], desc: 'Untrusted result: size not limited' },
+  { id: 'G24c', file: 'reviewer/src/main.js', find: "handoff.repo !== repo || handoff.prNumber !== prNumber || handoff.headSha !== headSha", replace: "false", tests: [S], desc: 'Handoff for other inputs is accepted' },
+  { id: 'G1', file: 'scripts/validation/workflow-policy.js', find: "add('G1', 1, 'top-level `permissions: {}` is missing')", replace: "void 0", tests: [W], desc: 'Policy no longer requires top-level permissions' },
+  { id: 'G13w', file: 'scripts/validation/workflow-policy.js', find: "if (!t) add('G13', job.start, `job ${job.name}: timeout-minutes is missing`);", replace: "if (!t) void 0;", tests: [W], desc: 'Policy no longer requires job timeouts' },
+  { id: 'G22w', file: 'scripts/validation/workflow-policy.js', find: "if (!SHA_PIN.test(u[1] + ' ')) add('G22'", replace: "if (false) add('G22'", tests: [W], desc: 'Policy no longer requires SHA-pinned actions' },
+  { id: 'G24w', file: 'scripts/validation/workflow-policy.js', find: "if (l.text.includes('${{')) add('G24'", replace: "if (false) add('G24'", tests: [W], desc: 'Policy allows expressions inside run:' },
+  { id: 'G25w', file: 'scripts/validation/workflow-policy.js', find: "if (job.name === 'review' && /(github", replace: "if (false && /(github", tests: [W], desc: 'Policy allows a GitHub token in the review job' },
+  { id: 'G34w', file: 'scripts/validation/workflow-policy.js', find: "add('G34', d.n, `job ${job.name}: forbidden permission ${d.p}`);", replace: "void 0;", tests: [W], desc: 'Policy allows forbidden write scopes' },
   { id: 'G37', file: 'reviewer/src/cost.js', find: "total: typeof stats.session_costs === 'number' ? stats.session_costs : null,", replace: 'total: null,', tests: [U('cost'), P], desc: 'Reported Bob cost dropped from the record' },
 ];
 
@@ -85,6 +98,8 @@ function main() {
   try {
     cpSync(join(ROOT, 'reviewer'), join(work, 'reviewer'), { recursive: true });
     cpSync(join(ROOT, 'tests'), join(work, 'tests'), { recursive: true });
+    cpSync(join(ROOT, 'scripts', 'validation', 'workflow-policy.js'), join(work, 'scripts', 'validation', 'workflow-policy.js'), { recursive: true });
+    cpSync(join(ROOT, 'integrations', 'github-actions'), join(work, 'integrations', 'github-actions'), { recursive: true });
 
     const allTests = [...new Set(MUTATIONS.flatMap((m) => m.tests))];
     const base = runTests(work, allTests);

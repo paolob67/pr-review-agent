@@ -10,7 +10,7 @@ end to end.
 - Phase 7 gate met.
 - Article brief (fixed by the owner): a LinkedIn article shared with the owner's network and
   clients. Short (target 900 to 1300 words, confirm with the owner), readable by a technical
-  leader who is not a Bob or Code Engine expert.
+  leader who is not a Bob or GitHub Actions expert.
 
 ## Inputs to read
 
@@ -19,7 +19,7 @@ Everything: [PLAN.md](../PLAN.md), [CONTRACTS.md](../CONTRACTS.md), [THREAT_MODE
 
 ## Do
 
-1. Finish `SETUP.md` (IBM Cloud, GitHub, secrets, first run), `TESTING.md` (every suite, how to
+1. Finish `SETUP.md` (GitHub environment, secrets, variables, first run), `TESTING.md` (every suite, how to
    run, what it costs), `RUNBOOK.md` (rotation, kill switch, incidents, cap changes, teardown,
    upgrading Bob Shell and the base image).
 2. Update diagrams so they match the final system; export PNGs; check them visually.
@@ -40,7 +40,7 @@ Everything: [PLAN.md](../PLAN.md), [CONTRACTS.md](../CONTRACTS.md), [THREAT_MODE
    - Caveats and what is unverified.
    - Closing: what an organization needs to do to adopt it, and a pointer to the repo.
    Tone: first person, plain, no hype, no em-dashes. Every number comes from a results file and
-   every claim about Bob, IBM Cloud or GitHub links to an official doc page or a results file.
+   every claim about Bob or GitHub links to an official doc page or a results file.
    Also provide a 3 to 4 line post teaser for sharing the article.
 4. Update README: current status, quick start, Documentation section linking the index; keep the
    Documentation index complete.

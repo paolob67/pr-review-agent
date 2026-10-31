@@ -5,7 +5,7 @@ Status: Accepted (2026-10-30). Amends [ADR 0007](0007-cost-record-and-cap-semant
 ## Context
 
 ADR 0007 set a daily run cap per repository (30) and a daily spend cap (10 USD). The reviewer job is
-stateless: each Code Engine job run starts empty and has no store shared between runs. A daily cap
+stateless: each workflow run starts on a fresh runner and has no store shared between runs. A daily cap
 would need new shared state (a counter file on a volume, or a sum over the log store), which adds a
 component, a failure mode and a new trust surface.
 

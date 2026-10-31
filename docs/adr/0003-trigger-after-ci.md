@@ -22,9 +22,10 @@ and runs the risk of analyzing code before CI has passed.
      triggering workflow itself to have concluded with `conclusion == "success"`.
 3. **Head Commit Verification**:
    * The trigger verifies that the workflow run corresponds to the exact head commit SHA of an open PR.
-   * If any required workflow fails, is cancelled, or is pending, no review job is submitted.
+   * If any required workflow fails, is cancelled, or is pending, the `prepare` job exits and the
+     `review` job does not run.
    * If a newer commit is pushed to the PR while CI is running, concurrency groups cancel older runs (G11),
-     and the job wrapper re-verifies the head SHA before running (G32).
+     and the `prepare` and `publish` jobs re-verify the head SHA (G32).
 
 ## Reasons
 
@@ -38,3 +39,7 @@ and runs the risk of analyzing code before CI has passed.
 
 - Review feedback arrives slightly later than immediate PR open events, as it must wait for CI to complete.
 - Repositories must configure `BOB_REVIEW_REQUIRED_WORKFLOWS` if they have multiple independent CI workflows.
+- `workflow_run` fires whatever the conclusion of the triggering run; the `prepare` job must check
+  the conclusion explicitly (see [runner facts](../results/runner-facts.md)).
+- Amended 2026-10-30 by [ADR 0012](0012-github-hosted-runner-execution.md): the trigger and the
+  review now live in one workflow with three jobs instead of a trigger that submits a cloud job.

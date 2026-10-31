@@ -10,14 +10,14 @@ fork contributors.
 
 Running automated LLM code review on every incoming pull request introduces two primary risks:
 1. **Denial-of-Wallet / Resource Exhaustion**: Malicious or automated fork accounts could open
-   numerous pull requests to rapidly consume Bobcoin budgets and IBM Cloud compute allocation.
+   numerous pull requests to rapidly consume Bobcoin budgets and runner minutes.
 2. **Adversarial Input Exposure**: Unvetted fork code and adversarial prompts could be used to probe
    the review system.
 
 ## Decision
 
-Adopt a role-based authorization gate (Guardrail G7) enforced in the GitHub Actions trigger workflow
-before dispatching the Code Engine job:
+Adopt a role-based authorization gate (Guardrail G7) enforced in the `prepare` job of the review
+workflow, before the `review` job (which holds the Bob key) can start:
 * **Auto-Review**: Pull requests authored by users with GitHub association `OWNER`, `MEMBER`, or
   `COLLABORATOR` are automatically reviewed once required CI passes.
 * **First-Time / Outside Contributors**: Pull requests authored by `FIRST_TIME_CONTRIBUTOR`,
