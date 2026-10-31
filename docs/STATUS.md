@@ -48,14 +48,14 @@ dirs). Details and the fix are in [results/phase-4-container.md](results/phase-4
 When run from the agent's shell the podman VM must be started detached or it stops when the command ends.
 `podman image prune` clears the `<none>` images each rebuild leaves behind.
 
-Open follow-ups for the owner (none block Part B beyond the above):
+Open follow-ups for the owner (none block Phase 5 beyond the above):
 
 1. **Verify the usage unit.** Compare the Bobcoin balance (or Bobalytics) with the Phase 3 ledger total
    of 0.9428 (21 calls). Until then `session_costs` is "reported by Bob, unit unverified" (ADR 0011).
 2. **The Bob key has no spending limit set by this project.** With no daily cap (ADR 0009), the Bobcoin
    budget on the account is the only ceiling. Confirm who watches it.
-3. The key in `pr-review-agent.json` expires 2026-12-30. Part B puts it into a GitHub environment secret;
-   do not paste it anywhere else.
+3. **Bob key expiry.** The key in `pr-review-agent.json` expires 2026-12-30. It is stored as the
+   GitHub environment secret `BOB_API_KEY` (re-entered by `setup-sandbox.sh`); do not paste it anywhere else.
 
 ## Decisions log
 
