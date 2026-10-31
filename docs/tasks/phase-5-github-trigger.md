@@ -13,6 +13,10 @@ trigger-side guardrails, and prove the whole path with a scripted end-to-end mat
   outside-contributor PRs, optionally a bot account (not a code owner) with a fine-grained token limited to
   the sandbox repo (issues and pull requests comment permission only), needed only if S17 fails
   or the owner wants a named identity, and approval to set environment secrets and variables.
+- The Phase 4 teardown deleted the `BOB_API_KEY` environment secret and `scripts/dev/setup-sandbox.sh`
+  recreated it from `pr-review-agent.json` (piped on stdin, never printed). That recreated secret is
+  not yet proven to authenticate; the first live Phase 5 run proves it. After any teardown, run
+  `scripts/dev/setup-sandbox.sh <owner>/<repo>` again; the owner does not need to retype the key.
 - `gh auth status` works.
 
 ## Inputs to read

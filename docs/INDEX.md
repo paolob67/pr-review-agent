@@ -13,7 +13,7 @@
 | [tasks/phase-1-design-freeze.md](tasks/phase-1-design-freeze.md) | Brief: threat model, ADRs, architecture freeze | Done |
 | [tasks/phase-2-reviewer-core.md](tasks/phase-2-reviewer-core.md) | Brief: reviewer core with offline tests | Ready |
 | [tasks/phase-3-real-bob.md](tasks/phase-3-real-bob.md) | Brief: real Bob integration, local | Ready |
-| [tasks/phase-4-runner-foundation.md](tasks/phase-4-runner-foundation.md) | Brief: runner foundation (container, stage split, secrets wiring) | Part A done, Part B waiting for owner |
+| [tasks/phase-4-runner-foundation.md](tasks/phase-4-runner-foundation.md) | Brief: runner foundation (container, stage split, secrets wiring) | Done 2026-10-31 |
 | [tasks/phase-5-github-trigger.md](tasks/phase-5-github-trigger.md) | Brief: GitHub trigger and end-to-end matrix | Ready |
 | [tasks/phase-6-redteam-evals.md](tasks/phase-6-redteam-evals.md) | Brief: red team and quality evals | Ready |
 | [tasks/phase-7-hardening.md](tasks/phase-7-hardening.md) | Brief: operational hardening and cost reconciliation | Ready |
@@ -29,12 +29,14 @@
 | [adr/0010-scratch-layout-stdin.md](adr/0010-scratch-layout-stdin.md) | Prompt on stdin; scratch holds only the mode file | Accepted |
 | [adr/0011-bobcoins-as-usage-unit.md](adr/0011-bobcoins-as-usage-unit.md) | Bob usage recorded in Bobcoins, no currency conversion | Accepted |
 | [adr/0008-scm-identity-for-comments.md](adr/0008-scm-identity-for-comments.md) | Dedicated bot account, comment-only scope | Accepted (amended by 0013) |
-| [adr/0012-secrets-and-credentials-on-github.md](adr/0012-secrets-and-credentials-on-github.md) | Secrets and credentials on GitHub | Accepted |
+| [adr/0012-secrets-and-credentials-on-github.md](adr/0012-secrets-and-credentials-on-github.md) | Secrets and credentials on GitHub | Accepted (item 3 amended by 0014) |
+| [adr/0014-publish-token-pull-requests-write.md](adr/0014-publish-token-pull-requests-write.md) | The publish token has `pull-requests: write` (S17); G34 held by allowlist, check and repo setting | Accepted 2026-10-31 |
+| [adr/0013-bob-license-acceptance.md](adr/0013-bob-license-acceptance.md) | `--accept-license` on every non-interactive Bob run | Accepted 2026-10-31 |
 | [diagrams/architecture-overview.drawio](diagrams/architecture-overview.drawio) | Architecture overview (source; PNG alongside) | Current |
 | [diagrams/trust-boundaries.drawio](diagrams/trust-boundaries.drawio) | Trust boundaries diagram (source; PNG alongside) | Current |
 | [TESTING.md](TESTING.md) | How to run each test suite and read results | Phase 2 done 2026-10-30 |
-| SETUP.md | IBM Cloud, GitHub, secrets, first run | Planned (Phase 4, completed Phase 8) |
-| RUNBOOK.md | Key rotation, kill switch, incident steps, teardown | Planned (Phase 4, completed Phase 8) |
+| [SETUP.md](SETUP.md) | GitHub part: environment, variables, secret, first run (IBM Cloud not used) | Draft (Phase 4), completed Phase 8 |
+| [RUNBOOK.md](RUNBOOK.md) | Kill switch, key rotation, teardown | Draft (Phase 4), completed Phase 8 |
 | ARTICLE.md | Narrative write-up | Planned (Phase 8) |
 | [results/spikes.md](results/spikes.md) | Phase 0 spike findings: S1-S10, S13, S14; gate decisions | Phase 0 done 2026-10-30 |
 | [results/phase-1-signoff.md](results/phase-1-signoff.md) | Phase 1 sign-off record and policy decisions | Phase 1 done 2026-10-30 |
@@ -44,6 +46,12 @@
 | [results/mutation-check.md](results/mutation-check.md) | Mutation check results (real patch-and-run, 39 mutations) | Phase 2 done 2026-10-30 |
 | [results/runner-facts.md](results/runner-facts.md) | GitHub runner, secrets and workflow_run documentation facts | 2026-10-30 |
 | [results/phase-4-container.md](results/phase-4-container.md) | Phase 4 Part A: podman reset, image digest, S11 canary, validation | Part A done 2026-10-31 |
+| [results/phase-4-runner.md](results/phase-4-runner.md) | Phase 4 Part B: run ledger, defects found, S17 to S20 | Part B done 2026-10-31, teardown proved |
+| [scripts/dev/install-sandbox-reviewer.sh](../scripts/dev/install-sandbox-reviewer.sh) | Install the reviewer into the sandbox repo (S20 per-run build) | Phase 4 |
+| [scripts/dev/teardown-sandbox.sh](../scripts/dev/teardown-sandbox.sh) | Remove the Part B environment, variables and files, then list what remains | Phase 4 |
+| [scripts/dev/setup-sandbox.sh](../scripts/dev/setup-sandbox.sh) | Recreate environment, variables and secret (key piped from the key file) after a teardown | Phase 4 |
+| [scripts/spikes/s17-approve-check.sh](../scripts/spikes/s17-approve-check.sh) | S17: can the job token APPROVE or REQUEST_CHANGES (sandbox) | Phase 4 |
+| [scripts/spikes/s17-token-scope.sh](../scripts/spikes/s17-token-scope.sh) | S17: job token permission sets against comments, reviews, checks, statuses | Phase 4 |
 | [scripts/spikes/s1-installer.sh](../scripts/spikes/s1-installer.sh) | S1: installer inspection script | Phase 0 |
 | [scripts/spikes/s2-s5-readonly.sh](../scripts/spikes/s2-s5-readonly.sh) | S2/S5: non-interactive flags and read-only enforcement | Phase 0 |
 | [scripts/spikes/s3-custom-mode.sh](../scripts/spikes/s3-custom-mode.sh) | S3: custom mode YAML and --chat-mode | Phase 0 |

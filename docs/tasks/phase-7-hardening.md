@@ -37,7 +37,9 @@ sections 2, 6, 7; draft `SETUP.md` and `RUNBOOK.md`; all earlier results.
    gap. Mention the privacy trade-off in the doc (telemetry must be enabled for enterprise users to
    appear in Bobalytics; team views anonymise users).
 5. Rebuild test: run the teardown steps from `RUNBOOK.md`, then follow only `SETUP.md` to recreate, then run one
-   end-to-end review. Fix every doc gap found.
+   end-to-end review. Fix every doc gap found. Teardown deletes the `BOB_API_KEY` environment secret, so the
+   key must be entered again; `scripts/dev/setup-sandbox.sh` does this from `pr-review-agent.json` (stdin,
+   never printed), and `SETUP.md` also documents the manual route (`gh secret set`) for readers without that file.
 6. Check artifact retention and cleanup (G26) with real numbers.
 
 ## Do not

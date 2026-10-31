@@ -1,7 +1,8 @@
 # ADR 0012: Secrets and credentials on GitHub
 
 Status: Accepted (owner decision on the approach, 2026-10-30; defaults open to change per PLAN
-section 10). Amends [ADR 0008](0008-scm-identity-for-comments.md).
+section 10). Amends [ADR 0008](0008-scm-identity-for-comments.md). Item 3 is amended by
+[ADR 0014](0014-publish-token-pull-requests-write.md): the comment token needs `pull-requests: write`.
 
 ## Context
 
