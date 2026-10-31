@@ -2,8 +2,8 @@
 
 Update this file at the end of every task. Newest information first within each section.
 
-Last updated: 2026-10-31. Phases 0 to 4 complete (Phase 4 closed with one carried item: the recreated Bob key is
-not yet proven to authenticate, see Current blockers). Execution environment: GitHub-hosted runners
+Last updated: 2026-10-31. Phases 0 to 5 complete (Phase 5: 13 of 13 same-repo matrix cases pass; the fork,
+outside-contributor and required-approval cases are owner-accepted deviations, see Current blockers). Execution environment: GitHub-hosted runners
 ([ADR 0001](adr/0001-execution-environment.md)).
 
 ## Phase tracker
@@ -15,7 +15,7 @@ not yet proven to authenticate, see Current blockers). Execution environment: Gi
 | 2. Reviewer core with offline tests | [phase-2-reviewer-core.md](tasks/phase-2-reviewer-core.md) | Done | Yes | n/a |
 | 3. Real Bob integration (local) | [phase-3-real-bob.md](tasks/phase-3-real-bob.md) | Done | Yes | n/a (key, 30 Bobcoin budget, rules direction and data consent supplied) |
 | 4. Runner foundation (container, stage split, secrets wiring) | [phase-4-runner-foundation.md](tasks/phase-4-runner-foundation.md) | Done | Yes (teardown proved by listing, then recreated) | n/a |
-| 5. GitHub trigger and end-to-end matrix | [phase-5-github-trigger.md](tasks/phase-5-github-trigger.md) | Not started | No | Second account, bot account; the sandbox exists and the Bob key is re-entered by `setup-sandbox.sh` |
+| 5. GitHub trigger and end-to-end matrix | [phase-5-github-trigger.md](tasks/phase-5-github-trigger.md) | Done | Yes, with owner-accepted deviations | Second GitHub account (fork and outside-contributor cases, S15 fork payload); optional |
 | 6. Red team and quality evals | [phase-6-redteam-evals.md](tasks/phase-6-redteam-evals.md) | Not started | No | Eval and red-team run budget |
 | 7. Operational hardening and cost reconciliation | [phase-7-hardening.md](tasks/phase-7-hardening.md) | Not started | No | Optional: Bobalytics access (see below) |
 | 8. Documentation, article, final validation | [phase-8-docs-article.md](tasks/phase-8-docs-article.md) | Not started | No | Confirm LinkedIn article length |
@@ -24,24 +24,32 @@ Status values: Not started, In progress, Blocked (say why), Done (gate met, resu
 
 ## Current blockers
 
-**Phase 4 is complete (2026-10-31); two items carry forward.** The workflow reviewed
-sandbox PR 1 and posted one comment as `github-actions[bot]`; a second run updated it; a stale SHA is a
-quiet skip; bad input is rejected without running anything; the Bob key appears only in the `review`
-job log and in no artifact. All 10 workflow runs of the budget are used (7 with a Bob call, 3 gated
-before Bob); the kill switch is `false`. Teardown was run and proved by listing, then
-`scripts/dev/setup-sandbox.sh` recreated everything. Details: [results/phase-4-runner.md](results/phase-4-runner.md).
+**Phase 5 is complete (2026-10-31).** The `workflow_run` and `ai-review` label triggers work end to end:
+13 of 13 same-repo matrix cases pass ([results/phase-5-github.md](results/phase-5-github.md)), lint, actionlint,
+zizmor (3 accepted findings) and 64 of 64 mutations are clean, 263 offline tests pass, no workflow checks out
+PR code. The recreated Bob key authenticates (proven by c01 and by the c13 restore). The sandbox is left with
+the kill switch `false`, no open test PRs (PR 1 from Phase 4 stays), and the Bob key restored.
 
-1. **The recreated Bob key secret is not yet proven (carried into Phase 5).** Teardown deletes the
-   `BOB_API_KEY` environment secret. `setup-sandbox.sh` re-enters it from `pr-review-agent.json` on stdin
-   (the agent never sees the value). Authentication needs a Bob call, which is beyond the Phase 4 budget;
-   the first Phase 5 run proves it. After any future teardown run `setup-sandbox.sh` again.
-2. **Accept a measured gap in G34 (owner, informational).** With `pull-requests: write` (ADR 0014, your
-   decision) the bot cannot approve (HTTP 422) but a REQUEST_CHANGES review succeeded in the probe
-   (dismissed afterwards). The workflow never calls that endpoint (tests and mutations), so the risk is
-   a bug or a compromised `publish` step. A dedicated comment-only bot (ADR 0008) would close it.
+Owner decisions needed:
 
-Decisions taken in this task: `--accept-license` on every run (ADR 0013); `pull-requests: write` on
-`publish` (ADR 0014); S18, S19 answered; S20 per-run build works, cross-repo delivery is Phase 5.
+1. **Fork and outside-contributor cases (owner-accepted deviation, 2026-10-31).** No second GitHub account
+   yet, so the fork PR, outside-contributor with and without the label, and the S15 fork payload were not run.
+   They are covered offline only. Provide a second account (and a public sandbox or an invited collaborator
+   with no write rights) to close them; the driver would gain the cases then.
+2. **Run budget exceeded.** The brief allowed about 40 workflow runs; 57 `bob-review` runs were used
+   (two required workflows give two firings per head, and the driver was corrected and rerun). Accept, or
+   reduce `BOB_REVIEW_REQUIRED_WORKFLOWS` to one workflow to halve firings. 15 reviews cost 0.3448 Bobcoins.
+3. **Accept the measured gap in G34 (informational, unchanged).** With `pull-requests: write` (ADR 0014)
+   APPROVE is refused (HTTP 422, repeated in Phase 5) but REQUEST_CHANGES succeeds. The workflow never calls
+   that endpoint. "Does not satisfy a required approval rule" could not be tested: branch protection is
+   unavailable on the owner's plan (HTTP 403). A dedicated comment-only bot (ADR 0008) would close the gap.
+4. **Verify the usage unit.** Compare the Bobcoin balance (or Bobalytics) with the Phase 3 ledger total of
+   0.9428 (21 calls) plus Phase 4 and 5 runs. Until then `session_costs` is "reported by Bob, unit unverified" (ADR 0011).
+5. **The Bob key has no spending limit set by this project** (ADR 0009); the account Bobcoin budget is the only
+   ceiling. Confirm who watches it.
+6. **Bob key expiry.** The key in `pr-review-agent.json` expires 2026-12-30. It is stored as the GitHub
+   environment secret `BOB_API_KEY` (re-entered by `setup-sandbox.sh`); do not paste it anywhere else.
+
 
 Local tooling note: podman needed a reset on 2026-10-31 (empty `/etc/subuid` in the VM, stale overlay temp
 dirs). Details and the fix are in [results/phase-4-container.md](results/phase-4-container.md) section 1.
@@ -70,6 +78,7 @@ Open follow-ups for the owner (none block Phase 5 beyond the above):
 | 2026-10-30 | Daily run and spend caps dropped (stateless job) | [ADR 0009](adr/0009-drop-daily-caps.md) |
 | 2026-10-30 | Prompt, rules and diff on stdin; scratch holds only the mode file | [ADR 0010](adr/0010-scratch-layout-stdin.md) |
 | 2026-10-30 | Usage recorded in Bobcoins, no currency conversion; Phase 3 budget 30 Bobcoins | [ADR 0011](adr/0011-bobcoins-as-usage-unit.md) |
+| 2026-10-31 | Trigger design: PR resolved from the head SHA, required workflows (G31), `ai-review` label overrides the author policy, per-job concurrency | [ADR 0015](adr/0015-trigger-design.md) |
 | 2026-10-31 | The publish token has `pull-requests: write`; G34 held by allowlist, check and repo setting | [ADR 0014](adr/0014-publish-token-pull-requests-write.md) |
 | 2026-10-31 | Pass `--accept-license` on every non-interactive Bob run | [ADR 0013](adr/0013-bob-license-acceptance.md) |
 | 2026-10-30 | SCM identity: dedicated bot account, comment-only scope, non-blocking | [ADR 0008](adr/0008-scm-identity-for-comments.md) |
@@ -99,12 +108,12 @@ answered; link to the entry in `docs/results/`.
 | S12 | Withdrawn | Not applicable to the GitHub-hosted runner design. |
 | S13 | Answered 2026-10-30 | Portal confirmed: Bob subscription region is `Global`. Compute on GitHub-hosted runners (location not selectable); egress to Global. |
 | S14 | Answered 2026-10-30 | [spikes.md S14](results/spikes.md#s14-settings-format-useagentrules-env-loading-tool-approvals) |
-| S15 | Analyzed (paper) | [ARCHITECTURE.md Section 4](ARCHITECTURE.md#4-github-trigger-and-workflow_run-paper-analysis-s15); live test Phase 5 |
+| S15 | Answered 2026-10-31 for same-repo PRs; fork payload unverified | [phase-5-github.md](results/phase-5-github.md#s15-answers) |
 | S16 | Open, optional | Phase 7 |
 | S17 | Answered 2026-10-31, contradicts the plan; owner accepted `pull-requests: write` (ADR 0014) | [phase-4-runner.md](results/phase-4-runner.md#s17-comment-identity-and-token-scope-contradicts-the-plan) |
 | S18 | Answered 2026-10-31 | Environment secrets available on the private repo ([phase-4-runner.md](results/phase-4-runner.md#s18-environment-secrets-on-the-owners-plan)) |
 | S19 | Answered 2026-10-31 | Runner reaches Bob; `BOB_API_KEY` ([phase-4-runner.md](results/phase-4-runner.md#s19-runner-reaches-bob-variable-name)) |
-| S20 | Partly answered 2026-10-31 | Per-run build works; cross-repo delivery in Phase 5 ([phase-4-runner.md](results/phase-4-runner.md#s20-delivery-route)) |
+| S20 | Partly answered 2026-10-31 | Per-run build works; artifacts pass between the three jobs (Phase 5 runs); cross-repo delivery decided in Phase 8 ([phase-4-runner.md](results/phase-4-runner.md#s20-delivery-route)) |
 
 ## About Bobalytics (S16), in plain terms
 
@@ -120,6 +129,7 @@ owner for this before Phase 7.
 
 | Date | Phase | Summary | Results link |
 |---|---|---|---|
+| 2026-10-31 | 5 | Trigger script `resolve-trigger.mjs`, `workflow_run` (CI, Lint) and `ai-review` label triggers, per-job concurrency, ADR 0015; e2e matrix driver `tests/e2e/matrix.mjs` with 13 cases, all passing; S17 re-checked (APPROVE 422, REQUEST_CHANGES 200); S15 answered for same-repo PRs; 57 runs (budget about 40), 0.3448 Bobcoins for 15 reviews. Fork, outside-contributor and required-approval cases are owner-accepted deviations. Offline: 263 tests, 64 of 64 mutations killed, lint, actionlint, zizmor clean | [phase-5-github.md](results/phase-5-github.md) |
 | 2026-10-31 | 4 (close) | Teardown run and proved by listing (environment, secret, variables, reviewer files gone; only CI remains). `scripts/dev/setup-sandbox.sh` recreated the environment, variables and secret (key piped from `pr-review-agent.json` on stdin) and reinstalled the reviewer at sandbox commit `7e891b9`. The recreated secret is not yet proven to authenticate (needs a Bob call, budget spent). Phase 5 and 7 briefs, RUNBOOK and SETUP now say the key is re-entered after teardown. Phase 4 closed. | [results/phase-4-runner.md](results/phase-4-runner.md) |
 | 2026-10-31 | 4 (Part B) | Environment `bob-review` (main only), two variables, owner-set secret, reviewer installed in the sandbox. 10 of 10 runs used. Six defects found by live runs and fixed with tests (license flag, read-only `~/.bob`, push-triggered `workflow_run`, silent Bob failure, opaque 403, rejected input turning the run red). S17: the job token needs `pull-requests: write` to comment (owner accepted, ADR 0014); APPROVE refused, REQUEST_CHANGES accepted in a probe. One comment posted, second run updated it, stale SHA and bad input are quiet, no secret in logs or artifacts. SETUP.md and RUNBOOK.md drafted. 235 tests, lint, 52 of 52 mutations. Open: teardown proof, runner canary run. | [results/phase-4-runner.md](results/phase-4-runner.md) |
 | 2026-10-31 | 4 (Part A) | Part A complete. Podman pruned and reset at the owner's request (25 images and 1 unrelated volume removed; two VM faults fixed: stale overlay temp dirs, empty `/etc/subuid`). Image rebuilt from scratch on `ubuntu:24.04` (pinned digest), Node 22.23.4, Bob 2.0.9, uid 10002 for Bob; manifest digest `sha256:0d0a9f44...d6adb`, 443 MB. S11 canary passes 13 of 13 under read-only rootfs, caps dropped, no-new-privileges. Verified existing stage subcommands, cost record change, workflow and policy check: 227 tests, lint, 52 of 52 mutations. No Bob calls (0 of 5), no GitHub resources. | [results/phase-4-container.md](results/phase-4-container.md) |

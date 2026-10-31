@@ -151,7 +151,8 @@ Review workflow (workflow_run, default-branch definition, NO checkout of PR code
 - Explicit re-request: a second small trigger on `pull_request_target` (`labeled`, label
   `ai-review`, no checkout) runs the same validation script, including the CI-green check.
 - How `workflow_run` behaves for fork PRs (PR lookup from the head SHA, payload contents) is not
-  confirmed; spike S15.
+  confirmed live; spike S15 (answered for same-repo PRs in Phase 5; the design resolves the PR from the SHA,
+  so it does not depend on the payload field).
 - Dependabot PRs are treated like fork PRs by GitHub.
 
 ### What the review does
@@ -323,7 +324,7 @@ record regardless. IDs are stable: S12 is withdrawn and is not reused.
 | S12 | Withdrawn (not applicable to the GitHub-hosted runner design). | none | Withdrawn. |
 | S13 | Which Bob service region applies to our instance, and what data-residency statement can we make now that the compute location is a GitHub-hosted runner that cannot be selected? | Implication 6, article | Unresolved: no region documentation found for Bob or for standard hosted runners. Owner should check the Bob portal. The article states "unverified". |
 | S14 | Format of trustedFolders.json; which settings keys pin approval mode and disable MCP and AGENTS.md loading? | G28 to G30, egress risk | Answered: trustedFolders.json format confirmed; project settings ignored when untrusted; AGENTS.md loads regardless of trust (disable via `"bob-cline.useAgentRules": false` in user-level settings.json); .env not loaded; MCP blocked per docs. |
-| S15 | `workflow_run` behaviour in practice for fork PRs | G6, G24, G31, G32 | Open: Phase 5 (live), analysed on paper in Phase 1. |
+| S15 | `workflow_run` behaviour in practice for fork PRs | G6, G24, G31, G32 | Answered 2026-10-31 for same-repo PRs ([phase-5-github.md](results/phase-5-github.md)); fork payload unverified (needs a second account). |
 | S16 | Does Bobalytics show Bob Shell API-key usage? | G37, reconciliation | Open: Phase 7, optional. |
 | S17 | Can a `GITHUB_TOKEN` with only `issues: write` create, update and list comments on a PR, and is it refused on the reviews, check-runs and statuses endpoints? | G25, G34, ADR 0012 | Answered 2026-10-31, contradicts the plan: `issues: write` alone is refused (403) on list and post; posting needs `pull-requests: write`, which also reaches the reviews endpoint. Check runs and statuses are refused. Owner decision 2026-10-31: accept `pull-requests: write` (ADR 0014). [phase-4-runner.md](results/phase-4-runner.md#s17-comment-identity-and-token-scope-contradicts-the-plan) |
 | S18 | Are environment secrets with a deployment-branch restriction available for the owner's plan and repository visibility (private or public)? If not, what is the fallback? | G25, ADR 0012 | Answered 2026-10-31: available on the private repo; environment `bob-review` limited to `main` created. [phase-4-runner.md](results/phase-4-runner.md#s18-environment-secrets-on-the-owners-plan) |

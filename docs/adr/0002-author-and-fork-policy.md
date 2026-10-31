@@ -23,7 +23,7 @@ workflow, before the `review` job (which holds the Bob key) can start:
 * **First-Time / Outside Contributors**: Pull requests authored by `FIRST_TIME_CONTRIBUTOR`,
   `FIRST_TIMER`, `CONTRIBUTOR`, `NONE`, or empty association are ignored by default.
 * **Explicit Maintainer Override**: A maintainer can trigger review on any PR by applying the label
-  `bob-review` (or `safe-to-review`).
+  `ai-review` (renamed from `bob-review`/`safe-to-review` by [ADR 0015](0015-trigger-design.md)).
 
 ## Reasons
 

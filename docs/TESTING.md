@@ -151,12 +151,33 @@ survives or is invalid. The result table is in
 The following suites require real credentials and are not run by `make test`:
 
 - `make test-live-bob`: Phase 3 - real Bob, real diffs, no GitHub.
-- `make test-e2e`: Phase 5 - full end-to-end with a sandbox GitHub repository.
+- `make test-e2e`: Phase 5 - full end-to-end matrix against the sandbox GitHub repository (below).
 - `make test-redteam`: Phase 6 - red-team injection corpus.
 - `make test-evals`: Phase 6 - precision evaluation against seeded-flaw PRs.
 
 These are defined in separate Makefile targets and documented in `docs/TESTING.md` as they are
 added.
+
+## End-to-end matrix (Phase 5, not part of `make test`)
+
+`tests/e2e/matrix.mjs` drives 13 cases against the sandbox repo with `gh` and `git` (argument arrays, no
+shell). Each case opens a PR from a fresh branch, waits until CI, Lint and the `bob-review` runs have settled,
+reads the audit lines from the job logs and the bot comments, checks the result, then closes the PR and deletes
+the branch.
+
+```bash
+node tests/e2e/matrix.mjs --list
+node tests/e2e/matrix.mjs --only c01              # prefix match; repeat --only for several
+make test-e2e                                     # all cases
+```
+
+Needs `gh` logged in (repo and workflow scopes), the sandbox set up by `scripts/dev/setup-sandbox.sh` and the
+reviewer installed by `scripts/dev/install-sandbox-reviewer.sh`. It spends Bobcoins (about 0.02 per review) and
+runner minutes; the full matrix is about 55 workflow runs. It switches the kill switch on for the run and always
+off again at the end. c13 replaces the Bob key with an invalid value and restores it from the git-ignored
+`pr-review-agent.json` (piped on stdin, never printed). Results are merged per case into
+`docs/results/phase-5-evidence/matrix.json`; see [results/phase-5-github.md](results/phase-5-github.md) for the
+table, the cases that need a second GitHub account and the run ledger.
 
 ## Live local runs (Phase 3, not part of `make test`)
 

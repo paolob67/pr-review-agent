@@ -31,6 +31,7 @@
 | [adr/0008-scm-identity-for-comments.md](adr/0008-scm-identity-for-comments.md) | Dedicated bot account, comment-only scope | Accepted (amended by 0013) |
 | [adr/0012-secrets-and-credentials-on-github.md](adr/0012-secrets-and-credentials-on-github.md) | Secrets and credentials on GitHub | Accepted (item 3 amended by 0014) |
 | [adr/0014-publish-token-pull-requests-write.md](adr/0014-publish-token-pull-requests-write.md) | The publish token has `pull-requests: write` (S17); G34 held by allowlist, check and repo setting | Accepted 2026-10-31 |
+| [adr/0015-trigger-design.md](adr/0015-trigger-design.md) | Trigger design: resolve the PR from the SHA, required workflows (G31), `ai-review` label, per-job concurrency | Accepted 2026-10-31 |
 | [adr/0013-bob-license-acceptance.md](adr/0013-bob-license-acceptance.md) | `--accept-license` on every non-interactive Bob run | Accepted 2026-10-31 |
 | [diagrams/architecture-overview.drawio](diagrams/architecture-overview.drawio) | Architecture overview (source; PNG alongside) | Current |
 | [diagrams/trust-boundaries.drawio](diagrams/trust-boundaries.drawio) | Trust boundaries diagram (source; PNG alongside) | Current |
@@ -47,6 +48,10 @@
 | [results/runner-facts.md](results/runner-facts.md) | GitHub runner, secrets and workflow_run documentation facts | 2026-10-30 |
 | [results/phase-4-container.md](results/phase-4-container.md) | Phase 4 Part A: podman reset, image digest, S11 canary, validation | Part A done 2026-10-31 |
 | [results/phase-4-runner.md](results/phase-4-runner.md) | Phase 4 Part B: run ledger, defects found, S17 to S20 | Part B done 2026-10-31, teardown proved |
+| [results/phase-5-github.md](results/phase-5-github.md) | Phase 5: end-to-end matrix (13 cases), S15 answers, defects, run ledger, owner-pending cases | Phase 5 done 2026-10-31 (fork cases pending) |
+| [results/phase-5-evidence/](results/phase-5-evidence/) | Matrix data (`matrix.json`) and the first bot comment of each case | Phase 5 |
+| [tests/e2e/matrix.mjs](../tests/e2e/matrix.mjs) | End-to-end matrix driver against the sandbox (`make test-e2e`) | Phase 5 |
+| [integrations/github-actions/scripts/resolve-trigger.mjs](../integrations/github-actions/scripts/resolve-trigger.mjs) | `prepare` trigger script: PR from SHA, required workflows, quiet stops | Phase 5 |
 | [scripts/dev/install-sandbox-reviewer.sh](../scripts/dev/install-sandbox-reviewer.sh) | Install the reviewer into the sandbox repo (S20 per-run build) | Phase 4 |
 | [scripts/dev/teardown-sandbox.sh](../scripts/dev/teardown-sandbox.sh) | Remove the Part B environment, variables and files, then list what remains | Phase 4 |
 | [scripts/dev/setup-sandbox.sh](../scripts/dev/setup-sandbox.sh) | Recreate environment, variables and secret (key piped from the key file) after a teardown | Phase 4 |

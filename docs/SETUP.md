@@ -1,7 +1,7 @@
 # Setup (GitHub part, draft)
 
-Draft from Phase 4 Part B. Everything here was done once, in a private sandbox repo, and the commands
-are the ones that worked. Only GitHub and the Bob service are needed (ADR 0001). Phase 8
+Draft from Phase 4 Part B, extended in Phase 5. Everything here was done in a private sandbox repo, and the
+commands are the ones that worked. Only GitHub and the Bob service are needed (ADR 0001). Phase 8
 completes this document.
 
 ## Before you start
@@ -33,8 +33,18 @@ Replace `OWNER/REPO` with the repo being reviewed.
 
    ```bash
    gh variable set BOB_REVIEW_ENABLED -R OWNER/REPO --body false
-   gh variable set BOB_REVIEW_REQUIRED_WORKFLOWS -R OWNER/REPO --body CI
+   gh variable set BOB_REVIEW_REQUIRED_WORKFLOWS -R OWNER/REPO --body CI,Lint
    ```
+
+   `BOB_REVIEW_REQUIRED_WORKFLOWS` is a comma-separated list of the workflow names (the `name:` of each
+   workflow file) that must have passed on the head SHA before a review starts (G31). The workflow
+   triggers on exactly those names (the `workflow_run.workflows` list in `bob-review.yml`; keep the two in
+   step). An invalid entry blocks every review; an empty value falls back to the workflow that fired.
+   Optional: `BOB_REVIEW_BOB_TIMEOUT_SECONDS` overrides the Bob time limit (used by test case c12; leave unset).
+
+   Create the label that asks for a review of a PR that the author policy would skip (G7):
+   `gh label create ai-review -R OWNER/REPO --description "Ask the AI reviewer to review this PR"`.
+   Only users who can label (triage rights or more) can apply it.
 
 3. **The Bob key.** In the sandbox, `scripts/dev/setup-sandbox.sh OWNER/REPO` does steps 1 to 4 in one go
    and enters the key from the git-ignored `pr-review-agent.json` (its `apikey` field) through a pipe, so
@@ -48,8 +58,9 @@ Replace `OWNER/REPO` with the repo being reviewed.
 
 4. **Install the workflow and reviewer** on the default branch. In the sandbox this is
    `scripts/dev/install-sandbox-reviewer.sh OWNER/REPO` (copies `reviewer/`, `integrations/`,
-   `tests/container/` and the workflow to `.github/workflows/bob-review.yml`). Delivery to a repo other
-   than the sandbox (reusable workflow or GHCR image) is not decided yet (S20, Phase 5).
+   `tests/container/` and the workflow to `.github/workflows/bob-review.yml`, and the sample `CI` and
+   `Lint` workflows). Delivery to a repo other than the sandbox (reusable workflow or GHCR image) is not
+   decided yet (S20, Phase 8).
 
 5. **Repository setting.** Keep "Allow GitHub Actions to create and approve pull requests" off
    (`can_approve_pull_request_reviews: false`). It stops the bot approving. It does not stop a
@@ -62,13 +73,21 @@ Replace `OWNER/REPO` with the repo being reviewed.
    gh workflow run bob-review.yml -R OWNER/REPO --ref main -f pr_number=N -f head_sha=<40 hex head SHA of PR N>
    ```
 
+   (Without `head_sha`/`pr_number` the workflow also starts by itself when `CI` and `Lint` complete on a
+   pull request, and when a maintainer adds the `ai-review` label. Manual dispatch skips the CI check.)
+
    Expect three green jobs (`prepare`, `review`, `publish`) in about 1 to 1.5 minutes and one comment
    from `github-actions[bot]` marked "AI Assisted". Running it again on the same SHA updates that comment.
 
 ## What to expect
 
-- A push-triggered CI run starts the workflow and is skipped quietly (only CI runs from pull requests
-  review).
+- Each required workflow that completes on a pull request fires the workflow once. A firing whose
+  required workflows are not all green on the head SHA stops quietly (`ci_pending`, `ci_not_green`,
+  `ci_missing`): the run is green, there is no comment. When all are green the review runs. With two
+  required workflows two firings can be ready together; the second cancels the first review job.
+- A push-triggered CI run, or a CI run for a SHA that is no longer a PR head (`no_open_pr`), stops quietly.
+- Each PR is reviewed at most 3 times (G14); the `ai-review` label asks for another review of the same SHA
+  (it counts towards the cap).
 - A stale or malformed SHA or PR number ends in a quiet skip or a rejected input; no Bob call is made.
 - Each review job builds the reviewer image on the runner (about 25 s of runner time).
 

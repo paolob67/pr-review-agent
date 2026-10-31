@@ -1,0 +1,1206 @@
+{
+  "c01_green_same_repo": {
+    "date": "2026-10-31T15:36:06.254Z",
+    "guardrails": "G12 G31 G18 G34 S19",
+    "pass": true,
+    "pr": "https://github.com/paolob67/notes-sandbox/pull/3",
+    "expected": "CI and Lint both green: one review and exactly one bot comment for the head SHA; a firing that sees the other workflow still pending stops quietly",
+    "observed": "reasons [\"ready\",\"ready\"]; outcomes [null,\"reviewed\"]; comments 1; Bob calls 1",
+    "bobCalls": 1,
+    "checks": [
+      {
+        "name": "at least one run reached outcome reviewed (the recreated Bob key authenticates)",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "exactly one marker comment",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "comment is for the PR head SHA (G32)",
+        "pass": true,
+        "detail": "59ce249db6985633376cc59e6b85121f75f15271 vs 59ce249db6985633376cc59e6b85121f75f15271"
+      },
+      {
+        "name": "comment has no @mention (G17)",
+        "pass": true,
+        "detail": "comment 6545474899"
+      },
+      {
+        "name": "comment carries the AI Assisted banner (G35)",
+        "pass": true,
+        "detail": "comment 6545474899"
+      },
+      {
+        "name": "comment holds no token pattern (G27)",
+        "pass": true,
+        "detail": "comment 6545474899"
+      },
+      {
+        "name": "comment was posted by github-actions[bot] (S17)",
+        "pass": true,
+        "detail": "github-actions[bot]"
+      },
+      {
+        "name": "no bob-review run is red",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "no injected command output in any prepare log (G24)",
+        "pass": true,
+        "detail": ""
+      }
+    ],
+    "runs": [
+      {
+        "url": "https://github.com/paolob67/notes-sandbox/actions/runs/41215400090",
+        "event": "workflow_run",
+        "conclusion": "cancelled",
+        "jobs": {
+          "prepare": "success",
+          "review": "cancelled",
+          "publish": "skipped"
+        },
+        "reason": "ready",
+        "outcome": null,
+        "gate": null
+      },
+      {
+        "url": "https://github.com/paolob67/notes-sandbox/actions/runs/41215404106",
+        "event": "workflow_run",
+        "conclusion": "success",
+        "jobs": {
+          "prepare": "success",
+          "review": "success",
+          "publish": "success"
+        },
+        "reason": "ready",
+        "outcome": "reviewed",
+        "gate": null
+      }
+    ]
+  },
+  "c02_red_ci": {
+    "date": "2026-10-31T15:42:28.874Z",
+    "guardrails": "G31 G12",
+    "pass": true,
+    "pr": "https://github.com/paolob67/notes-sandbox/pull/4",
+    "expected": "CI red: no review, no Bob call, no comment; the CI firing is skipped (conclusion failure) and the Lint firing stops with ci_not_green or ci_pending",
+    "observed": "reasons [\"ci_not_green\"]; conclusions [\"success\",\"skipped\"]; comments 0; Bob calls 0",
+    "bobCalls": 0,
+    "checks": [
+      {
+        "name": "no Bob call",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "no comment",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "the red CI firing was skipped before prepare",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "the Lint firing stopped because CI is not green",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "no bob-review run is red",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "no injected command output in any prepare log (G24)",
+        "pass": true,
+        "detail": ""
+      }
+    ],
+    "runs": [
+      {
+        "url": "https://github.com/paolob67/notes-sandbox/actions/runs/41216053748",
+        "event": "workflow_run",
+        "conclusion": "success",
+        "jobs": {
+          "prepare": "success",
+          "review": "skipped",
+          "publish": "skipped"
+        },
+        "reason": "ci_not_green",
+        "outcome": null,
+        "gate": null
+      },
+      {
+        "url": "https://github.com/paolob67/notes-sandbox/actions/runs/41216055852",
+        "event": "workflow_run",
+        "conclusion": "skipped",
+        "jobs": {
+          "review": "skipped",
+          "publish": "skipped",
+          "prepare": "skipped"
+        },
+        "reason": null,
+        "outcome": null,
+        "gate": null
+      }
+    ]
+  },
+  "c03_cancelled_ci": {
+    "date": "2026-10-31T15:44:24.814Z",
+    "guardrails": "G31",
+    "pass": true,
+    "pr": "https://github.com/paolob67/notes-sandbox/pull/5",
+    "expected": "CI cancelled while running: no review, no comment",
+    "observed": "cancelled CI run 41216153433; reasons [\"ci_pending\"]; comments 0; Bob calls 0",
+    "bobCalls": 0,
+    "checks": [
+      {
+        "name": "the CI run was cancelled by the case",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "no Bob call",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "no comment",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "no bob-review run is red",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "no injected command output in any prepare log (G24)",
+        "pass": true,
+        "detail": ""
+      }
+    ],
+    "runs": [
+      {
+        "url": "https://github.com/paolob67/notes-sandbox/actions/runs/41216167288",
+        "event": "workflow_run",
+        "conclusion": "success",
+        "jobs": {
+          "prepare": "success",
+          "review": "skipped",
+          "publish": "skipped"
+        },
+        "reason": "ci_pending",
+        "outcome": null,
+        "gate": null
+      },
+      {
+        "url": "https://github.com/paolob67/notes-sandbox/actions/runs/41216224904",
+        "event": "workflow_run",
+        "conclusion": "skipped",
+        "jobs": {
+          "prepare": "skipped",
+          "publish": "skipped",
+          "review": "skipped"
+        },
+        "reason": null,
+        "outcome": null,
+        "gate": null
+      }
+    ]
+  },
+  "c04_two_required_one_red_then_fixed": {
+    "date": "2026-10-31T15:48:08.706Z",
+    "guardrails": "G31",
+    "pass": true,
+    "pr": "https://github.com/paolob67/notes-sandbox/pull/6",
+    "expected": "Phase 1: Lint red, CI green: no review, no comment. Phase 2: after the fix both green: one review, one comment for the new head",
+    "observed": "phase 1 reasons [\"ci_not_green\"], Bob calls 0, comments 0; phase 2 reasons [\"ready\",\"ready\"], Bob calls 1, comments 1",
+    "bobCalls": 1,
+    "checks": [
+      {
+        "name": "phase 1: no Bob call",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "phase 1: no comment",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "phase 1: a firing stopped because a required workflow is not green",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "phase 2: reviewed",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "phase 2: one comment for the fixed head",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "no bob-review run is red",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "no injected command output in any prepare log (G24)",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "comment has no @mention (G17)",
+        "pass": true,
+        "detail": "comment 6545607414"
+      },
+      {
+        "name": "comment carries the AI Assisted banner (G35)",
+        "pass": true,
+        "detail": "comment 6545607414"
+      },
+      {
+        "name": "comment holds no token pattern (G27)",
+        "pass": true,
+        "detail": "comment 6545607414"
+      },
+      {
+        "name": "comment was posted by github-actions[bot] (S17)",
+        "pass": true,
+        "detail": "github-actions[bot]"
+      },
+      {
+        "name": "no bob-review run is red",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "no injected command output in any prepare log (G24)",
+        "pass": true,
+        "detail": ""
+      }
+    ],
+    "runs": [
+      {
+        "url": "https://github.com/paolob67/notes-sandbox/actions/runs/41216414782",
+        "event": "workflow_run",
+        "conclusion": "success",
+        "jobs": {
+          "prepare": "success",
+          "review": "success",
+          "publish": "success"
+        },
+        "reason": "ready",
+        "outcome": "reviewed",
+        "gate": null
+      },
+      {
+        "url": "https://github.com/paolob67/notes-sandbox/actions/runs/41216417568",
+        "event": "workflow_run",
+        "conclusion": "cancelled",
+        "jobs": {
+          "prepare": "success",
+          "review": "cancelled",
+          "publish": "skipped"
+        },
+        "reason": "ready",
+        "outcome": null,
+        "gate": null
+      }
+    ]
+  },
+  "c05_draft": {
+    "date": "2026-10-31T15:56:22.469Z",
+    "guardrails": "G9",
+    "pass": true,
+    "pr": "https://github.com/paolob67/notes-sandbox/pull/9",
+    "expected": "Draft PR with green CI: the gate skips it (skipped_gate, draft), no Bob call, no comment",
+    "observed": "outcomes [\"skipped_gate\",\"skipped_gate\"]; gate [\"draft\",\"draft\"]; comments 0; Bob calls 0",
+    "bobCalls": 0,
+    "checks": [
+      {
+        "name": "a run ended in skipped_gate for the draft",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "no Bob call",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "no comment",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "no bob-review run is red",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "no injected command output in any prepare log (G24)",
+        "pass": true,
+        "detail": ""
+      }
+    ],
+    "runs": [
+      {
+        "url": "https://github.com/paolob67/notes-sandbox/actions/runs/41217119338",
+        "event": "workflow_run",
+        "conclusion": "success",
+        "jobs": {
+          "prepare": "success",
+          "publish": "success",
+          "review": "skipped"
+        },
+        "reason": "ready",
+        "outcome": "skipped_gate",
+        "gate": "draft"
+      },
+      {
+        "url": "https://github.com/paolob67/notes-sandbox/actions/runs/41217125381",
+        "event": "workflow_run",
+        "conclusion": "success",
+        "jobs": {
+          "prepare": "success",
+          "publish": "success",
+          "review": "skipped"
+        },
+        "reason": "ready",
+        "outcome": "skipped_gate",
+        "gate": "draft"
+      }
+    ]
+  },
+  "c06_oversized_diff": {
+    "date": "2026-10-31T15:58:18.142Z",
+    "guardrails": "G8",
+    "pass": true,
+    "pr": "https://github.com/paolob67/notes-sandbox/pull/10",
+    "expected": "Diff above the byte limit: no Bob call; a short \"Review unavailable\" note is posted (size_exceeded)",
+    "observed": "bytes 260180; outcomes [\"skipped_gate\",\"skipped_gate\"]; comments 1; Bob calls 0",
+    "bobCalls": 0,
+    "checks": [
+      {
+        "name": "no Bob call",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "one note comment",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "the note says the review is unavailable",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "outcome skipped_gate for size",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "comment has no @mention (G17)",
+        "pass": true,
+        "detail": "comment 6545723079"
+      },
+      {
+        "name": "comment carries the AI Assisted banner (G35)",
+        "pass": true,
+        "detail": "comment 6545723079"
+      },
+      {
+        "name": "comment holds no token pattern (G27)",
+        "pass": true,
+        "detail": "comment 6545723079"
+      },
+      {
+        "name": "comment was posted by github-actions[bot] (S17)",
+        "pass": true,
+        "detail": "github-actions[bot]"
+      },
+      {
+        "name": "no bob-review run is red",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "no injected command output in any prepare log (G24)",
+        "pass": true,
+        "detail": ""
+      }
+    ],
+    "runs": [
+      {
+        "url": "https://github.com/paolob67/notes-sandbox/actions/runs/41217257648",
+        "event": "workflow_run",
+        "conclusion": "success",
+        "jobs": {
+          "prepare": "success",
+          "publish": "success",
+          "review": "skipped"
+        },
+        "reason": "ready",
+        "outcome": "skipped_gate",
+        "gate": "size_exceeded"
+      },
+      {
+        "url": "https://github.com/paolob67/notes-sandbox/actions/runs/41217264468",
+        "event": "workflow_run",
+        "conclusion": "success",
+        "jobs": {
+          "prepare": "success",
+          "publish": "success",
+          "review": "skipped"
+        },
+        "reason": "ready",
+        "outcome": "skipped_gate",
+        "gate": "size_exceeded"
+      }
+    ]
+  },
+  "c07_stale_and_rapid_pushes": {
+    "date": "2026-10-31T16:02:02.051Z",
+    "guardrails": "G11 G32",
+    "pass": true,
+    "pr": "https://github.com/paolob67/notes-sandbox/pull/11",
+    "expected": "Three pushes while CI runs: firings for the first two SHAs stop quietly (no_open_pr, the head moved); only the last SHA is reviewed; one comment for the last head",
+    "observed": "reasons [\"no_open_pr\",\"no_open_pr\",\"no_open_pr\",\"no_open_pr\",\"ready\",\"ready\"]; comments 1 (head f7f1903); Bob calls 1",
+    "bobCalls": 1,
+    "checks": [
+      {
+        "name": "stale SHAs stopped with no_open_pr (G32)",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "exactly one comment",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "the comment is for the last pushed SHA",
+        "pass": true,
+        "detail": "f7f19031a04f32a09f4d69b19f22a3e900f61bc6 vs f7f19031a04f32a09f4d69b19f22a3e900f61bc6"
+      },
+      {
+        "name": "reviewed",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "comment has no @mention (G17)",
+        "pass": true,
+        "detail": "comment 6545769407"
+      },
+      {
+        "name": "comment carries the AI Assisted banner (G35)",
+        "pass": true,
+        "detail": "comment 6545769407"
+      },
+      {
+        "name": "comment holds no token pattern (G27)",
+        "pass": true,
+        "detail": "comment 6545769407"
+      },
+      {
+        "name": "comment was posted by github-actions[bot] (S17)",
+        "pass": true,
+        "detail": "github-actions[bot]"
+      },
+      {
+        "name": "no bob-review run is red",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "no injected command output in any prepare log (G24)",
+        "pass": true,
+        "detail": ""
+      }
+    ],
+    "runs": [
+      {
+        "url": "https://github.com/paolob67/notes-sandbox/actions/runs/41217409963",
+        "event": "workflow_run",
+        "conclusion": "success",
+        "jobs": {
+          "prepare": "success",
+          "review": "skipped",
+          "publish": "skipped"
+        },
+        "reason": "no_open_pr",
+        "outcome": null,
+        "gate": null
+      },
+      {
+        "url": "https://github.com/paolob67/notes-sandbox/actions/runs/41217420334",
+        "event": "workflow_run",
+        "conclusion": "success",
+        "jobs": {
+          "prepare": "success",
+          "publish": "skipped",
+          "review": "skipped"
+        },
+        "reason": "no_open_pr",
+        "outcome": null,
+        "gate": null
+      },
+      {
+        "url": "https://github.com/paolob67/notes-sandbox/actions/runs/41217427559",
+        "event": "workflow_run",
+        "conclusion": "cancelled",
+        "jobs": {
+          "prepare": "success",
+          "review": "cancelled",
+          "publish": "skipped"
+        },
+        "reason": "ready",
+        "outcome": null,
+        "gate": null
+      },
+      {
+        "url": "https://github.com/paolob67/notes-sandbox/actions/runs/41217430971",
+        "event": "workflow_run",
+        "conclusion": "success",
+        "jobs": {
+          "prepare": "success",
+          "review": "success",
+          "publish": "success"
+        },
+        "reason": "ready",
+        "outcome": "reviewed",
+        "gate": null
+      },
+      {
+        "url": "https://github.com/paolob67/notes-sandbox/actions/runs/41217463537",
+        "event": "workflow_run",
+        "conclusion": "success",
+        "jobs": {
+          "prepare": "success",
+          "review": "skipped",
+          "publish": "skipped"
+        },
+        "reason": "no_open_pr",
+        "outcome": null,
+        "gate": null
+      },
+      {
+        "url": "https://github.com/paolob67/notes-sandbox/actions/runs/41217475146",
+        "event": "workflow_run",
+        "conclusion": "success",
+        "jobs": {
+          "prepare": "success",
+          "review": "skipped",
+          "publish": "skipped"
+        },
+        "reason": "no_open_pr",
+        "outcome": null,
+        "gate": null
+      }
+    ]
+  },
+  "c08_own_rules_edit": {
+    "date": "2026-10-31T16:52:37.527Z",
+    "guardrails": "G33",
+    "pass": true,
+    "pr": "https://github.com/paolob67/notes-sandbox/pull/21",
+    "expected": "The PR adds STD-099 to .bob-review/standards.md; the base-branch rules are used, so no finding is raised under STD-099",
+    "observed": "comments 1; finding under STD-099: false; Bob calls 1",
+    "bobCalls": 1,
+    "checks": [
+      {
+        "name": "reviewed",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "no finding is raised under the PR-added rule (G33)",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "rules were loaded from the base branch (footer says standards yes)",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "comment has no @mention (G17)",
+        "pass": true,
+        "detail": "comment 6546335451"
+      },
+      {
+        "name": "comment carries the AI Assisted banner (G35)",
+        "pass": true,
+        "detail": "comment 6546335451"
+      },
+      {
+        "name": "comment holds no token pattern (G27)",
+        "pass": true,
+        "detail": "comment 6546335451"
+      },
+      {
+        "name": "comment was posted by github-actions[bot] (S17)",
+        "pass": true,
+        "detail": "github-actions[bot]"
+      },
+      {
+        "name": "no bob-review run is red",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "no injected command output in any prepare log (G24)",
+        "pass": true,
+        "detail": ""
+      }
+    ],
+    "runs": [
+      {
+        "url": "https://github.com/paolob67/notes-sandbox/actions/runs/41221515300",
+        "event": "workflow_run",
+        "conclusion": "cancelled",
+        "jobs": {
+          "prepare": "success",
+          "review": "cancelled",
+          "publish": "skipped"
+        },
+        "reason": "ready",
+        "outcome": null,
+        "gate": null
+      },
+      {
+        "url": "https://github.com/paolob67/notes-sandbox/actions/runs/41221517704",
+        "event": "workflow_run",
+        "conclusion": "success",
+        "jobs": {
+          "prepare": "success",
+          "review": "success",
+          "publish": "success"
+        },
+        "reason": "ready",
+        "outcome": "reviewed",
+        "gate": null
+      }
+    ]
+  },
+  "c09_hostile_names_label_rerun_cap": {
+    "date": "2026-10-31T16:40:41.848Z",
+    "guardrails": "G6 G24 G7 G12 G14 G18",
+    "pass": true,
+    "pr": "https://github.com/paolob67/notes-sandbox/pull/17",
+    "expected": "Hostile branch, title, body and commit message are only data: nothing runs and none of it is echoed. Label documentation starts nothing. Label ai-review re-reviews the same SHA and updates the same comment (runs 2). A CI re-run makes runs 3. A further re-run hits the per-PR cap (3): the comment stays, no 4th review",
+    "observed": "phase 1 outcomes [null,\"reviewed\"], comments 1; label phase [\"pull_request_target:skipped:null\",\"pull_request_target:success:reviewed\"], runs in comment 2; CI re-run phase runs 3; cap phase outcomes [\"skipped_gate\"], runs 3; Bob calls 1+1+1+0",
+    "bobCalls": 3,
+    "checks": [
+      {
+        "name": "phase 1: reviewed with a hostile branch, title, body and message",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "a quoted hostile title is inert text: no live @mention (G17)",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "label documentation started no review (prepare skipped)",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "label ai-review reviewed the same SHA and updated the same comment (runs 2, one comment)",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "CI re-run reviewed again (runs 3, one comment)",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "the fourth trigger hit the cap and left the review comment in place (G14)",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "comment has no @mention (G17)",
+        "pass": true,
+        "detail": "comment 6546139475"
+      },
+      {
+        "name": "comment carries the AI Assisted banner (G35)",
+        "pass": true,
+        "detail": "comment 6546139475"
+      },
+      {
+        "name": "comment holds no token pattern (G27)",
+        "pass": true,
+        "detail": "comment 6546139475"
+      },
+      {
+        "name": "comment was posted by github-actions[bot] (S17)",
+        "pass": true,
+        "detail": "github-actions[bot]"
+      },
+      {
+        "name": "no bob-review run is red",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "no injected command output in any prepare log (G24)",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "comment has no @mention (G17)",
+        "pass": true,
+        "detail": "comment 6546139475"
+      },
+      {
+        "name": "comment carries the AI Assisted banner (G35)",
+        "pass": true,
+        "detail": "comment 6546139475"
+      },
+      {
+        "name": "comment holds no token pattern (G27)",
+        "pass": true,
+        "detail": "comment 6546139475"
+      },
+      {
+        "name": "comment was posted by github-actions[bot] (S17)",
+        "pass": true,
+        "detail": "github-actions[bot]"
+      },
+      {
+        "name": "no bob-review run is red",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "no injected command output in any prepare log (G24)",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "comment has no @mention (G17)",
+        "pass": true,
+        "detail": "comment 6546139475"
+      },
+      {
+        "name": "comment carries the AI Assisted banner (G35)",
+        "pass": true,
+        "detail": "comment 6546139475"
+      },
+      {
+        "name": "comment holds no token pattern (G27)",
+        "pass": true,
+        "detail": "comment 6546139475"
+      },
+      {
+        "name": "comment was posted by github-actions[bot] (S17)",
+        "pass": true,
+        "detail": "github-actions[bot]"
+      },
+      {
+        "name": "no bob-review run is red",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "no injected command output in any prepare log (G24)",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "comment has no @mention (G17)",
+        "pass": true,
+        "detail": "comment 6546139475"
+      },
+      {
+        "name": "comment carries the AI Assisted banner (G35)",
+        "pass": true,
+        "detail": "comment 6546139475"
+      },
+      {
+        "name": "comment holds no token pattern (G27)",
+        "pass": true,
+        "detail": "comment 6546139475"
+      },
+      {
+        "name": "comment was posted by github-actions[bot] (S17)",
+        "pass": true,
+        "detail": "github-actions[bot]"
+      },
+      {
+        "name": "no bob-review run is red",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "no injected command output in any prepare log (G24)",
+        "pass": true,
+        "detail": ""
+      }
+    ],
+    "runs": [
+      {
+        "url": "https://github.com/paolob67/notes-sandbox/actions/runs/41220744912",
+        "event": "workflow_run",
+        "conclusion": "success",
+        "jobs": {
+          "prepare": "success",
+          "publish": "success",
+          "review": "skipped"
+        },
+        "reason": "ready",
+        "outcome": "skipped_gate",
+        "gate": "pr_run_limit_reached"
+      }
+    ]
+  },
+  "c10_label_during_review_concurrency": {
+    "date": "2026-10-31T16:26:08.768Z",
+    "guardrails": "G11",
+    "pass": true,
+    "pr": "https://github.com/paolob67/notes-sandbox/pull/15",
+    "expected": "A second trigger for the same PR while a review runs cancels the running review and its publish; one comment results",
+    "observed": "label applied during review: true; review jobs cancelled 2; Bob calls 1; comments 1",
+    "bobCalls": 1,
+    "checks": [
+      {
+        "name": "the label was applied while a review job was running",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "one review job was cancelled by the newer one",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "exactly one comment",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "the cancelled run published nothing",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "comment has no @mention (G17)",
+        "pass": true,
+        "detail": "comment 6546043674"
+      },
+      {
+        "name": "comment carries the AI Assisted banner (G35)",
+        "pass": true,
+        "detail": "comment 6546043674"
+      },
+      {
+        "name": "comment holds no token pattern (G27)",
+        "pass": true,
+        "detail": "comment 6546043674"
+      },
+      {
+        "name": "comment was posted by github-actions[bot] (S17)",
+        "pass": true,
+        "detail": "github-actions[bot]"
+      },
+      {
+        "name": "no bob-review run is red",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "no injected command output in any prepare log (G24)",
+        "pass": true,
+        "detail": ""
+      }
+    ],
+    "runs": [
+      {
+        "url": "https://github.com/paolob67/notes-sandbox/actions/runs/41219423300",
+        "event": "workflow_run",
+        "conclusion": "cancelled",
+        "jobs": {
+          "prepare": "success",
+          "review": "cancelled",
+          "publish": "skipped"
+        },
+        "reason": "ready",
+        "outcome": null,
+        "gate": null
+      },
+      {
+        "url": "https://github.com/paolob67/notes-sandbox/actions/runs/41219423347",
+        "event": "workflow_run",
+        "conclusion": "cancelled",
+        "jobs": {
+          "prepare": "success",
+          "review": "cancelled",
+          "publish": "skipped"
+        },
+        "reason": "ready",
+        "outcome": null,
+        "gate": null
+      },
+      {
+        "url": "https://github.com/paolob67/notes-sandbox/actions/runs/41219458484",
+        "event": "pull_request_target",
+        "conclusion": "success",
+        "jobs": {
+          "prepare": "success",
+          "review": "success",
+          "publish": "success"
+        },
+        "reason": "ready",
+        "outcome": "reviewed",
+        "gate": null
+      }
+    ]
+  },
+  "c11_kill_switch_off": {
+    "date": "2026-10-31T16:42:10.345Z",
+    "guardrails": "G10",
+    "pass": true,
+    "pr": "https://github.com/paolob67/notes-sandbox/pull/18",
+    "expected": "Kill switch false: every firing is skipped, no Bob call, no comment",
+    "observed": "conclusions [\"skipped\",\"skipped\"]; comments 0; Bob calls 0",
+    "bobCalls": 0,
+    "checks": [
+      {
+        "name": "every bob-review run was skipped",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "no Bob call",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "no comment",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "no bob-review run is red",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "no injected command output in any prepare log (G24)",
+        "pass": true,
+        "detail": ""
+      }
+    ],
+    "runs": [
+      {
+        "url": "https://github.com/paolob67/notes-sandbox/actions/runs/41220869411",
+        "event": "workflow_run",
+        "conclusion": "skipped",
+        "jobs": {
+          "prepare": "skipped",
+          "publish": "skipped",
+          "review": "skipped"
+        },
+        "reason": null,
+        "outcome": null,
+        "gate": null
+      },
+      {
+        "url": "https://github.com/paolob67/notes-sandbox/actions/runs/41220891904",
+        "event": "workflow_run",
+        "conclusion": "skipped",
+        "jobs": {
+          "review": "skipped",
+          "publish": "skipped",
+          "prepare": "skipped"
+        },
+        "reason": null,
+        "outcome": null,
+        "gate": null
+      }
+    ]
+  },
+  "c12_bob_timeout": {
+    "date": "2026-10-31T16:44:28.268Z",
+    "guardrails": "G13",
+    "pass": true,
+    "pr": "https://github.com/paolob67/notes-sandbox/pull/19",
+    "expected": "Timeout of 1 second: Bob is killed; a short \"Review unavailable\" note (bob_unavailable); the run stays green",
+    "observed": "outcomes [\"bob_unavailable\",null]; comments 1; note: true",
+    "bobCalls": 1,
+    "checks": [
+      {
+        "name": "outcome bob_unavailable",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "one note comment",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "comment has no @mention (G17)",
+        "pass": true,
+        "detail": "comment 6546241953"
+      },
+      {
+        "name": "comment carries the AI Assisted banner (G35)",
+        "pass": true,
+        "detail": "comment 6546241953"
+      },
+      {
+        "name": "comment holds no token pattern (G27)",
+        "pass": true,
+        "detail": "comment 6546241953"
+      },
+      {
+        "name": "comment was posted by github-actions[bot] (S17)",
+        "pass": true,
+        "detail": "github-actions[bot]"
+      },
+      {
+        "name": "no bob-review run is red",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "no injected command output in any prepare log (G24)",
+        "pass": true,
+        "detail": ""
+      }
+    ],
+    "runs": [
+      {
+        "url": "https://github.com/paolob67/notes-sandbox/actions/runs/41220985390",
+        "event": "workflow_run",
+        "conclusion": "success",
+        "jobs": {
+          "prepare": "success",
+          "review": "success",
+          "publish": "success"
+        },
+        "reason": "ready",
+        "outcome": "bob_unavailable",
+        "gate": null
+      },
+      {
+        "url": "https://github.com/paolob67/notes-sandbox/actions/runs/41220987417",
+        "event": "workflow_run",
+        "conclusion": "cancelled",
+        "jobs": {
+          "prepare": "success",
+          "review": "cancelled",
+          "publish": "skipped"
+        },
+        "reason": null,
+        "outcome": null,
+        "gate": null
+      }
+    ]
+  },
+  "c13_bob_unavailable_invalid_key": {
+    "date": "2026-10-31T16:47:35.717Z",
+    "guardrails": "G16 G25",
+    "pass": true,
+    "pr": "https://github.com/paolob67/notes-sandbox/pull/20",
+    "expected": "Invalid Bob key: Bob fails, a short \"Review unavailable\" note, the run stays green, the canary key appears nowhere in the comment",
+    "observed": "outcomes [null,\"bob_unavailable\"]; comments 1; stderr head [\"Error: Request Failed. Invalid or expired API key.\"]",
+    "bobCalls": 1,
+    "checks": [
+      {
+        "name": "outcome bob_unavailable",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "one note comment",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "the canary key is not in the comment",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "comment has no @mention (G17)",
+        "pass": true,
+        "detail": "comment 6546277775"
+      },
+      {
+        "name": "comment carries the AI Assisted banner (G35)",
+        "pass": true,
+        "detail": "comment 6546277775"
+      },
+      {
+        "name": "comment holds no token pattern (G27)",
+        "pass": true,
+        "detail": "comment 6546277775"
+      },
+      {
+        "name": "comment was posted by github-actions[bot] (S17)",
+        "pass": true,
+        "detail": "github-actions[bot]"
+      },
+      {
+        "name": "no bob-review run is red",
+        "pass": true,
+        "detail": ""
+      },
+      {
+        "name": "no injected command output in any prepare log (G24)",
+        "pass": true,
+        "detail": ""
+      }
+    ],
+    "runs": [
+      {
+        "url": "https://github.com/paolob67/notes-sandbox/actions/runs/41221165015",
+        "event": "workflow_run",
+        "conclusion": "cancelled",
+        "jobs": {
+          "prepare": "success",
+          "review": "cancelled",
+          "publish": "skipped"
+        },
+        "reason": "ready",
+        "outcome": null,
+        "gate": null
+      },
+      {
+        "url": "https://github.com/paolob67/notes-sandbox/actions/runs/41221168707",
+        "event": "workflow_run",
+        "conclusion": "success",
+        "jobs": {
+          "prepare": "success",
+          "review": "success",
+          "publish": "success"
+        },
+        "reason": "ready",
+        "outcome": "bob_unavailable",
+        "gate": null
+      }
+    ]
+  }
+}
