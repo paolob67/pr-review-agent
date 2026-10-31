@@ -14,13 +14,15 @@ trap 'rm -rf "$work"' EXIT
 gh auth status >/dev/null
 
 gh api -X DELETE "repos/$target/environments/bob-review" 2>/dev/null && echo "deleted environment bob-review" || echo "environment bob-review already absent"
-for v in BOB_REVIEW_ENABLED BOB_REVIEW_REQUIRED_WORKFLOWS; do
+for v in BOB_REVIEW_ENABLED BOB_REVIEW_REQUIRED_WORKFLOWS BOB_REVIEW_BOB_TIMEOUT_SECONDS; do
   gh variable delete "$v" -R "$target" 2>/dev/null && echo "deleted variable $v" || echo "variable $v already absent"
 done
 
+gh label delete ai-review -R "$target" --yes 2>/dev/null && echo "deleted label ai-review" || echo "label ai-review already absent"
+
 gh repo clone "$target" "$work/repo" -- --quiet
 cd "$work/repo"
-git rm -rq --ignore-unmatch .github/workflows/bob-review.yml reviewer integrations tests/container
+git rm -rq --ignore-unmatch .github/workflows/bob-review.yml .github/workflows/lint.yml reviewer integrations tests/container
 if git diff --cached --quiet; then
   echo "no reviewer files on main"
 else

@@ -92,12 +92,17 @@ export function checkWorkflow(text) {
   // G1: the workflow starts with no permissions.
   if (!lines.some((l) => /^permissions:\s*\{\}\s*$/.test(l))) add('G1', 1, 'top-level `permissions: {}` is missing');
 
-  // G24: tainted contexts anywhere; G25: no secrets inherit; G6: no pull_request_target yet.
-  for (const l of all) {
+  // G24: tainted contexts anywhere; G25: no secrets inherit; G6/G12: pull_request_target only for the
+  // label re-request (types: [labeled]) and never with a checkout of PR code (checked per step below).
+  for (let i = 0; i < all.length; i++) {
+    const l = all[i];
     if (l.text.trimStart().startsWith('#')) continue;
     for (const re of TAINTED) if (re.test(l.text)) add('G24', l.n, `PR-controlled context used: ${l.text.trim()}`);
     if (/^\s*secrets:\s*inherit\s*$/.test(l.text)) add('G25', l.n, '`secrets: inherit` is not allowed');
-    if (/^\s*pull_request_target\s*:/.test(l.text)) add('G6', l.n, 'pull_request_target is Phase 5 and needs its own review');
+    if (/^\s*pull_request_target\s*:/.test(l.text)) {
+      const next = all[i + 1]?.text ?? '';
+      if (!/^\s+types:\s*\[labeled\]\s*$/.test(next)) add('G6', l.n, 'pull_request_target is allowed only with `types: [labeled]`');
+    }
   }
 
   const jobs = splitJobs(lines);
@@ -124,7 +129,7 @@ export function checkWorkflow(text) {
       const inline = /^    permissions:\s*(.*?)(\s+#.*)?$/.exec(body[pAt].text)[1].trim();
       if (inline && inline !== '{}') add('G1', body[pAt].n, `job ${job.name}: permissions must be a block or {}: ${inline}`);
       const declared = [];
-      for (let i = pAt + 1; i < body.length && /^      \S/.test(body[i].text); i++) declared.push({ n: body[i].n, p: body[i].text.trim() });
+      for (let i = pAt + 1; i < body.length && /^      \S/.test(body[i].text); i++) declared.push({ n: body[i].n, p: body[i].text.replace(/\s+#.*$/, '').trim() });
       const allowed = ALLOWED_PERMISSIONS[job.name];
       for (const d of declared) {
         // pull-requests: write is allowed on publish only (ADR 0014); every other write scope is forbidden.

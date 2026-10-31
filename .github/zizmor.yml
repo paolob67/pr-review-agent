@@ -1,0 +1,15 @@
+# zizmor configuration. Run from the repo root:
+#   zizmor --persona pedantic integrations/github-actions/bob-review.yml
+# dangerous-triggers is accepted by design (docs/adr/0015-trigger-design.md): the review must start from
+# the default branch, with secrets, after CI; only workflow_run and pull_request_target provide that. The
+# triggers are made safe by what the workflow does not do (no checkout of PR code, no PR data in shell
+# strings or expressions), enforced by scripts/validation/workflow-policy.js and its tests.
+# concurrency-limits: the groups are on the review and publish jobs on purpose. A workflow-level group
+# would let a run that stops quietly in prepare (stale SHA, CI pending) cancel a running review.
+rules:
+  dangerous-triggers:
+    ignore:
+      - bob-review.yml
+  concurrency-limits:
+    ignore:
+      - bob-review.yml

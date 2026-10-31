@@ -23,8 +23,12 @@ echo '{"name":"main","type":"branch"}' \
   | gh api -X POST "repos/$target/environments/bob-review/deployment-branch-policies" --input - --jq '"branch policy " + .name' 
 
 gh variable set BOB_REVIEW_ENABLED -R "$target" --body false
-gh variable set BOB_REVIEW_REQUIRED_WORKFLOWS -R "$target" --body CI
+gh variable set BOB_REVIEW_REQUIRED_WORKFLOWS -R "$target" --body "CI,Lint"
 echo "variables set (kill switch is false)"
+
+# The label that re-requests a review or opts in an outside contributor (ADR 0015).
+gh label create ai-review -R "$target" --color 0e8a16 --description "Maintainer: run the AI Assisted review" --force >/dev/null
+echo "label ai-review"
 
 # The value travels node -> pipe -> gh stdin only. A missing or empty field fails before gh runs.
 node -e '
@@ -40,4 +44,5 @@ echo "--- created (names only)"
 echo "environments:"; gh api "repos/$target/environments" --jq '.environments[]?.name'
 echo "environment secrets:"; gh secret list --env bob-review -R "$target"
 echo "repo variables:"; gh variable list -R "$target"
+echo "labels:"; gh label list -R "$target" --json name --jq '.[].name'
 echo "workflows:"; gh workflow list -R "$target"

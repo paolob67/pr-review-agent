@@ -33,6 +33,7 @@ docker run --rm \
   -e REVIEW_EXCHANGE_DIR=/exchange \
   -e BOB_API_KEY \
   -e REVIEW_REPO -e REVIEW_PR_NUMBER -e REVIEW_HEAD_SHA -e REVIEW_ENABLED \
+  -e REVIEW_BOB_TIMEOUT_SECONDS \
   -e REVIEW_IMAGE_DIGEST \
   "$image" review || status=$?
 

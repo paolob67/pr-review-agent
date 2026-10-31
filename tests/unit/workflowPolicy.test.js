@@ -38,26 +38,26 @@ describe('workflow policy', () => {
   });
 
   it('S17, ADR 0014: publish has pull-requests: write and the real workflow is clean', () => {
-    assert.ok(REAL.includes('    permissions:\n      pull-requests: write\n    steps:'));
+    assert.ok(REAL.includes('    permissions:\n      pull-requests: write # create and update the one comment (S17, ADR 0014)\n    steps:'));
     assert.deepEqual(checkWorkflow(REAL), []);
   });
 
   it('G34: checks: write, statuses: write or contents: write on publish is reported', () => {
     for (const scope of ['checks: write', 'statuses: write', 'contents: write']) {
-      assert.ok(rules(mutate('      pull-requests: write\n    steps:', `      pull-requests: write\n      ${scope}\n    steps:`)).includes('G34'), scope);
+      assert.ok(rules(mutate('      pull-requests: write # create and update the one comment (S17, ADR 0014)\n    steps:', `      pull-requests: write # create and update the one comment (S17, ADR 0014)\n      ${scope}\n    steps:`)).includes('G34'), scope);
     }
   });
 
   it('G34: pull-requests: write on prepare is reported (allowed on publish only)', () => {
-    assert.ok(rules(mutate('      pull-requests: read\n      actions: read', '      pull-requests: write\n      actions: read')).includes('G34'));
+    assert.ok(rules(mutate('      pull-requests: read # PR metadata, diff, commits/{sha}/pulls, existing comment', '      pull-requests: write # PR metadata, diff, commits/{sha}/pulls, existing comment')).includes('G34'));
   });
 
   it('G25: an unexpected scope on publish is reported', () => {
-    assert.ok(rules(mutate('      pull-requests: write\n    steps:', '      pull-requests: write\n      models: read\n    steps:')).includes('G25'));
+    assert.ok(rules(mutate('      pull-requests: write # create and update the one comment (S17, ADR 0014)\n    steps:', '      pull-requests: write\n      models: read\n    steps:')).includes('G25'));
   });
 
   it('G25: issues: write on publish is no longer in the allowed set', () => {
-    assert.ok(rules(mutate('      pull-requests: write\n    steps:', '      pull-requests: write\n      issues: write\n    steps:')).includes('G25'));
+    assert.ok(rules(mutate('      pull-requests: write # create and update the one comment (S17, ADR 0014)\n    steps:', '      pull-requests: write\n      issues: write\n    steps:')).includes('G25'));
   });
 
   it('G25: the review job referencing the GitHub token is reported', () => {
@@ -65,7 +65,7 @@ describe('workflow policy', () => {
   });
 
   it('G25: the Bob key in another job is reported', () => {
-    const text = mutate('          SCM_READ_TOKEN: ${{ github.token }}', '          SCM_READ_TOKEN: ${{ github.token }}\n          BOB_API_KEY: ${{ secrets.BOB_API_KEY }}');
+    const text = mutate('          REVIEW_PR_NUMBER: ${{ steps.trigger.outputs.pr_number }}', '          REVIEW_PR_NUMBER: ${{ steps.trigger.outputs.pr_number }}\n          BOB_API_KEY: ${{ secrets.BOB_API_KEY }}');
     assert.ok(rules(text).includes('G25'));
   });
 
@@ -74,7 +74,7 @@ describe('workflow policy', () => {
   });
 
   it('G25: the bob-review environment on another job is reported', () => {
-    assert.ok(rules(mutate('    permissions:\n      pull-requests: write\n    steps:', '    environment: bob-review\n    permissions:\n      pull-requests: write\n    steps:')).includes('G25'));
+    assert.ok(rules(mutate('    permissions:\n      pull-requests: write # create and update the one comment (S17, ADR 0014)\n    steps:', '    environment: bob-review\n    permissions:\n      pull-requests: write # create and update the one comment (S17, ADR 0014)\n    steps:')).includes('G25'));
   });
 
   it('G25: secrets: inherit is reported', () => {
@@ -101,8 +101,35 @@ describe('workflow policy', () => {
     assert.ok(rules(mutate('          persist-credentials: false', '          persist-credentials: false\n          ref: refs/pull/1/head')).includes('G6'));
   });
 
-  it('G6: pull_request_target is reported', () => {
-    assert.ok(rules(mutate('  workflow_dispatch:', '  pull_request_target:\n    types: [labeled]\n  workflow_dispatch:')).includes('G6'));
+  it('G6/G12: pull_request_target is allowed only for the labeled type', () => {
+    assert.ok(REAL.includes('  pull_request_target:\n    types: [labeled]\n'));
+    for (const types of ['[opened, synchronize]', '[labeled, opened]', '[opened]']) {
+      assert.ok(rules(mutate('  pull_request_target:\n    types: [labeled]\n', `  pull_request_target:\n    types: ${types}\n`)).includes('G6'), types);
+    }
+    assert.ok(rules(mutate('  pull_request_target:\n    types: [labeled]\n', '  pull_request_target:\n    branches: [main]\n')).includes('G6'));
+  });
+
+  it('G6: a checkout of the pull request head under pull_request_target is reported', () => {
+    for (const extra of ['ref: ${{ github.event.pull_request.head.sha }}', 'repository: attacker/fork']) {
+      assert.ok(rules(mutate('          persist-credentials: false', `          persist-credentials: false\n          ${extra}`)).some((r) => r === 'G6' || r === 'G24'), extra);
+    }
+  });
+
+  it('G12: the label trigger and the workflow_run trigger both stay in the prepare gate', () => {
+    assert.ok(REAL.includes("(github.event_name == 'pull_request_target' && github.event.label.name == 'ai-review')"));
+    assert.ok(REAL.includes("github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'"));
+  });
+
+  it('G11: concurrency is per pull request on the review and publish jobs, not on the workflow', () => {
+    assert.ok(!REAL.includes('\nconcurrency:'), 'a workflow-level group would let a quiet run cancel a real review');
+    assert.ok(REAL.includes('      group: bob-review-run-${{ needs.prepare.outputs.pr_number }}\n      cancel-in-progress: true\n'));
+    assert.ok(REAL.includes('      group: bob-review-publish-${{ needs.prepare.outputs.pr_number }}\n      cancel-in-progress: false\n'));
+    assert.ok(REAL.includes("needs.review.result != 'cancelled'"));
+  });
+
+  it('G24: trigger values reach the script only through env, and the script call has no expression', () => {
+    assert.ok(REAL.includes('        run: node integrations/github-actions/scripts/resolve-trigger.mjs\n'));
+    assert.ok(REAL.includes('          TRIGGER_HEAD_SHA: ${{ github.event.workflow_run.head_sha || inputs.head_sha }}'));
   });
 
   it('G24: PR-controlled context in a run: string is reported', () => {

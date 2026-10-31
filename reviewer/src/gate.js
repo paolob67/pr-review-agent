@@ -54,10 +54,14 @@ export function checkHeadPin(pr, headSha) {
 }
 
 // checkAuthor checks the PR author association. (G7)
-// Returns skipped_gate if the author is not in the allowed set.
+// Returns skipped_gate if the author is not in the allowed set and no maintainer has applied the
+// review label (ADR 0015). Only users with triage rights or above can label a pull request, so the
+// label is the maintainer override for outside contributors.
 const ALLOWED_ASSOCIATIONS = new Set(['OWNER', 'MEMBER', 'COLLABORATOR']);
+export const REVIEW_LABEL = 'ai-review';
 
 export function checkAuthor(pr) {
+  if (Array.isArray(pr.labels) && pr.labels.some(l => l?.name === REVIEW_LABEL)) return null;
   const assoc = pr.author_association ?? '';
   if (!ALLOWED_ASSOCIATIONS.has(assoc)) {
     return { outcome: 'skipped_gate', reason: 'author_policy' };

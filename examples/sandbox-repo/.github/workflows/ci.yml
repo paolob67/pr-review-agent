@@ -16,4 +16,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      # Test hook for the Phase 5 matrix: a file named .ci-slow makes CI take about 45 seconds, so a
+      # second push can land while CI is still running (stale head case).
+      - run: if [ -f .ci-slow ]; then sleep 45; fi
       - run: npm test

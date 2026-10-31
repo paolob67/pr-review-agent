@@ -62,6 +62,18 @@ SURVIVED means no test noticed (a gap).
 | G24w | scripts/validation/workflow-policy.js | Policy allows expressions inside run: | unit/workflowPolicy | KILLED |
 | G25w | scripts/validation/workflow-policy.js | Policy allows a GitHub token in the review job | unit/workflowPolicy | KILLED |
 | G34w | scripts/validation/workflow-policy.js | Policy allows forbidden write scopes | unit/workflowPolicy | KILLED |
+| G7b | gate.js | Any label (or none) overrides the author policy | unit/gate | KILLED |
+| G7c | gate.js | Override label renamed away from ai-review | unit/gate | KILLED |
+| G31a | integrations/github-actions/scripts/resolve-trigger.mjs | A red, cancelled or skipped required workflow does not block | unit/resolveTrigger | KILLED |
+| G31b | integrations/github-actions/scripts/resolve-trigger.mjs | A pending required workflow does not block | unit/resolveTrigger | KILLED |
+| G31c | integrations/github-actions/scripts/resolve-trigger.mjs | A missing required workflow does not block | unit/resolveTrigger | KILLED |
+| G31d | integrations/github-actions/scripts/resolve-trigger.mjs | A push-event run counts as pull request CI | unit/resolveTrigger | KILLED |
+| G31e | integrations/github-actions/scripts/resolve-trigger.mjs | The newest run of a required workflow is not the one that counts | unit/resolveTrigger | KILLED |
+| G32t | integrations/github-actions/scripts/resolve-trigger.mjs | A PR whose head moved still resolves from the SHA | unit/resolveTrigger | KILLED |
+| G24t | integrations/github-actions/scripts/resolve-trigger.mjs | workflow_run head SHA is not validated before the API call | unit/resolveTrigger | KILLED |
+| G24u | integrations/github-actions/scripts/resolve-trigger.mjs | Label trigger PR number is not validated before the API call | unit/resolveTrigger | KILLED |
+| G6t | integrations/github-actions/scripts/resolve-trigger.mjs | A pull request of another repository resolves | unit/resolveTrigger | KILLED |
+| G12w | scripts/validation/workflow-policy.js | Policy allows pull_request_target for any activity type | unit/workflowPolicy | KILLED |
 | G37 | cost.js | Reported Bob cost dropped from the record | unit/cost, pipeline/pipeline | KILLED |
 
-Summary: 52 of 52 mutations killed.
+Summary: 64 of 64 mutations killed.

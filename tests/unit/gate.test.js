@@ -67,6 +67,26 @@ describe('gate.js - checkAuthor (G7)', () => {
     assert.ok(result);
     assert.equal(result.outcome, 'skipped_gate');
   });
+
+  it('G7: the ai-review label lets an outside contributor through (ADR 0015)', () => {
+    for (const assoc of ['CONTRIBUTOR', 'NONE', 'FIRST_TIME_CONTRIBUTOR', '']) {
+      assert.equal(checkAuthor(makePR({ author_association: assoc, labels: [{ name: 'ai-review' }] })), null, assoc);
+    }
+  });
+
+  it('G7: other labels and look-alike names do not override the policy', () => {
+    for (const name of ['bug', 'AI-Review', 'ai-review ', 'safe-to-review']) {
+      const result = checkAuthor(makePR({ author_association: 'NONE', labels: [{ name }] }));
+      assert.ok(result, name);
+      assert.equal(result.reason, 'author_policy');
+    }
+  });
+
+  it('G7: a malformed labels field does not override the policy', () => {
+    for (const labels of ['ai-review', { name: 'ai-review' }, [null], [{}], null]) {
+      assert.ok(checkAuthor(makePR({ author_association: 'NONE', labels })));
+    }
+  });
 });
 
 describe('gate.js - checkDraft (G9)', () => {
