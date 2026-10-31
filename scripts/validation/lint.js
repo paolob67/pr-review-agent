@@ -31,7 +31,7 @@ function walkJs(dir, callback) {
     try { stat = statSync(full); } catch { continue; }
     if (stat.isDirectory()) {
       walkJs(full, callback);
-    } else if (entry.endsWith('.js')) {
+    } else if (entry.endsWith('.js') || entry.endsWith('.mjs')) {
       callback(full);
     }
   }

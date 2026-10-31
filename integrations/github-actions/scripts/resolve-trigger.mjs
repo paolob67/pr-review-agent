@@ -129,7 +129,9 @@ export async function resolveTrigger(env, fetchImpl = fetch) {
 
 async function main() {
   const r = await resolveTrigger(process.env);
-  process.stdout.write(`${JSON.stringify({ event: 'trigger', ready: r.ready, reason: r.reason, pr: r.prNumber ?? null, workflow: r.name ?? null })}\n`);
+  // Logged values are validated tokens or null: the SHA only when it matches the 40-hex pattern.
+  const sha = SHA_RE.test(process.env.TRIGGER_HEAD_SHA ?? '') ? process.env.TRIGGER_HEAD_SHA : (r.headSha ?? null);
+  process.stdout.write(`${JSON.stringify({ event: 'trigger', ready: r.ready, reason: r.reason, pr: r.prNumber ?? null, head_sha: sha, workflow: r.name ?? null })}\n`);
   const out = process.env.GITHUB_OUTPUT;
   if (out) {
     // Values are validated tokens (digits, hex, a fixed reason word): no newline can be injected.
