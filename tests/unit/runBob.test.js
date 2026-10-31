@@ -174,7 +174,8 @@ describe('runBob.js - runBob process (G13)', () => {
       assert.equal(at('--workspace'), scratch);
       assert.equal(at('--mode'), 'reviewer');
       assert.equal(at('-f'), 'json');
-      for (const banned of ['--yolo', '--trust', '--accept-license']) {
+      assert.ok(argv.includes('--accept-license'), 'ADR 0013: license acceptance flag is passed');
+      for (const banned of ['--yolo', '--trust']) {
         assert.ok(!argv.includes(banned), `${banned} must never be passed`);
       }
     } finally {

@@ -1,9 +1,10 @@
-# Advisory pull request review by IBM Bob. See docs/adr/0012 and docs/adr/0013.
+# Advisory pull request review by IBM Bob. See docs/adr/0012 and docs/adr/0013 (license).
 #
 # Three jobs on three fresh GitHub-hosted runners, one credential each:
 #   prepare  read-only GITHUB_TOKEN: gates, diff, base-branch rules, redaction, prompt
 #   review   BOB_API_KEY only (environment bob-review): Bob in a hardened container, read-only
-#   publish  GITHUB_TOKEN with issues: write only: validates the result, upserts the one comment
+#   publish  GITHUB_TOKEN with pull-requests: write (S17, ADR 0014): validates the result, upserts the
+#            one comment
 #
 # This workflow never checks out pull request code. The only checkout is the default branch
 # (workflow_run always runs the default branch definition), and it happens in the prepare job only;
@@ -49,10 +50,12 @@ env:
 jobs:
   prepare:
     name: prepare
-    # Kill switch (G10): the repository variable must be exactly "true". Review only after a green CI.
+    # Kill switch (G10): the repository variable must be exactly "true". Review only after a green CI
+    # that was itself a pull_request run (a CI run on a push has no PR number; found in Part B).
     if: >-
       vars.BOB_REVIEW_ENABLED == 'true' &&
-      (github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success')
+      (github.event_name == 'workflow_dispatch' ||
+       (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'))
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     permissions:
@@ -61,6 +64,7 @@ jobs:
       actions: read
     outputs:
       proceed: ${{ steps.flag.outputs.proceed }}
+      handoff: ${{ steps.flag.outputs.handoff }}
     steps:
       - name: Check out the default branch (trusted code only)
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -76,14 +80,16 @@ jobs:
         env:
           REVIEW_EXCHANGE_DIR: ${{ runner.temp }}/exchange
         run: |
-          node -e "const fs=require('fs'),p=require('path');let v='false';try{v=JSON.parse(fs.readFileSync(p.join(process.env.REVIEW_EXCHANGE_DIR,'handoff.json'),'utf8')).proceed===true?'true':'false'}catch{}console.log('proceed='+v)" >> "$GITHUB_OUTPUT"
+          node -e "const fs=require('fs'),p=require('path');let v='false',h='false';try{const j=JSON.parse(fs.readFileSync(p.join(process.env.REVIEW_EXCHANGE_DIR,'handoff.json'),'utf8'));h='true';v=j.proceed===true?'true':'false'}catch{}console.log('proceed='+v);console.log('handoff='+h)" >> "$GITHUB_OUTPUT"
+      # Rejected input (G24) ends prepare before a handoff exists: no artifact, nothing to publish,
+      # and the run stays green (found in Part B, run 41195024332).
       - name: Upload the prompt (data only)
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: prompt
           path: ${{ runner.temp }}/exchange/handoff.json
           retention-days: 1
-          if-no-files-found: error
+          if-no-files-found: ignore
       - name: Upload the trusted reviewer code
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
@@ -136,11 +142,14 @@ jobs:
     name: publish
     needs: [prepare, review]
     # Runs after review whatever its outcome, so a failed or timed-out review still gets a short note.
-    if: always() && needs.prepare.result == 'success'
+    if: always() && needs.prepare.result == 'success' && needs.prepare.outputs.handoff == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 5
+    # S17, ADR 0014: PR comments need pull-requests: write (issues: write alone is refused with 403).
+    # That scope can also reach the reviews endpoint, so "never approves" (G34) is held by the client
+    # endpoint allowlist, this workflow check and the repository setting that stops Actions approving.
     permissions:
-      issues: write
+      pull-requests: write
     steps:
       - name: Download the trusted reviewer code
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2

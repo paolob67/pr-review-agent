@@ -33,15 +33,17 @@ RUN set -eu; \
     node --version
 
 # Ubuntu 24.04 ships a default "ubuntu" user at uid 1000; the Bob user is a separate fixed uid (S11, G23).
-# User-level settings turn off auto-update and AGENTS.md loading (G30, S14).
+# Default user-level settings turn off auto-update and AGENTS.md loading (G30, S14). They live in a
+# root-owned file; the wrapper copies them into the Bob home at start because that home is a tmpfs
+# (Bob writes under ~/.bob and the rootfs is read-only, see docs/results/phase-4-runner.md).
 RUN npm install -g "@ibm/bob@${BOB_VERSION}" \
  && npm cache clean --force \
  && groupadd --gid 10002 bobrun \
  && useradd --uid 10002 --gid 10002 --create-home --home-dir /home/bobrun --shell /usr/sbin/nologin bobrun \
  && bob --version \
- && mkdir -p /home/bobrun/.bob/settings \
- && printf '{\n  "general": { "disableAutoUpdate": true, "disableUpdateNag": true },\n  "bob-cline.useAgentRules": false\n}\n' > /home/bobrun/.bob/settings/settings.json \
- && chown -R 10002:10002 /home/bobrun
+ && mkdir -p /opt/bob-defaults \
+ && printf '{\n  "general": { "disableAutoUpdate": true, "disableUpdateNag": true },\n  "bob-cline.useAgentRules": false\n}\n' > /opt/bob-defaults/settings.json \
+ && chmod -R a+rX,go-w /opt/bob-defaults
 
 # Reviewer code is root-owned and not writable by the Bob user.
 COPY reviewer/ /app/reviewer/

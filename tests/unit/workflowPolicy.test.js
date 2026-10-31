@@ -32,12 +32,32 @@ describe('workflow policy', () => {
     assert.ok(rules(mutate('    permissions: {}\n    environment: bob-review', '    environment: bob-review')).includes('G1'));
   });
 
-  it('G34: pull-requests: write on publish is reported', () => {
-    assert.ok(rules(mutate('    permissions:\n      issues: write', '    permissions:\n      issues: write\n      pull-requests: write')).includes('G34'));
+  it('G24: rejected input ends quietly: the prompt upload tolerates a missing handoff and publish needs one', () => {
+    assert.ok(REAL.includes('          path: ${{ runner.temp }}/exchange/handoff.json\n          retention-days: 1\n          if-no-files-found: ignore'));
+    assert.ok(REAL.includes("needs.prepare.outputs.handoff == 'true'"));
+  });
+
+  it('S17, ADR 0014: publish has pull-requests: write and the real workflow is clean', () => {
+    assert.ok(REAL.includes('    permissions:\n      pull-requests: write\n    steps:'));
+    assert.deepEqual(checkWorkflow(REAL), []);
+  });
+
+  it('G34: checks: write, statuses: write or contents: write on publish is reported', () => {
+    for (const scope of ['checks: write', 'statuses: write', 'contents: write']) {
+      assert.ok(rules(mutate('      pull-requests: write\n    steps:', `      pull-requests: write\n      ${scope}\n    steps:`)).includes('G34'), scope);
+    }
+  });
+
+  it('G34: pull-requests: write on prepare is reported (allowed on publish only)', () => {
+    assert.ok(rules(mutate('      pull-requests: read\n      actions: read', '      pull-requests: write\n      actions: read')).includes('G34'));
   });
 
   it('G25: an unexpected scope on publish is reported', () => {
-    assert.ok(rules(mutate('      issues: write', '      issues: write\n      models: read')).includes('G25'));
+    assert.ok(rules(mutate('      pull-requests: write\n    steps:', '      pull-requests: write\n      models: read\n    steps:')).includes('G25'));
+  });
+
+  it('G25: issues: write on publish is no longer in the allowed set', () => {
+    assert.ok(rules(mutate('      pull-requests: write\n    steps:', '      pull-requests: write\n      issues: write\n    steps:')).includes('G25'));
   });
 
   it('G25: the review job referencing the GitHub token is reported', () => {
@@ -54,7 +74,7 @@ describe('workflow policy', () => {
   });
 
   it('G25: the bob-review environment on another job is reported', () => {
-    assert.ok(rules(mutate('    timeout-minutes: 5\n    permissions:\n      issues: write', '    timeout-minutes: 5\n    environment: bob-review\n    permissions:\n      issues: write')).includes('G25'));
+    assert.ok(rules(mutate('    permissions:\n      pull-requests: write\n    steps:', '    environment: bob-review\n    permissions:\n      pull-requests: write\n    steps:')).includes('G25'));
   });
 
   it('G25: secrets: inherit is reported', () => {

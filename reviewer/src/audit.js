@@ -75,6 +75,16 @@ export function logBobFinished(exitCode, durationMs) {
   emit('info', 'bob_finished', { exit_code: exitCode, duration_ms: durationMs });
 }
 
+// logBobFailure records why Bob failed: the first 300 characters of its stderr, on one line, with
+// control characters removed and registered secrets scrubbed (G27). Called only when Bob exits
+// non-zero or times out. Bob's stderr carries plain-text errors (spikes S6), not the diff or the
+// model output, which go to stdout and are never logged.
+export function logBobFailure(stderr) {
+  // Scrub before truncating so a cut inside a secret cannot leave a partial value.
+  const tail = scrub(String(stderr ?? '')).replace(/[\u0000-\u001f\u007f]+/g, ' ').trim().slice(0, 300);
+  emit('warn', 'bob_failed', { stderr_head: tail });
+}
+
 export function logPublishDone(action) {
   emit('info', 'publish_done', { action });
 }

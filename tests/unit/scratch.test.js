@@ -4,9 +4,10 @@
 
 import { describe, it, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { createScratch, checkForbiddenPaths, wouldBeForbidden } from '../../reviewer/src/scratch.js';
-import { existsSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { createScratch, checkForbiddenPaths, wouldBeForbidden, seedBobHome } from '../../reviewer/src/scratch.js';
+import { existsSync, mkdirSync, writeFileSync, readFileSync, rmSync, mkdtempSync } from 'node:fs';
 import { join } from 'node:path';
+import { tmpdir } from 'node:os';
 
 const created = [];
 
@@ -14,6 +15,26 @@ after(() => {
   for (const dir of created) {
     try { rmSync(dir, { recursive: true, force: true }); } catch {}
   }
+});
+
+describe('scratch.js seedBobHome (G30)', () => {
+  it('G30: copies the seed settings into <home>/.bob/settings/settings.json', () => {
+    const base = mkdtempSync(join(tmpdir(), 'seed-test-'));
+    created.push(base);
+    const seed = join(base, 'seed.json');
+    writeFileSync(seed, '{"bob-cline.useAgentRules":false}');
+    const home = join(base, 'home');
+    mkdirSync(home);
+    seedBobHome(home, process.getuid(), process.getgid(), seed);
+    assert.equal(readFileSync(join(home, '.bob', 'settings', 'settings.json'), 'utf8'), '{"bob-cline.useAgentRules":false}');
+  });
+
+  it('G30: does nothing when the seed file is absent', () => {
+    const base = mkdtempSync(join(tmpdir(), 'seed-test-'));
+    created.push(base);
+    seedBobHome(base, process.getuid(), process.getgid(), join(base, 'missing.json'));
+    assert.ok(!existsSync(join(base, '.bob')));
+  });
 });
 
 describe('scratch.js (G28, G29)', () => {

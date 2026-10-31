@@ -92,6 +92,25 @@ export function handOverScratch(scratchDir, uid, gid) {
   walk(scratchDir);
 }
 
+// seedBobHome prepares Bob's home on a writable (tmpfs) mount: creates <home>/.bob/settings, copies
+// the root-owned default settings file into it and hands the tree to the Bob user. Bob writes under
+// ~/.bob at start, and the container rootfs is read-only (G23), so the home is a tmpfs seeded here.
+// The settings file turns off auto-update and AGENTS.md loading (G30). Only called when the wrapper
+// runs as root with a Bob user. No-op when the seed file is absent (local runs, offline tests).
+export function seedBobHome(home, uid, gid, seedFile) {
+  if (!existsSync(seedFile)) return;
+  const settingsDir = join(home, '.bob', 'settings');
+  mkdirSync(settingsDir, { recursive: true });
+  writeFileSync(join(settingsDir, 'settings.json'), readFileSync(seedFile));
+  const walk = (p) => {
+    chownSync(p, uid, gid);
+    if (statSync(p).isDirectory()) {
+      for (const e of readdirSync(p)) walk(join(p, e));
+    }
+  };
+  walk(home);
+}
+
 // assertNoBobSettingsJson is exported for tests that verify a specific forbidden path.
 export function wouldBeForbidden(relativePath) {
   return isForbidden(relativePath);

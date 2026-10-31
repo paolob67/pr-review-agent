@@ -4,7 +4,7 @@
 
 import { describe, it, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
-import { registerSecrets, scrub, logRunStart, logRunSummary } from '../../reviewer/src/audit.js';
+import { registerSecrets, scrub, logRunStart, logRunSummary, logBobFailure } from '../../reviewer/src/audit.js';
 
 describe('audit.js - scrub (G27)', () => {
   it('G27: registered secret value is replaced with [SCRUBBED]', () => {
@@ -63,6 +63,26 @@ describe('audit.js - logRunSummary schema (G20)', () => {
     assert.equal(parsed.outcome, 'reviewed');
     assert.ok(parsed.ts, 'should have a timestamp');
     assert.ok(parsed.level, 'should have a level');
+  });
+
+  it('G27: logBobFailure scrubs secrets, strips control characters and caps the length', () => {
+    const key = 'canary-bob-key-0123456789';
+    registerSecrets([key]);
+    const written = [];
+    const origWrite = process.stdout.write.bind(process.stdout);
+    process.stdout.write = (chunk) => { written.push(chunk.toString()); return true; };
+    try {
+      logBobFailure(`Error: bad key ${key}\n\u001b[31mred\u001b[0m ${'x'.repeat(1000)}`);
+    } finally {
+      process.stdout.write = origWrite;
+    }
+    const line = written[0].trim();
+    assert.ok(!line.includes(key), 'secret must not reach the log');
+    const parsed = JSON.parse(line);
+    assert.equal(parsed.event, 'bob_failed');
+    assert.ok(parsed.stderr_head.includes('[SCRUBBED]'));
+    assert.ok(!/[\u0000-\u001f]/.test(parsed.stderr_head));
+    assert.ok(parsed.stderr_head.length <= 300 + 9 * 2, 'capped near 300 characters');
   });
 
   it('G20: logRunStart writes event=run_start', () => {

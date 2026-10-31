@@ -4,7 +4,7 @@
 //             G21 (job configuration), G22 (pinned runner and actions), G24 (no PR data in shell
 //             strings), G25 (one credential per job), G34 (no review, check or status writes).
 //
-// Static policy check for the review workflow (ADR 0012, ADR 0013). It reads the workflow text line
+// Static policy check for the review workflow (ADR 0012). It reads the workflow text line
 // by line (no YAML dependency) and relies on the fixed shape of integrations/github-actions/*.yml:
 // two-space indentation, `jobs:` at the top level, `steps:` under each job.
 //
@@ -26,7 +26,8 @@ const ENVIRONMENT_JOBS = ['review'];
 const ALLOWED_PERMISSIONS = {
   prepare: new Set(['contents: read', 'pull-requests: read', 'actions: read']),
   review: new Set([]),
-  publish: new Set(['issues: write']),
+  // PR comments need pull-requests: write (S17, ADR 0014); issues: write alone is refused with 403.
+  publish: new Set(['pull-requests: write']),
 };
 const PINNED_RUNNER = /^ubuntu-24\.04$/;
 const SHA_PIN = /@[0-9a-f]{40}(\s|$)/;
@@ -126,7 +127,9 @@ export function checkWorkflow(text) {
       for (let i = pAt + 1; i < body.length && /^      \S/.test(body[i].text); i++) declared.push({ n: body[i].n, p: body[i].text.trim() });
       const allowed = ALLOWED_PERMISSIONS[job.name];
       for (const d of declared) {
-        if (/(write-all|read-all)/.test(d.p) || /^(checks|statuses|pull-requests|contents|id-token|packages|deployments|actions):\s*write/.test(d.p)) add('G34', d.n, `job ${job.name}: forbidden permission ${d.p}`);
+        // pull-requests: write is allowed on publish only (ADR 0014); every other write scope is forbidden.
+        const prWriteOk = job.name === 'publish' && d.p === 'pull-requests: write';
+        if (/(write-all|read-all)/.test(d.p) || (!prWriteOk && /^(checks|statuses|pull-requests|contents|id-token|packages|deployments|actions):\s*write/.test(d.p))) add('G34', d.n, `job ${job.name}: forbidden permission ${d.p}`);
         else if (allowed && !allowed.has(d.p)) add('G25', d.n, `job ${job.name}: permission ${d.p} is not in the allowed set`);
       }
     }

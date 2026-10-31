@@ -1,7 +1,7 @@
 // tests/pipeline/stages.test.js
 // Staged mode: prepare, review and publish run as three separate processes of the real CLI
 // (reviewer/bin/reviewer.js), each with only its own credential, exchanging files. This mirrors the
-// three GitHub Actions jobs (ADR 0012, ADR 0013).
+// three GitHub Actions jobs (ADR 0012).
 // Guardrails covered: G2, G23, G25 (credential separation by stage), G16 and G36 (the result is
 // untrusted input to publish), G24 (stage inputs), G34 (comment endpoints only).
 //

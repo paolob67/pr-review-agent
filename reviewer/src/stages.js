@@ -14,7 +14,7 @@ import { checkHeadPin, checkAuthor, checkDraft, checkSizes, checkPaths, checkBud
 import { loadRules }          from './rules.js';
 import { redactDiff }         from './redact.js';
 import { buildPrompt }        from './prompt.js';
-import { createScratch, handOverScratch } from './scratch.js';
+import { createScratch, handOverScratch, seedBobHome } from './scratch.js';
 import { runBob, getBobVersion, bobUserFromEnv } from './runBob.js';
 import { parseOutput }        from './parseOutput.js';
 import { validateFindings }   from './validate.js';
@@ -23,9 +23,11 @@ import { sanitiseOutput }     from './sanitise.js';
 import { renderComment, renderUnavailableComment, parseMarker } from './render.js';
 import { upsertComment }      from './publish.js';
 import { buildCostRecord, runIdFromEnv } from './cost.js';
-import { logGateSkipped, logPrepareDone, logBobStarted, logBobFinished, logPublishDone } from './audit.js';
+import { logGateSkipped, logPrepareDone, logBobStarted, logBobFinished, logBobFailure, logPublishDone } from './audit.js';
 import { rmSync } from 'node:fs';
 
+// Root-owned default Bob settings baked into the image (Dockerfile); copied into the tmpfs home.
+const BOB_SETTINGS_SEED = '/opt/bob-defaults/settings.json';
 const MARKER_PREFIX = '<!-- bob-pr-review:v1 ';
 const SHA256_RE = /^sha256:[0-9a-f]{64}$/;
 const VERSION_RE = /^\d+\.\d+\.\d+[\w.+-]*$/;
@@ -155,7 +157,10 @@ export async function reviewStage(env, config, handoff) {
   let scratchDir;
   try {
     scratchDir = createScratch(); // G28
-    if (bobUser) handOverScratch(scratchDir, bobUser.uid, bobUser.gid);
+    if (bobUser) {
+      handOverScratch(scratchDir, bobUser.uid, bobUser.gid);
+      seedBobHome(bobUser.home, bobUser.uid, bobUser.gid, BOB_SETTINGS_SEED);
+    }
   } catch (err) {
     process.stderr.write(`[review] failed to create scratch: ${err.message}\n`);
     process.exit(1);
@@ -182,6 +187,7 @@ export async function reviewStage(env, config, handoff) {
   }
 
   logBobFinished(bobResult.exitCode, bobResult.durationMs);
+  if (bobResult.exitCode !== 0) logBobFailure(bobResult.stderr);
   cleanScratch(scratchDir);
   return {
     schema_version: 1,

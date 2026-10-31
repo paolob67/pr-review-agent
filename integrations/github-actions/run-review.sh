@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Run the reviewer's review stage in the hardened container on the GitHub-hosted runner (ADR 0012).
 # Called from the review job. BOB_API_KEY comes from the step env and is passed into the container by
-# NAME (-e BOB_API_KEY), never as a value on a command line (ADR 0013). The other REVIEW_* values are
+# NAME (-e BOB_API_KEY), never as a value on a command line (ADR 0012). The other REVIEW_* values are
 # validated by the reviewer (G24) and also passed by name.
 #
 # Hardening (G3, G23, G28): read-only rootfs, all capabilities dropped except the four the UID drop
@@ -27,6 +27,7 @@ docker run --rm \
   --cap-drop=ALL --cap-add=CHOWN --cap-add=SETUID --cap-add=SETGID --cap-add=DAC_OVERRIDE \
   --security-opt no-new-privileges \
   --tmpfs /tmp:rw,exec,nosuid,size=256m \
+  --tmpfs /home/bobrun:rw,nosuid,mode=0755,size=64m \
   --pids-limit 512 \
   -v "$REVIEW_EXCHANGE_DIR:/exchange" \
   -e REVIEW_EXCHANGE_DIR=/exchange \

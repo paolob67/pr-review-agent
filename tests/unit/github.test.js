@@ -28,6 +28,31 @@ before(async () => {
 
 after(() => new Promise((r) => server.close(r)));
 
+describe('github.js error detail', () => {
+  it('a refused call reports GitHub message and accepted permissions, never the token', async () => {
+    const refuse = http.createServer((req, res) => {
+      res.writeHead(403, { 'Content-Type': 'application/json', 'x-accepted-github-permissions': 'issues=read; pull_requests=read' });
+      res.end(JSON.stringify({ message: 'Resource not accessible by integration' }));
+    });
+    await new Promise((r) => refuse.listen(0, '127.0.0.1', r));
+    try {
+      const url = `http://127.0.0.1:${refuse.address().port}`;
+      await assert.rejects(
+        makeGithubClient(url, 'secret-token-value').listComments('o/r', 5),
+        (err) => {
+          assert.match(err.message, /HTTP 403/);
+          assert.match(err.message, /Resource not accessible by integration/);
+          assert.match(err.message, /issues=read; pull_requests=read/);
+          assert.ok(!err.message.includes('secret-token-value'));
+          return true;
+        },
+      );
+    } finally {
+      await new Promise((r) => refuse.close(r));
+    }
+  });
+});
+
 describe('github.js (G34)', () => {
   it('G34: client exposes exactly the six allowed operations', () => {
     const client = makeGithubClient(base, 't');

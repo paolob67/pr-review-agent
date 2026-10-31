@@ -18,5 +18,6 @@ exec podman run --rm \
   --cap-drop=ALL --cap-add=CHOWN --cap-add=SETUID --cap-add=SETGID --cap-add=DAC_OVERRIDE \
   --security-opt no-new-privileges \
   --tmpfs /tmp:rw,exec,nosuid,size=256m \
+  --tmpfs /home/bobrun:rw,nosuid,mode=0755,size=64m \
   --pids-limit 512 \
   "$tag" "$@"

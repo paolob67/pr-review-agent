@@ -65,6 +65,9 @@ export function runBob({ bobBin, scratchDir, promptText, timeoutSeconds, parentE
 
   const args = [
     'run',
+    // ADR 0013: the owner accepted the IBM Bob license for this project; non-interactive runs
+    // cannot accept it any other way.
+    '--accept-license',
     '--workspace', scratchDir,
     '--mode', 'reviewer',
     '--disable-tool-groups', 'edit,execute',
