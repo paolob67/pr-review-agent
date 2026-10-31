@@ -5,7 +5,7 @@ section 10). Amends [ADR 0008](0008-scm-identity-for-comments.md).
 
 ## Context
 
-With [ADR 0012](0012-github-hosted-runner-execution.md) the Bob API key lives in GitHub. Three
+With [ADR 0001](0001-execution-environment.md) the Bob API key lives in GitHub. Three
 credentials must stay separate (AGENTS.md): the Bob key, the read-only SCM token and the comment
 token. GitHub documents (see [results/runner-facts.md](results/runner-facts.md)):
 

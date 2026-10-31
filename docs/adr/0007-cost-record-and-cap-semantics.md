@@ -27,8 +27,8 @@ their pull requests.
      outcome `skipped_gate` (reason: `pr_run_limit_reached`).
    * ~~Daily run cap and daily spend cap~~: dropped, see ADR 0009.
    * **Timeouts (Guardrail G13)**: Hard process timeout on `bob run` (default 180 seconds) and the
-     Actions `timeout-minutes` on the `review` job (default 5 minutes). Amended by
-     [ADR 0012](0012-github-hosted-runner-execution.md).
+     Actions `timeout-minutes` on the `review` job (default 5 minutes), set in Phase 4
+     ([ADR 0001](0001-execution-environment.md)).
 
 ## Reasons
 

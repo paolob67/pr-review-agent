@@ -2,7 +2,7 @@
 
 This document describes the system architecture, component breakdown, data flow, isolation model,
 failure behaviors, and GitHub trigger analysis for the IBM Bob PR Review Agent. The execution
-environment is GitHub-hosted runners ([ADR 0012](adr/0012-github-hosted-runner-execution.md));
+environment is GitHub-hosted runners ([ADR 0001](adr/0001-execution-environment.md));
 credential handling is in [ADR 0013](adr/0013-secrets-and-credentials-on-github.md).
 
 ## 1. System Overview

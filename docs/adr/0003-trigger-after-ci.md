@@ -41,5 +41,5 @@ and runs the risk of analyzing code before CI has passed.
 - Repositories must configure `BOB_REVIEW_REQUIRED_WORKFLOWS` if they have multiple independent CI workflows.
 - `workflow_run` fires whatever the conclusion of the triggering run; the `prepare` job must check
   the conclusion explicitly (see [runner facts](../results/runner-facts.md)).
-- Amended 2026-10-30 by [ADR 0012](0012-github-hosted-runner-execution.md): the trigger and the
-  review now live in one workflow with three jobs instead of a trigger that submits a cloud job.
+- The trigger and the review live in one workflow with three jobs on GitHub-hosted runners
+  ([ADR 0001](0001-execution-environment.md)).

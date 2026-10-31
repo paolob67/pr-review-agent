@@ -329,7 +329,7 @@ Budget is managed via `--max-cost` per run.
 
 ## S13: Service region and data residency
 
-**Question**: Which Bob service region applies, and can the compute environment (a GitHub-hosted runner since ADR 0012) reach it?
+**Question**: Which Bob service region applies, and can the compute environment (a GitHub-hosted runner per ADR 0001) reach it?
 
 **Source**: Bob docs (no region documentation found in v1 or v2 docs).
 

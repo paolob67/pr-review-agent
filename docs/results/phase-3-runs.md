@@ -151,6 +151,6 @@ every run are kept in `docs/results/phase-3-evidence/`.
 
 The `result.json` files under `phase-3-evidence/` are historical. They use the cost record shape of
 the time, with `vcpu`, `memory_gb`, `rates_version` and `estimated_cost_usd` fields that belonged
-to the replaced compute design ([ADR 0012](../adr/0012-github-hosted-runner-execution.md)). The
+to the replaced compute design ([ADR 0001](../adr/0001-execution-environment.md)). The
 current shape is in [CONTRACTS.md](../CONTRACTS.md) section 8. The Bob usage figures (Bobcoins,
 tool call counts, findings) in those files remain valid.

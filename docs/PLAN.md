@@ -1,9 +1,6 @@
 # Project Plan: Bob as a Pull Request Review Agent
 
-Status: revised 2026-10-30. The execution environment changed from a managed cloud container job
-to GitHub-hosted runners ([ADR 0012](adr/0012-github-hosted-runner-execution.md),
-[ADR 0013](adr/0013-secrets-and-credentials-on-github.md)). Phases 0 to 3 are done; Phase 4 is
-re-scoped. See [STATUS.md](STATUS.md).
+Status: revised 2026-10-30. Phases 0 to 3 are done; Phase 4 is in progress. See [STATUS.md](STATUS.md).
 
 ## Table of contents
 
@@ -75,7 +72,7 @@ Actions, SCMs other than GitHub, a hosted multi-tenant service. Possible extensi
    behaving is a mitigation, not a guardrail.
 2. **The comment credential must not sit next to the model process.** Solved by job separation:
    `review` holds only the Bob key; `publish` holds only the comment token and reads the result
-   as untrusted data (section 3, ADR 0012). A container UID split inside `review` is defence in
+   as untrusted data (section 3, [ADR 0001](adr/0001-execution-environment.md)). A container UID split inside `review` is defence in
    depth.
 3. **Anyone who can change workflows can reach repository secrets.** A user with write access can
    run a workflow that reads them. Mitigated by environment secrets limited to the default
@@ -204,7 +201,7 @@ Job publish  (fresh runner; ONLY the comment token, issues: write)
 ```
 
 Isolation requirement: the comment token must not be readable by the Bob process or anything the
-model can make it run. Mechanisms, strongest first ([ADR 0012](adr/0012-github-hosted-runner-execution.md)):
+model can make it run. Mechanisms, strongest first ([ADR 0001](adr/0001-execution-environment.md)):
 
 1. Job boundary (the design): the comment token is never present on the machine that runs Bob.
    Jobs share only artifacts, which `publish` treats as untrusted.
@@ -280,7 +277,7 @@ Each item names the control, its type, and the test that proves it.
 | G20 | Structured audit log per run to stdout, the job summary and a retained artifact (PR, sizes, duration, decision, cost record, no content) | Detective | Unit test on log schema; live check that the summary and artifact exist |
 | G21 | Job config: short `timeout-minutes` on every job, no retry or re-run action, secrets only in the `env:` of the one step that needs them (ADR 0013), container non-root, read-only rootfs, caps dropped | Preventive | Workflow lint plus a test that scans workflows for stray `secrets.` references; live e2e |
 | G22 | Supply chain: pin Bob Shell version (checksum if published), pin the container base image and the published image by digest, pin third-party actions by SHA, pin the runner label (`ubuntu-24.04`) | Preventive | zizmor, CI check |
-| G23 | Credential separation: the Bob process cannot reach the comment token (job boundary, ADR 0012) and, inside `review`, cannot read the wrapper's credentials (UID drop, S11) | Preventive | Workflow test that no step in `review` references a comment token; canary test: model-influenced command tries to read parent environ and credential files |
+| G23 | Credential separation: the Bob process cannot reach the comment token (job boundary, ADR 0001) and, inside `review`, cannot read the wrapper's credentials (UID drop, S11) | Preventive | Workflow test that no step in `review` references a comment token; canary test: model-influenced command tries to read parent environ and credential files |
 | G24 | Triggers pass only validated identifiers (repo `owner/name` pattern, integer PR number, 40-hex head SHA); the PR is resolved through the API; titles, bodies, branch names are never put in env, args, or shell strings | Preventive | Unit tests with hostile values; workflow lint |
 | G25 | Least-privilege credentials per job: per-job `permissions:` (`prepare` read-only, `review` none beyond `contents: read`, `publish` `issues: write` only), `BOB_API_KEY` in an environment restricted to the default branch, rotation procedure (S17, S18) | Preventive | Workflow lint on `permissions:`; live negative test (the `publish` token is refused on the reviews endpoint) |
 | G26 | Artifact hygiene: `retention-days` set on the prompt and result artifacts (short) and on the audit artifact; no secret or full diff in a retained artifact beyond the redacted prompt | Operational | Workflow lint; artifact content test |
@@ -323,14 +320,14 @@ record regardless. IDs are stable: S12 belonged to the withdrawn cloud design an
 | S9 | Which system packages does Bob need beyond Node? | Dockerfile | Answered (v2): Node 22+ (24+ preferred); npm; package is @ibm/bob. Verify in Phase 4. |
 | S10 | Rate and concurrency limits on one API key | Parallel PR handling | Unresolved: no documentation found. Assume one-at-a-time; verify empirically in Phase 3. |
 | S11 | Does the container entrypoint start Bob as a different unprivileged UID, with a read-only rootfs and dropped capabilities, under podman locally (Ubuntu 24.04 base) and under Docker on the `ubuntu-24.04` runner? | G23 | Open: Phase 4. |
-| S12 | Withdrawn 2026-10-30 (belonged to the replaced cloud design; ADR 0012). | none | Withdrawn. |
+| S12 | Withdrawn (not applicable to the GitHub-hosted runner design). | none | Withdrawn. |
 | S13 | Which Bob service region applies to our instance, and what data-residency statement can we make now that the compute location is a GitHub-hosted runner that cannot be selected? | Implication 6, article | Unresolved: no region documentation found for Bob or for standard hosted runners. Owner should check the Bob portal. The Phase 1 stance is withdrawn; the article states "unverified". |
 | S14 | Format of trustedFolders.json; which settings keys pin approval mode and disable MCP and AGENTS.md loading? | G28 to G30, egress risk | Answered: trustedFolders.json format confirmed; project settings ignored when untrusted; AGENTS.md loads regardless of trust (disable via `"bob-cline.useAgentRules": false` in user-level settings.json); .env not loaded; MCP blocked per docs. |
 | S15 | `workflow_run` behaviour in practice for fork PRs | G6, G24, G31, G32 | Open: Phase 5 (live), analysed on paper in Phase 1. |
 | S16 | Does Bobalytics show Bob Shell API-key usage? | G37, reconciliation | Open: Phase 7, optional. |
 | S17 | Can a `GITHUB_TOKEN` with only `issues: write` create, update and list comments on a PR, and is it refused on the reviews, check-runs and statuses endpoints? | G25, G34, ADR 0013 | Open: Phase 4 or 5 (sandbox). |
 | S18 | Are environment secrets with a deployment-branch restriction available for the owner's plan and repository visibility (private or public)? If not, what is the fallback? | G25, ADR 0013 | Open: owner input, then Phase 4 (sandbox). |
-| S19 | Does a hosted runner reach the Bob service, and does `BOB_API_KEY` authenticate there (the docs search showed `BOBSHELL_API_KEY`; Phase 0 used `BOB_API_KEY`)? | D1, ADR 0012 | Open: Phase 4 (live smoke). |
+| S19 | Does a hosted runner reach the Bob service, and does `BOB_API_KEY` authenticate there (the docs search showed `BOBSHELL_API_KEY`; Phase 0 used `BOB_API_KEY`)? | D1, ADR 0001 | Open: Phase 4 (live smoke). |
 | S20 | How are the reviewer code and image delivered to the jobs when the reviewed repo differs from this repo: reusable workflow from a private repo, image from GHCR by digest, or per-run build? Do artifacts pass cleanly between the three jobs? | Layout, G22 | Open: Phase 4. |
 
 Decision gate after Phase 0 (recorded 2026-10-30):
@@ -550,7 +547,7 @@ Principles:
 
 | # | Decision | Value |
 |---|---|---|
-| 1 | Execution environment | GitHub-hosted runners, three jobs with separate credentials, Bob in a hardened container ([ADR 0012](adr/0012-github-hosted-runner-execution.md); supersedes [ADR 0001](adr/0001-execution-environment.md)) |
+| 1 | Execution environment | GitHub-hosted runners, three jobs with separate credentials, Bob in a hardened container ([ADR 0001](adr/0001-execution-environment.md)) |
 | 2 | CI system | GitHub Actions |
 | 3 | Secret store | GitHub environment secrets, default branch only ([ADR 0013](adr/0013-secrets-and-credentials-on-github.md)) |
 | 4 | Resource names | Placeholders in section 6; the environment, secrets and variables are created in Phase 4 Part B with `gh` |
@@ -593,7 +590,7 @@ Principles:
 |---|---|
 | Bob Shell flags or behaviour differ from the documentation | Phase 0 spikes before design freeze; pin version; record version in results |
 | Read-only enforcement is weaker than assumed | Decision gate after Phase 0; stricter sandbox |
-| Container cannot drop to a second UID on the runner or under podman (S11) | The job boundary already isolates the comment token (ADR 0012); the UID split is defence in depth, so record the result and rely on the other container hardening |
+| Container cannot drop to a second UID on the runner or under podman (S11) | The job boundary already isolates the comment token (ADR 0001); the UID split is defence in depth, so record the result and rely on the other container hardening |
 | Anyone with write access can read repository secrets through a workflow, or the plan lacks environment secrets (S18) | Environment scoped to the default branch; Bobcoin ceiling on the key; rotation in the runbook; documented weaker fallback; sandbox may need to be public |
 | `GITHUB_TOKEN` with `issues: write` cannot list or update comments, or is not refused on reviews (S17) | Use a dedicated bot token held only by `publish` (ADR 0013) |
 | Hosted runner cannot reach the Bob service, or the key variable differs (S19) | Live smoke early in Phase 4 Part B; record exact egress needs |

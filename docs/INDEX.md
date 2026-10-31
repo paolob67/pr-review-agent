@@ -18,7 +18,7 @@
 | [tasks/phase-6-redteam-evals.md](tasks/phase-6-redteam-evals.md) | Brief: red team and quality evals | Ready |
 | [tasks/phase-7-hardening.md](tasks/phase-7-hardening.md) | Brief: operational hardening and cost reconciliation | Ready |
 | [tasks/phase-8-docs-article.md](tasks/phase-8-docs-article.md) | Brief: documentation, article, final validation | Ready |
-| [adr/0001-execution-environment.md](adr/0001-execution-environment.md) | Decision to run Bob Shell on IBM Cloud Code Engine (eu-de) | Superseded by 0012 |
+| [adr/0001-execution-environment.md](adr/0001-execution-environment.md) | Decision to run Bob Shell on GitHub-hosted runners, three jobs with separate credentials | Accepted |
 | [adr/0002-author-and-fork-policy.md](adr/0002-author-and-fork-policy.md) | Role-based author policy and maintainer label gate | Accepted |
 | [adr/0003-trigger-after-ci.md](adr/0003-trigger-after-ci.md) | Trigger after CI and definition of required CI | Accepted |
 | [adr/0004-findings-contract-and-comment-format.md](adr/0004-findings-contract-and-comment-format.md) | Findings schema, line mapping, comment structure | Accepted |
@@ -29,7 +29,6 @@
 | [adr/0010-scratch-layout-stdin.md](adr/0010-scratch-layout-stdin.md) | Prompt on stdin; scratch holds only the mode file | Accepted |
 | [adr/0011-bobcoins-as-usage-unit.md](adr/0011-bobcoins-as-usage-unit.md) | Bob usage recorded in Bobcoins, no currency conversion | Accepted |
 | [adr/0008-scm-identity-for-comments.md](adr/0008-scm-identity-for-comments.md) | Dedicated bot account, comment-only scope | Accepted (amended by 0013) |
-| [adr/0012-github-hosted-runner-execution.md](adr/0012-github-hosted-runner-execution.md) | Run Bob Shell on GitHub-hosted runners, three jobs | Accepted |
 | [adr/0013-secrets-and-credentials-on-github.md](adr/0013-secrets-and-credentials-on-github.md) | Secrets and credentials on GitHub | Accepted |
 | [diagrams/architecture-overview.drawio](diagrams/architecture-overview.drawio) | Architecture overview (source; PNG alongside) | Current |
 | [diagrams/trust-boundaries.drawio](diagrams/trust-boundaries.drawio) | Trust boundaries diagram (source; PNG alongside) | Current |

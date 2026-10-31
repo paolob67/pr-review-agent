@@ -1,8 +1,8 @@
 # Contracts
 
 Shared interfaces between the workflow, the container, the reviewer modules and the tests.
-Status: Frozen (Phase 1 design freeze, 2026-10-30). Amended 2026-10-30 for GitHub-hosted runners
-([ADR 0012](adr/0012-github-hosted-runner-execution.md),
+Status: Frozen (Phase 1 design freeze, 2026-10-30). Covers GitHub-hosted runners
+([ADR 0001](adr/0001-execution-environment.md),
 [ADR 0013](adr/0013-secrets-and-credentials-on-github.md)). Change these contracts only through an
 ADR and update every consumer and test in the same task.
 
@@ -192,7 +192,7 @@ Bob usage is measured in Bobcoins, never converted to currency ([ADR 0011](adr/0
 `bob_usage.total` is `stats.session_costs` from Bob Shell v2 output, recorded with
 `source = "reported"` and `unit = "bobcoins"`. Bob's documentation does not state the unit of
 `session_costs`; treating it as Bobcoins is unverified until reconciled with the Bobcoin balance
-(Phase 3 results). Runner compute is recorded as time, not currency ([ADR 0012](adr/0012-github-hosted-runner-execution.md)):
+(Phase 3 results). Runner compute is recorded as time, not currency ([ADR 0001](adr/0001-execution-environment.md)):
 `compute.runner` is the pinned runner label and `compute.runner_minutes` is the sum of job
 durations rounded up per job, `null` while the jobs are still running (the pipeline seconds in
 `duration_seconds` are always set). The hidden marker keeps cumulative totals only (runs, summed

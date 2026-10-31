@@ -4,7 +4,7 @@
 
 Run the reviewer as three GitHub Actions jobs on GitHub-hosted `ubuntu-24.04` runners, with the
 Bob key present only in the `review` job and the comment token only in `publish`, started by hand
-against a sandbox PR. Governed by [ADR 0012](../adr/0012-github-hosted-runner-execution.md).
+against a sandbox PR. Governed by [ADR 0001](../adr/0001-execution-environment.md).
 
 The phase has two parts. Part A is local and needs nothing from the owner. Part B needs the owner.
 Do Part A completely first, then stop and ask before starting Part B.
@@ -24,7 +24,7 @@ Do Part A completely first, then stop and ask before starting Part B.
 ## Inputs to read
 
 [PLAN.md](../PLAN.md) sections 3 (the three jobs), 6, and G1, G10, G13, G20 to G27, G34;
-[CONTRACTS.md](../CONTRACTS.md) sections 1, 2, 7, 8; [ADR 0012](../adr/0012-github-hosted-runner-execution.md);
+[CONTRACTS.md](../CONTRACTS.md) sections 1, 2, 7, 8; [ADR 0001](../adr/0001-execution-environment.md);
 [ADR 0013](../adr/0013-secrets-and-credentials-on-github.md);
 [runner-facts.md](../results/runner-facts.md).
 

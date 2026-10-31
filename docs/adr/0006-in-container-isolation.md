@@ -1,8 +1,8 @@
 # ADR 0006: Isolation Mechanism and Privilege Separation
 
-Status: Accepted (frozen Phase 1). Amended 2026-10-30 by
-[ADR 0012](0012-github-hosted-runner-execution.md): the main boundary is now the job boundary on
-GitHub-hosted runners; the in-container controls below are defence in depth.
+Status: Accepted (frozen Phase 1). The main isolation boundary is the job boundary on
+GitHub-hosted runners ([ADR 0001](0001-execution-environment.md)); the in-container controls
+below are defence in depth.
 
 ## Context
 

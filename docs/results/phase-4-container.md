@@ -2,7 +2,7 @@
 
 Date: 2026-10-31. Bob Shell 2.0.9. Host: macOS 27.0.1 (arm64), podman 6.0.0 (libkrun/applehv VM,
 Fedora CoreOS 44, rootless). Brief: [phase-4-runner-foundation.md](../tasks/phase-4-runner-foundation.md).
-Decision context: [ADR 0012](../adr/0012-github-hosted-runner-execution.md).
+Decision context: [ADR 0001](../adr/0001-execution-environment.md).
 
 No Bob calls were made in Part A. The canary uses made-up credential values and a probe process that
 stands in for Bob, so 0 of the 5 allowed short calls were used. No GitHub or IBM Cloud resources were

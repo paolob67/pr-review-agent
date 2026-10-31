@@ -8,7 +8,7 @@ abuse mitigations.
 
 The PR Review Agent is an automated advisory system. When CI completes successfully on a pull
 request, a GitHub Actions workflow (`workflow_run`, default branch) runs three jobs on separate
-GitHub-hosted runners ([ADR 0012](adr/0012-github-hosted-runner-execution.md)). `prepare` fetches
+GitHub-hosted runners ([ADR 0001](adr/0001-execution-environment.md)). `prepare` fetches
 the diff from the GitHub REST API and builds a prompt; `review` invokes IBM Bob Shell in
 non-interactive read-only mode in a scratch workspace; `publish` validates and sanitizes the
 output and posts a single structured markdown comment on the pull request.
