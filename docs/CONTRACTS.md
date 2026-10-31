@@ -3,7 +3,7 @@
 Shared interfaces between the workflow, the container, the reviewer modules and the tests.
 Status: Frozen (Phase 1 design freeze, 2026-10-30). Covers GitHub-hosted runners
 ([ADR 0001](adr/0001-execution-environment.md),
-[ADR 0013](adr/0013-secrets-and-credentials-on-github.md)). Change these contracts only through an
+[ADR 0012](adr/0012-secrets-and-credentials-on-github.md)). Change these contracts only through an
 ADR and update every consumer and test in the same task.
 
 Contents:
@@ -49,7 +49,7 @@ validation and exits with outcome `rejected_input` before any API call.
 ## 2. Secrets
 
 The reviewer code reads three environment variable names. Each exists in exactly one job (G2, G23,
-G25). Source and scoping are in [ADR 0013](adr/0013-secrets-and-credentials-on-github.md).
+G25). Source and scoping are in [ADR 0012](adr/0012-secrets-and-credentials-on-github.md).
 
 | Env var in the process | Source on GitHub | Present in job | Held by |
 |---|---|---|---|

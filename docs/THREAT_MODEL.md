@@ -24,7 +24,7 @@ The system handles or protects six distinct assets:
 |---|---|---|
 | **Bob API Key** | `BOB_API_KEY`, a GitHub environment secret, granting access to the IBM Bob inference service and consuming Bobcoins or billing budget. | Critical |
 | **SCM Read Token** | The `prepare` job's `GITHUB_TOKEN` (`SCM_READ_TOKEN`) with read-only repository and pull request permissions used to fetch diffs and base-branch rules. | High |
-| **SCM Comment Token** | The `publish` job's `GITHUB_TOKEN` with `issues: write` only (or a dedicated bot token, ADR 0013), scoped strictly to comments. | High |
+| **SCM Comment Token** | The `publish` job's `GITHUB_TOKEN` with `issues: write` only (or a dedicated bot token, ADR 0012), scoped strictly to comments. | High |
 | **Workflow Definition** | The workflow files on the default branch that decide which job gets which credential. Write access to them equals access to repository secrets. | High |
 | **Source Code & PR Content** | Repository code, pull request diffs, metadata, and team rule files. | High |
 | **PR Discussion Channel** | Pull request comments feed; must remain clean, free of spam, free of misleading approvals, and free of malicious markdown injections. | Medium |
@@ -112,7 +112,7 @@ Three primary trust boundaries separate untrusted inputs from privileged operati
 
 ### AC-11: Secret Exposure through Workflow Changes or Over-broad Tokens
 * **Attack**: A user with write access, or a malicious change merged to a workflow, reads `BOB_API_KEY` or obtains a token with more scope than needed (for example a token able to submit approving reviews).
-* **Mitigation**: `BOB_API_KEY` lives in an environment limited to the default branch and is referenced only in the `env:` of one step (ADR 0013). Per-job `permissions:` are explicit and the `publish` job has `issues: write` only (G1, G25). Workflow files are default-branch only and change through review. A static check fails the build on stray `secrets.` references (G21). Retained artifacts are short-lived and hold no secrets (G26). A global kill switch allows immediate disabling (G10); rotation follows the runbook.
+* **Mitigation**: `BOB_API_KEY` lives in an environment limited to the default branch and is referenced only in the `env:` of one step (ADR 0012). Per-job `permissions:` are explicit and the `publish` job has `issues: write` only (G1, G25). Workflow files are default-branch only and change through review. A static check fails the build on stray `secrets.` references (G21). Retained artifacts are short-lived and hold no secrets (G26). A global kill switch allows immediate disabling (G10); rotation follows the runbook.
 
 ### AC-12: Supply Chain Tampering
 * **Attack**: Compromised upstream Bob installer or Docker base image injects backdoors into the review container.
@@ -176,4 +176,4 @@ The table below verifies that every guardrail from G1 through G37 is mapped to i
 2. **Egress from the Runner**: The `review` job needs outbound HTTPS connectivity to the Bob service (`https://bob.ibm.com`) and the other jobs to GitHub (`https://api.github.com`). Standard hosted runners offer no domain-level egress control, so egress stays open; the credentials present on each runner are what limit the damage.
 3. **Data Residency Stance**: The runner location of a standard GitHub-hosted runner is not selectable and no per-region statement was found (S13). Inference requests go to the Bob service. The Phase 1 stance on EU compute location no longer applies; organizations with strict data residency requirements must review this data path (unverified).
 4. **Secret Visibility to Writers**: Anyone with write access to the repository can read its secrets through a workflow they can run. Environment scoping to the default branch and review of workflow changes reduce this; if the plan lacks environment secrets (S18) the weaker repository-secret fallback applies.
-5. **Shared Comment Identity**: The comment identity is `github-actions[bot]` by default, which is not a dedicated reviewer account (ADR 0013); the endpoint allowlist and token scope carry G34.
+5. **Shared Comment Identity**: The comment identity is `github-actions[bot]` by default, which is not a dedicated reviewer account (ADR 0012); the endpoint allowlist and token scope carry G34.

@@ -60,7 +60,7 @@ Actions, SCMs other than GitHub, a hosted multi-tenant service. Possible extensi
   spend (section 3, cost visibility), so the job has to produce its own per-PR record.
 - Adds an attack surface: the model reads attacker-controlled text.
 - The Bob key is a GitHub secret; anyone with write access can read repository secrets through a
-  workflow, so environment scoping matters (ADR 0013).
+  workflow, so environment scoping matters (ADR 0012).
 - Compute location is a GitHub runner location that cannot be chosen (S13).
 - Logs and artifacts have GitHub's retention; the audit record is written to the job summary and
   a retained artifact.
@@ -77,7 +77,7 @@ Actions, SCMs other than GitHub, a hosted multi-tenant service. Possible extensi
 3. **Anyone who can change workflows can reach repository secrets.** A user with write access can
    run a workflow that reads them. Mitigated by environment secrets limited to the default
    branch, rotation, a Bobcoin ceiling on the key itself, and by documenting the weaker fallback
-   when the plan lacks environment secrets (ADR 0013, S18).
+   when the plan lacks environment secrets (ADR 0012, S18).
 4. **Output is untrusted too.** Rendered markdown (image URLs, links, @mentions, HTML) is an
    exfiltration and abuse channel. Validate and sanitise before posting.
 5. **Fork PRs.** The trigger workflows never check out PR code and carry no model-readable
@@ -275,7 +275,7 @@ Each item names the control, its type, and the test that proves it.
 | G18 | Idempotent upsert of one marker comment (never spam) | Preventive | Unit test and sandbox e2e |
 | G19 | Footer stating AI assisted, advisory, with Bob version, head SHA and run id (see also G35) | Transparency | Snapshot test |
 | G20 | Structured audit log per run to stdout, the job summary and a retained artifact (PR, sizes, duration, decision, cost record, no content) | Detective | Unit test on log schema; live check that the summary and artifact exist |
-| G21 | Job config: short `timeout-minutes` on every job, no retry or re-run action, secrets only in the `env:` of the one step that needs them (ADR 0013), container non-root, read-only rootfs, caps dropped | Preventive | Workflow lint plus a test that scans workflows for stray `secrets.` references; live e2e |
+| G21 | Job config: short `timeout-minutes` on every job, no retry or re-run action, secrets only in the `env:` of the one step that needs them (ADR 0012), container non-root, read-only rootfs, caps dropped | Preventive | Workflow lint plus a test that scans workflows for stray `secrets.` references; live e2e |
 | G22 | Supply chain: pin Bob Shell version (checksum if published), pin the container base image and the published image by digest, pin third-party actions by SHA, pin the runner label (`ubuntu-24.04`) | Preventive | zizmor, CI check |
 | G23 | Credential separation: the Bob process cannot reach the comment token (job boundary, ADR 0001) and, inside `review`, cannot read the wrapper's credentials (UID drop, S11) | Preventive | Workflow test that no step in `review` references a comment token; canary test: model-influenced command tries to read parent environ and credential files |
 | G24 | Triggers pass only validated identifiers (repo `owner/name` pattern, integer PR number, 40-hex head SHA); the PR is resolved through the API; titles, bodies, branch names are never put in env, args, or shell strings | Preventive | Unit tests with hostile values; workflow lint |
@@ -288,7 +288,7 @@ Each item names the control, its type, and the test that proves it.
 | G31 | Review starts only when every required CI workflow has concluded success for the exact head SHA; failed, cancelled or missing CI means no review and no comment | Preventive | Sandbox e2e (red CI, green CI, one of two workflows green); unit tests on the gate |
 | G32 | Head pinning: the job reviews the SHA it was given and exits quietly if the PR head has moved or the PR is closed | Preventive | Sandbox e2e with a push between CI and review; unit test |
 | G33 | Team rules and standards are read from the base branch through the API, never from the PR head; size cap; changes to `.bob-review/` take effect only after merge | Preventive | Fixture PR that edits its own rules; assert the old rules are used |
-| G34 | Never approves or blocks: publisher calls only the PR comment create and update endpoints; no reviews, check runs or commit statuses; the `publish` token has `issues: write` and no pull-requests scope (default identity `github-actions[bot]`, or a dedicated non-code-owner bot, ADR 0013); never a required check | Preventive | Unit test with a mocked API that fails on any other endpoint; live check that the real token is refused on the reviews endpoint (S17); sandbox check that the bot cannot satisfy a required-approval rule |
+| G34 | Never approves or blocks: publisher calls only the PR comment create and update endpoints; no reviews, check runs or commit statuses; the `publish` token has `issues: write` and no pull-requests scope (default identity `github-actions[bot]`, or a dedicated non-code-owner bot, ADR 0012); never a required check | Preventive | Unit test with a mocked API that fails on any other endpoint; live check that the real token is refused on the reviews endpoint (S17); sandbox check that the bot cannot satisfy a required-approval rule |
 | G35 | Wrapper-generated "AI Assisted" header and footer stating advisory status and that a human makes the final decision; model text cannot alter or imitate them (imitations are stripped) | Transparency | Snapshot test; injection test where the model emits a fake approval or fake header |
 | G36 | Findings contract: category (standards, team rule, security, other), severity, confidence, rule ID for standards findings, file and line that exist in the diff, evidence, proposed fix text; low-confidence items dropped or moved to "needs human attention"; per-category cap; de-duplication | Preventive | Fake-Bob outputs with hallucinated locations, duplicates and floods; eval set for precision |
 | G37 | Per-PR cost record produced for every run (fields in section 3), shown in the comment footer, stored in hidden metadata and the audit log | Detective | Unit tests on the record schema and cumulative counter; live reconciliation against Bobalytics daily spend where available |
@@ -325,8 +325,8 @@ record regardless. IDs are stable: S12 belonged to the withdrawn cloud design an
 | S14 | Format of trustedFolders.json; which settings keys pin approval mode and disable MCP and AGENTS.md loading? | G28 to G30, egress risk | Answered: trustedFolders.json format confirmed; project settings ignored when untrusted; AGENTS.md loads regardless of trust (disable via `"bob-cline.useAgentRules": false` in user-level settings.json); .env not loaded; MCP blocked per docs. |
 | S15 | `workflow_run` behaviour in practice for fork PRs | G6, G24, G31, G32 | Open: Phase 5 (live), analysed on paper in Phase 1. |
 | S16 | Does Bobalytics show Bob Shell API-key usage? | G37, reconciliation | Open: Phase 7, optional. |
-| S17 | Can a `GITHUB_TOKEN` with only `issues: write` create, update and list comments on a PR, and is it refused on the reviews, check-runs and statuses endpoints? | G25, G34, ADR 0013 | Open: Phase 4 or 5 (sandbox). |
-| S18 | Are environment secrets with a deployment-branch restriction available for the owner's plan and repository visibility (private or public)? If not, what is the fallback? | G25, ADR 0013 | Open: owner input, then Phase 4 (sandbox). |
+| S17 | Can a `GITHUB_TOKEN` with only `issues: write` create, update and list comments on a PR, and is it refused on the reviews, check-runs and statuses endpoints? | G25, G34, ADR 0012 | Open: Phase 4 or 5 (sandbox). |
+| S18 | Are environment secrets with a deployment-branch restriction available for the owner's plan and repository visibility (private or public)? If not, what is the fallback? | G25, ADR 0012 | Open: owner input, then Phase 4 (sandbox). |
 | S19 | Does a hosted runner reach the Bob service, and does `BOB_API_KEY` authenticate there (the docs search showed `BOBSHELL_API_KEY`; Phase 0 used `BOB_API_KEY`)? | D1, ADR 0001 | Open: Phase 4 (live smoke). |
 | S20 | How are the reviewer code and image delivered to the jobs when the reviewed repo differs from this repo: reusable workflow from a private repo, image from GHCR by digest, or per-run build? Do artifacts pass cleanly between the three jobs? | Layout, G22 | Open: Phase 4. |
 
@@ -362,7 +362,7 @@ Everything runs on GitHub. No cloud account is needed. The names below are place
 | Repository variables | `BOB_REVIEW_ENABLED`, `BOB_REVIEW_REQUIRED_WORKFLOWS` (names only, no secrets) |
 | Image | `pr-reviewer`, built from `integrations/container/Dockerfile` on `ubuntu:24.04`, pinned by digest; delivery route decided in S20 (GHCR by digest, or built per run from the trusted default-branch checkout) |
 | Artifacts | `prompt` (redacted prompt, from `prepare`), `result` (raw Bob output, from `review`), `audit` (cost record and audit log, from `publish`); short `retention-days` |
-| Secrets | See [ADR 0013](adr/0013-secrets-and-credentials-on-github.md) and [CONTRACTS.md](CONTRACTS.md) section 2 |
+| Secrets | See [ADR 0012](adr/0012-secrets-and-credentials-on-github.md) and [CONTRACTS.md](CONTRACTS.md) section 2 |
 
 Local tooling on this machine: `gh`, `node` (v26.3.1), `bob` and `podman` 6.0.0. `docker` is
 absent. The image is built and the canary run locally with **podman** on an Ubuntu 24.04 base so
@@ -470,7 +470,7 @@ split) built and run with podman; canary and probe pass inside the container (S1
 `reviewer/bin/reviewer.js` gains `prepare`, `review` and `publish` subcommands that exchange the
 two artifacts (the single-process mode stays); cost record updated for GitHub run ids and runner
 minutes; workflow skeleton under `integrations/github-actions/` with per-job `permissions:`,
-`timeout-minutes` and the secret-reference rules of ADR 0013; static checks that enforce them.
+`timeout-minutes` and the secret-reference rules of ADR 0012; static checks that enforce them.
 Part B needs the owner (GitHub plan, environment, secrets, sandbox repo): create the `bob-review`
 environment and secrets with `gh`, run the three-job workflow by hand (`workflow_dispatch` against
 a sandbox PR), resolve S17 to S20, S11 on the runner.
@@ -549,7 +549,7 @@ Principles:
 |---|---|---|
 | 1 | Execution environment | GitHub-hosted runners, three jobs with separate credentials, Bob in a hardened container ([ADR 0001](adr/0001-execution-environment.md)) |
 | 2 | CI system | GitHub Actions |
-| 3 | Secret store | GitHub environment secrets, default branch only ([ADR 0013](adr/0013-secrets-and-credentials-on-github.md)) |
+| 3 | Secret store | GitHub environment secrets, default branch only ([ADR 0012](adr/0012-secrets-and-credentials-on-github.md)) |
 | 4 | Resource names | Placeholders in section 6; the environment, secrets and variables are created in Phase 4 Part B with `gh` |
 | 5 | Primary deliverable | Repository and article together, article written from repo results |
 | 6 | Language for the core | Node.js ESM, near-zero dependencies |
@@ -592,7 +592,7 @@ Principles:
 | Read-only enforcement is weaker than assumed | Decision gate after Phase 0; stricter sandbox |
 | Container cannot drop to a second UID on the runner or under podman (S11) | The job boundary already isolates the comment token (ADR 0001); the UID split is defence in depth, so record the result and rely on the other container hardening |
 | Anyone with write access can read repository secrets through a workflow, or the plan lacks environment secrets (S18) | Environment scoped to the default branch; Bobcoin ceiling on the key; rotation in the runbook; documented weaker fallback; sandbox may need to be public |
-| `GITHUB_TOKEN` with `issues: write` cannot list or update comments, or is not refused on reviews (S17) | Use a dedicated bot token held only by `publish` (ADR 0013) |
+| `GITHUB_TOKEN` with `issues: write` cannot list or update comments, or is not refused on reviews (S17) | Use a dedicated bot token held only by `publish` (ADR 0012) |
 | Hosted runner cannot reach the Bob service, or the key variable differs (S19) | Live smoke early in Phase 4 Part B; record exact egress needs |
 | Compute location cannot be chosen, so the earlier residency stance fails (S13) | Owner decision; state in the article; larger runners with static IPs or a self-hosted runner are change cases |
 | `workflow_run` does not behave as assumed for forks (S15) | Spike in Phase 5 with a real fork; fall back to maintainer-triggered review for fork PRs |
@@ -610,7 +610,7 @@ work; each would need its own risk review.
 
 | Change case | What changes | Touches |
 |---|---|---|
-| Keyless secret delivery | Fetch the Bob key at run time from an external secret manager using GitHub's OIDC token, so no long-lived Bob key is stored in GitHub. Needs a secret manager that trusts GitHub OIDC claims and a Bob key that can be minted or rotated by API (unverified) | G2, G21, G25, ADR 0013 |
+| Keyless secret delivery | Fetch the Bob key at run time from an external secret manager using GitHub's OIDC token, so no long-lived Bob key is stored in GitHub. Needs a secret manager that trusts GitHub OIDC claims and a Bob key that can be minted or rotated by API (unverified) | G2, G21, G25, ADR 0012 |
 | GitHub App instead of PAT | Short-lived, installation-scoped comment tokens with per-repository permissions and a bot identity, removing the personal token | G2, G7, G34, credential handling in publish stage |
 | Other CI systems | Any CI that can run the same three stages on separate machines with separate credentials could host the reviewer. Needs equivalent controls (no PR code execution with secrets, identifier validation, CI-green check, kill switch, concurrency) | G1, G6, G7, G10, G11, G12, G24, G31, new `integrations/` entry |
 | Other SCMs | GitLab, Bitbucket or Gitea need a different fetch and publish adapter and their own comment-upsert semantics | Prepare and publish stages, G17, G18, G34 |

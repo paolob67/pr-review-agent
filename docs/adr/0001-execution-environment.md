@@ -42,7 +42,7 @@ Facts used here (official GitHub docs, fetched 2026-10-30; see
    |---|---|---|---|
    | `prepare` | read-only `GITHUB_TOKEN` | `contents: read`, `pull-requests: read`, `actions: read` | Validates identifiers, CI result for the SHA, author policy, kill switch, head pinning, size and skip gates; fetches diff and base-branch rules through the API; redacts; builds the prompt; uploads it as an artifact (data only) |
    | `review` | `BOB_API_KEY` only | `contents: read` (to fetch trusted reviewer code) | Downloads the prompt artifact, runs Bob read-only in a hardened container with a scrubbed environment, uploads the raw result as an artifact |
-   | `publish` | comment token only ([ADR 0013](0013-secrets-and-credentials-on-github.md)) | `issues: write` | Treats the result artifact as untrusted, validates and sanitises it, upserts one marker comment, writes the audit log and cost record |
+   | `publish` | comment token only ([ADR 0012](0012-secrets-and-credentials-on-github.md)) | `issues: write` | Treats the result artifact as untrusted, validates and sanitises it, upserts one marker comment, writes the audit log and cost record |
 
 4. `review` runs Bob in a container on the runner (Docker is preinstalled) with a read-only root
    filesystem, all capabilities dropped, `no-new-privileges`, a non-root user, and the UID
@@ -72,7 +72,7 @@ Facts used here (official GitHub docs, fetched 2026-10-30; see
 - Egress cannot be restricted by domain on standard hosted runners. Accepted residual risk.
 - The Bob key is a GitHub secret. Anyone with write access to the repository can read repository
   secrets through a workflow they can run; environment secrets limited to the default branch
-  reduce this ([ADR 0013](0013-secrets-and-credentials-on-github.md)).
+  reduce this ([ADR 0012](0012-secrets-and-credentials-on-github.md)).
 - Private-repo runner minutes count against the plan. Reviews are short; per-run minutes are
   recorded in the cost record.
 - Job summaries, logs and artifacts are the audit store. Retention is a repository setting plus

@@ -25,7 +25,7 @@ Do Part A completely first, then stop and ask before starting Part B.
 
 [PLAN.md](../PLAN.md) sections 3 (the three jobs), 6, and G1, G10, G13, G20 to G27, G34;
 [CONTRACTS.md](../CONTRACTS.md) sections 1, 2, 7, 8; [ADR 0001](../adr/0001-execution-environment.md);
-[ADR 0013](../adr/0013-secrets-and-credentials-on-github.md);
+[ADR 0012](../adr/0012-secrets-and-credentials-on-github.md);
 [runner-facts.md](../results/runner-facts.md).
 
 ## Do

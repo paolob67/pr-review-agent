@@ -29,7 +29,7 @@ behaviour; the Phase 4 results.
    the sandbox repository's default branch.
 2. In `integrations/github-actions/` extend the review workflow from Phase 4 with the `workflow_run`
    trigger (completed, for the required CI workflows), default-branch definition, no PR checkout,
-   per-job permissions as in ADR 0013, concurrency group per PR. Steps: validate inputs
+   per-job permissions as in ADR 0012, concurrency group per PR. Steps: validate inputs
    (G24), resolve the PR from the head SHA through the API, check kill switch (G10), draft, author
    policy (G7), all required workflows green for that SHA (G31), head unchanged, then hand over to the
    `review` job. Put the logic in a script under
@@ -61,7 +61,7 @@ behaviour; the Phase 4 results.
 - Do not use `pull_request_target` or `workflow_run` to check out or run PR code, ever.
 - Do not give the trigger workflows write permissions.
 - Do not make the comment token available to the `review` job, or the Bob key to `prepare` or
-  `publish` (ADR 0013).
+  `publish` (ADR 0012).
 - Do not leave test PRs open or any token with wider rights than needed.
 
 ## Budget

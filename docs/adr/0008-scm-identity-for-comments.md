@@ -1,7 +1,7 @@
 # ADR 0008: SCM Identity for Comments and Non-Blocking Status
 
 Status: Accepted (frozen Phase 1). Item 1 amended 2026-10-30 by
-[ADR 0013](0013-secrets-and-credentials-on-github.md): the default identity is the `publish` job's
+[ADR 0012](0012-secrets-and-credentials-on-github.md): the default identity is the `publish` job's
 `GITHUB_TOKEN` (`github-actions[bot]`) with `issues: write` only; a dedicated bot account is
 optional.
 
@@ -16,7 +16,7 @@ explicitly advisory.
 ## Decision
 
 1. **Bot identity (Guardrail G34)**; default is the workflow token, a dedicated account is the
-   alternative (ADR 0013):
+   alternative (ADR 0012):
    * The SCM comment token (`SCM_COMMENT_TOKEN`) belongs to a dedicated machine user (e.g. `ibm-bob-pr-reviewer[bot]`).
    * The bot account is never assigned `ADMIN` or `MAINTAIN` roles, is never configured in `CODEOWNERS`,
      and cannot satisfy required reviewer branch protection rules.

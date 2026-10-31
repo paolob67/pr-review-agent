@@ -29,7 +29,7 @@
 | [adr/0010-scratch-layout-stdin.md](adr/0010-scratch-layout-stdin.md) | Prompt on stdin; scratch holds only the mode file | Accepted |
 | [adr/0011-bobcoins-as-usage-unit.md](adr/0011-bobcoins-as-usage-unit.md) | Bob usage recorded in Bobcoins, no currency conversion | Accepted |
 | [adr/0008-scm-identity-for-comments.md](adr/0008-scm-identity-for-comments.md) | Dedicated bot account, comment-only scope | Accepted (amended by 0013) |
-| [adr/0013-secrets-and-credentials-on-github.md](adr/0013-secrets-and-credentials-on-github.md) | Secrets and credentials on GitHub | Accepted |
+| [adr/0012-secrets-and-credentials-on-github.md](adr/0012-secrets-and-credentials-on-github.md) | Secrets and credentials on GitHub | Accepted |
 | [diagrams/architecture-overview.drawio](diagrams/architecture-overview.drawio) | Architecture overview (source; PNG alongside) | Current |
 | [diagrams/trust-boundaries.drawio](diagrams/trust-boundaries.drawio) | Trust boundaries diagram (source; PNG alongside) | Current |
 | [TESTING.md](TESTING.md) | How to run each test suite and read results | Phase 2 done 2026-10-30 |
