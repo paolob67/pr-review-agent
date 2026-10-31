@@ -1,7 +1,7 @@
 # Setup (GitHub part, draft)
 
 Draft from Phase 4 Part B. Everything here was done once, in a private sandbox repo, and the commands
-are the ones that worked. The IBM Cloud part does not apply (ADR 0001: GitHub-hosted runners). Phase 8
+are the ones that worked. Only GitHub and the Bob service are needed (ADR 0001). Phase 8
 completes this document.
 
 ## Before you start

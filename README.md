@@ -1,7 +1,7 @@
 # PR Review Agent with IBM Bob Shell
 
-Reference implementation and write-up for running IBM Bob Shell as an advisory pull request
-reviewer on IBM Cloud Code Engine (Frankfurt, `eu-de`), triggered from GitHub Actions after the
+Reference implementation and write-up for running IBM Bob Shell as an advisory pull request reviewer
+in a hardened container on GitHub-hosted runners, triggered from GitHub Actions after the
 team's CI has passed. Comments are marked "AI Assisted"; a human makes the final decision.
 
 Status: Phase 3 complete (reviewer core runs against the real Bob locally). See [docs/STATUS.md](docs/STATUS.md).

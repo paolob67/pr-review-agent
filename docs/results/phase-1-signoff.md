@@ -13,10 +13,10 @@ Status: Signed Off (Phase 1 Gate Met)
   * Inference egress: IBM Bob service with Global subscription region (`https://bob.ibm.com`).
   * Compute runs on GitHub-hosted runners, whose location is not selectable, so no compute-region
     statement can be made ([ADR 0001](../adr/0001-execution-environment.md)). The Bob service
-    region statement stands; the combined residency statement is withdrawn and S13 is open. The
-    owner is asked to confirm the new stance.
+    region statement stands; no combined residency statement is made and S13 is open. The
+    owner is asked to confirm this stance.
 * **Recorded in**: [spikes.md](spikes.md#s13-service-region-and-data-residency), [ARCHITECTURE.md](../ARCHITECTURE.md), and [THREAT_MODEL.md](../THREAT_MODEL.md).
-* **Sign-off**: Bob service region confirmed via Bob subscription portal verification on 2026-10-30; compute-location part withdrawn the same day, awaiting owner confirmation.
+* **Sign-off**: Bob service region confirmed via Bob subscription portal verification on 2026-10-30; no compute-location statement is made, awaiting owner confirmation.
 
 ## 3. Review Scope and Findings Contract
 * **Decision**:

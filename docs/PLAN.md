@@ -85,7 +85,7 @@ Actions, SCMs other than GitHub, a hosted multi-tenant service. Possible extensi
 6. **Data egress and residency.** Source and diffs go from a GitHub-hosted runner, whose location
    cannot be chosen on standard runners, to the Bob service. Which Bob service endpoint applies
    to our Bob instance and what residency it guarantees must be confirmed (S13), then stated in
-   the article. The earlier region stance no longer applies.
+   the article.
 7. **Key ownership.** Bob API keys are scoped to a user and a subscription instance; revocation
    breaks the pipeline. Needs an operational owner and a rotation procedure.
 8. **Duplicate and runaway runs.** Re-pushes, manual re-runs of a workflow, and several CI
@@ -305,7 +305,7 @@ S11 is checked in Phase 4 (local podman, then the runner). S17 to S20 need the s
 workflow (Phase 4 and 5). S15 needs a sandbox GitHub repo (Phase 5); it is analysed on paper in
 Phase 1. S16 is answered in Phase 7 by someone with Bobalytics access looking at the dashboard
 after the first live runs; it is optional and blocks nothing, because the job writes its own cost
-record regardless. IDs are stable: S12 belonged to the withdrawn cloud design and is not reused.
+record regardless. IDs are stable: S12 is withdrawn and is not reused.
 
 | ID | Question | Why it matters | Status |
 |---|---|---|---|
@@ -321,7 +321,7 @@ record regardless. IDs are stable: S12 belonged to the withdrawn cloud design an
 | S10 | Rate and concurrency limits on one API key | Parallel PR handling | Unresolved: no documentation found. Assume one-at-a-time; verify empirically in Phase 3. |
 | S11 | Does the container entrypoint start Bob as a different unprivileged UID, with a read-only rootfs and dropped capabilities, under podman locally (Ubuntu 24.04 base) and under Docker on the `ubuntu-24.04` runner? | G23 | Open: Phase 4. |
 | S12 | Withdrawn (not applicable to the GitHub-hosted runner design). | none | Withdrawn. |
-| S13 | Which Bob service region applies to our instance, and what data-residency statement can we make now that the compute location is a GitHub-hosted runner that cannot be selected? | Implication 6, article | Unresolved: no region documentation found for Bob or for standard hosted runners. Owner should check the Bob portal. The Phase 1 stance is withdrawn; the article states "unverified". |
+| S13 | Which Bob service region applies to our instance, and what data-residency statement can we make now that the compute location is a GitHub-hosted runner that cannot be selected? | Implication 6, article | Unresolved: no region documentation found for Bob or for standard hosted runners. Owner should check the Bob portal. The article states "unverified". |
 | S14 | Format of trustedFolders.json; which settings keys pin approval mode and disable MCP and AGENTS.md loading? | G28 to G30, egress risk | Answered: trustedFolders.json format confirmed; project settings ignored when untrusted; AGENTS.md loads regardless of trust (disable via `"bob-cline.useAgentRules": false` in user-level settings.json); .env not loaded; MCP blocked per docs. |
 | S15 | `workflow_run` behaviour in practice for fork PRs | G6, G24, G31, G32 | Open: Phase 5 (live), analysed on paper in Phase 1. |
 | S16 | Does Bobalytics show Bob Shell API-key usage? | G37, reconciliation | Open: Phase 7, optional. |
@@ -352,7 +352,7 @@ Decision gate after Phase 0 (recorded 2026-10-30):
 
 ## 6. GitHub Actions target
 
-Everything runs on GitHub. No cloud account is needed. The names below are placeholders.
+Everything runs on GitHub. No account other than GitHub and the Bob service is needed. The names below are placeholders.
 
 | Item | Value |
 |---|---|
@@ -431,7 +431,7 @@ self-contained brief in [docs/tasks/](tasks/README.md); progress is tracked in
 ### Phase 0: Spikes against the real Bob CLI (local, cheap)
 
 Work: scripts under `scripts/spikes/` answering S1 to S10, S13 and S14 (S7 covers what usage
-information a run exposes); capture outputs in `docs/results/spikes.md`. Needs no cloud or GitHub
+information a run exposes); capture outputs in `docs/results/spikes.md`. Needs no GitHub
 resources.
 Gate: every unknown has a recorded answer or an explicit "unresolved, assume worst case" note;
 read-only enforcement decision made (see decision gate in section 5); cost reporting approach
@@ -594,7 +594,7 @@ Principles:
 | Anyone with write access can read repository secrets through a workflow, or the plan lacks environment secrets (S18) | Environment scoped to the default branch; Bobcoin ceiling on the key; rotation in the runbook; documented weaker fallback; sandbox may need to be public |
 | `GITHUB_TOKEN` with `issues: write` cannot list or update comments, or is not refused on reviews (S17) | Use a dedicated bot token held only by `publish` (ADR 0012) |
 | Hosted runner cannot reach the Bob service, or the key variable differs (S19) | Live smoke early in Phase 4 Part B; record exact egress needs |
-| Compute location cannot be chosen, so the earlier residency stance fails (S13) | Owner decision; state in the article; larger runners with static IPs or a self-hosted runner are change cases |
+| Compute location cannot be chosen, so no compute-region residency statement can be made (S13) | Owner decision; state in the article; larger runners with static IPs or a self-hosted runner are change cases |
 | `workflow_run` does not behave as assumed for forks (S15) | Spike in Phase 5 with a real fork; fall back to maintainer-triggered review for fork PRs |
 | No usable per-run usage figure from Bob (S7, S16) | Labelled estimates plus daily reconciliation; article states the accuracy |
 | Review is too noisy or too shallow to be useful | Triage and caps (G36); precision and recall evals; tune before enabling beyond the sandbox |

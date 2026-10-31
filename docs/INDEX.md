@@ -35,7 +35,7 @@
 | [diagrams/architecture-overview.drawio](diagrams/architecture-overview.drawio) | Architecture overview (source; PNG alongside) | Current |
 | [diagrams/trust-boundaries.drawio](diagrams/trust-boundaries.drawio) | Trust boundaries diagram (source; PNG alongside) | Current |
 | [TESTING.md](TESTING.md) | How to run each test suite and read results | Phase 2 done 2026-10-30 |
-| [SETUP.md](SETUP.md) | GitHub part: environment, variables, secret, first run (IBM Cloud not used) | Draft (Phase 4), completed Phase 8 |
+| [SETUP.md](SETUP.md) | GitHub part: environment, variables, secret, first run | Draft (Phase 4), completed Phase 8 |
 | [RUNBOOK.md](RUNBOOK.md) | Kill switch, key rotation, teardown | Draft (Phase 4), completed Phase 8 |
 | ARTICLE.md | Narrative write-up | Planned (Phase 8) |
 | [results/spikes.md](results/spikes.md) | Phase 0 spike findings: S1-S10, S13, S14; gate decisions | Phase 0 done 2026-10-30 |

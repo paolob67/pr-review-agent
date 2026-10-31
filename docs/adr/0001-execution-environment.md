@@ -16,7 +16,7 @@ The requirements are:
   comment token (AGENTS.md). They must never coexist on the same machine.
 - The trigger must never check out PR code with secrets in scope (guardrails G6, G24).
 - The review is advisory only; the system never approves, blocks, or sets commit statuses.
-- The implementation adds no dependency on any cloud account other than GitHub and the Bob service.
+- The implementation adds no dependency on any service other than GitHub and the Bob service.
 
 Facts used here (official GitHub docs, fetched 2026-10-30; see
 [results/runner-facts.md](../results/runner-facts.md)):
@@ -50,8 +50,8 @@ Facts used here (official GitHub docs, fetched 2026-10-30; see
    defence in depth; the job boundary is the main isolation.
 5. Local development builds the same image with **podman** on an Ubuntu 24.04 base, so local runs
    match the runner OS. The runner uses Docker; the Dockerfile is plain OCI and builds with both.
-6. No IBM Cloud service, account, CLI or credential is used anywhere. The only external services
-   are GitHub and the Bob service.
+6. No other cloud account, CLI or credential is used anywhere. The only external services are
+   GitHub and the Bob service.
 
 ## Reasons
 

@@ -5,7 +5,7 @@ Fedora CoreOS 44, rootless). Brief: [phase-4-runner-foundation.md](../tasks/phas
 Decision context: [ADR 0001](../adr/0001-execution-environment.md).
 
 No Bob calls were made in Part A. The canary uses made-up credential values and a probe process that
-stands in for Bob, so 0 of the 5 allowed short calls were used. No GitHub or IBM Cloud resources were
+stands in for Bob, so 0 of the 5 allowed short calls were used. No GitHub resources were
 created.
 
 ## 1. Podman health (step 1)
@@ -33,7 +33,7 @@ Actions and findings, in order:
    bytes). Fix: write `core:100000:65536` to both and run `podman system migrate`. After that
    `podman info` shows the mappings `{0 1000 1} {1 100000 65536}`.
 
-The earlier "storage error (`readlink .../overlay/diff`)" noted in the old Code Engine results is not
+The earlier "storage error (`readlink .../overlay/diff`)" seen in a previous local podman session is not
 reproduced after the reset. The cause of the original corruption is not established (unverified).
 
 Housekeeping for the owner: images accumulate on every build. `integrations/container/build.sh` uses

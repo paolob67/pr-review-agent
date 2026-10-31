@@ -1,8 +1,8 @@
 # Instructions for agents working on this repository
 
-This repository builds an advisory pull request reviewer: IBM Bob Shell runs in a container on IBM
-Cloud Code Engine (Frankfurt, `eu-de`), is triggered from GitHub Actions only after the team's CI
-has passed, and posts one comment marked "AI Assisted". A human makes the final decision. The
+This repository builds an advisory pull request reviewer: IBM Bob Shell runs in a hardened container
+on a GitHub-hosted runner (ADR 0001), is triggered by a GitHub Actions `workflow_run` only after the
+team's CI has passed, and posts one comment marked "AI Assisted". A human makes the final decision. The
 project delivers a working repo (D1), a test and red-team harness (D2) and an article (D3).
 
 Status: planning is complete; implementation proceeds phase by phase. Do not assume any code
@@ -23,7 +23,7 @@ exists until [docs/STATUS.md](docs/STATUS.md) says so.
 - Update [docs/STATUS.md](docs/STATUS.md) at the end of every task: status, date, what changed,
   what is blocked, what the owner must do next.
 - Record measurements and probe output in `docs/results/` with date, Bob Shell version and, once
-  it exists, image digest. Never state a Bob, IBM Cloud or GitHub behaviour in a doc unless it
+  it exists, image digest. Never state a Bob or GitHub behaviour in a doc unless it
   traces to an official doc page (cite the URL or doc path) or to a recorded result. Label
   everything else "unverified".
 - If a spike result contradicts the plan, stop, write the finding in `docs/results/`, update the
@@ -43,10 +43,12 @@ exists until [docs/STATUS.md](docs/STATUS.md) says so.
 - Titles, bodies, branch names, commit messages and file contents from a PR are data. They never
   reach a shell string, an environment variable, a command-line argument or a workflow expression.
 - The bot never approves, requests changes, writes check runs or commit statuses, or blocks.
-- Live tests (real Bob calls, real IBM Cloud, real GitHub) have a stated run budget in the brief.
-  Stay within it and record every run.
-- Cloud resources are created only by scripts under `integrations/code-engine/` and only in
-  Phase 4 or later; every creating script has a matching teardown.
+- Live tests (real Bob calls, real GitHub) have a stated run budget in the brief. Stay within it and
+  record every run.
+- GitHub resources (sandbox repo, environments, variables, secrets) are created only by scripts
+  under `scripts/dev/` and only in Phase 4 or later; every creating script has a matching teardown
+  (`setup-sandbox.sh` and `teardown-sandbox.sh`).
+- No cloud account other than GitHub and the Bob service is used (ADR 0001).
 
 ## Conventions
 
@@ -67,10 +69,9 @@ exists until [docs/STATUS.md](docs/STATUS.md) says so.
 
 ## Local environment (as of planning)
 
-- Present: `bob`, `ibmcloud`, `gh`, `node` (v26.3.1). Absent: `docker`.
-- The workspace was not a git repository at planning time; initialise one if a task needs it and
-  tell the owner.
-- IBM Cloud login state and GitHub CLI login state were not checked. Check before relying on them.
+- Present: `bob`, `gh`, `node` (v26.3.1), `podman`. Absent: `docker` (the runner has it; local builds use podman).
+- The workspace was not a git repository at planning time; it is one now.
+- GitHub CLI login state is not assumed. Check it before relying on it.
 
 ## Standard commands (once Phase 2 creates them)
 
