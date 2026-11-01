@@ -589,7 +589,9 @@ The following items remain open at the end of Phase 7. Each is documented in the
 file; none were silently smoothed over.
 
 1. **Bobcoin unit unverified (S16).** The figures reported by Bob (`session_costs`) have not been
-   reconciled against a per-key billing source. Bobalytics was not available for this subscription.
+   reconciled against a per-key billing source. The Bobalytics dashboard was not available for this
+   subscription; a per-user CSV export covers weekdays only up to 2026-10-30 and has no key
+   attribution ([`bobalytics.md`](results/bobalytics.md)).
    The account total on 2026-11-01 (95.58 Bobcoins) mixes local use and cannot split the reviewer's
    contribution. The per-review Bobcoin figures are precise to what Bob reports but their absolute
    meaning is unconfirmed.

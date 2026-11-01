@@ -107,7 +107,9 @@ reported figure is the cost record.
 
 ## 6. Reconciliation with the account total (S16)
 
-Bobalytics is not available in the portal (owner, 2026-11-01). The owner read an account total instead:
+The Bobalytics dashboard is not available in the portal (owner, 2026-11-01). A per-user CSV export was obtained
+later the same day; it holds weekdays only up to 2026-10-30, so it has no row for the live-run days
+([bobalytics.md](bobalytics.md)). The owner read an account total instead:
 **95.58 Bobcoins spent on 2026-11-01**, covering both the reviewer's calls and the owner's local Bob use for this
 project.
 

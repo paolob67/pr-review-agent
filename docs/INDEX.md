@@ -53,6 +53,7 @@
 | [results/phase-6-evals.md](results/phase-6-evals.md) | Phase 6: quality eval results (25/30 PASS, recall 0.97, FP rate 2.5/clean PR) | Phase 6 done 2026-11-01 |
 | [results/phase-7-drills.md](results/phase-7-drills.md) | Phase 7: kill switch, cap, key rotation, revoked key, rebuild from docs, artifact retention | Phase 7 done 2026-11-01 |
 | [results/cost-summary.md](results/cost-summary.md) | Phase 7: per-PR cost statement with accuracy, runner minutes, cancelled-review cost, S16 | Phase 7 done 2026-11-01 |
+| [results/bobalytics.md](results/bobalytics.md) | S16: what the owner's Bobalytics per-user export (CSV in `results/bobalytics/`) shows and does not show | 2026-11-01 |
 | [results/cost-data.json](results/cost-data.json) | Phase 7: per-run job timings and audit records for 269 runs (data only) | Phase 7 |
 | [results/cost-data-cancelled.json](results/cost-data-cancelled.json) | Phase 7: Bob calls found inside cancelled review jobs (29) | Phase 7 |
 | [results/phase-5-evidence/](results/phase-5-evidence/) | Matrix data (`matrix.json`) and the first bot comment of each case | Phase 5 |

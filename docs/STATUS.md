@@ -133,7 +133,7 @@ answered; link to the entry in `docs/results/`.
 | S13 | Answered 2026-10-30 | Portal confirmed: Bob subscription region is `Global`. Compute on GitHub-hosted runners (location not selectable); egress to Global. |
 | S14 | Answered 2026-10-30 | [spikes.md S14](results/spikes.md#s14-settings-format-useagentrules-env-loading-tool-approvals) |
 | S15 | Answered 2026-10-31 for same-repo PRs; fork payload unverified | [phase-5-github.md](results/phase-5-github.md#s15-answers) |
-| S16 | Not available 2026-11-01 | Bobalytics is not available in the portal (owner). The account total for the day (95.58 Bobcoins) mixes local use; reviewer total 2.54. See [cost-summary.md](results/cost-summary.md#6-reconciliation-with-the-account-total-s16) |
+| S16 | Partly available 2026-11-01; does not reconcile the reviewer | Per-user Bobalytics export received (weekdays only, 2026-10-03 to 2026-10-30, no 10-31 or 11-01 rows, no key attribution): [bobalytics.md](results/bobalytics.md). The account total for 11-01 (95.58 Bobcoins) mixes local use; reviewer total 2.54. See [cost-summary.md](results/cost-summary.md#6-reconciliation-with-the-account-total-s16) |
 | S17 | Answered 2026-10-31, contradicts the plan; owner accepted `pull-requests: write` (ADR 0014) | [phase-4-runner.md](results/phase-4-runner.md#s17-comment-identity-and-token-scope-contradicts-the-plan) |
 | S18 | Answered 2026-10-31 | Environment secrets available on the private repo ([phase-4-runner.md](results/phase-4-runner.md#s18-environment-secrets-on-the-owners-plan)) |
 | S19 | Answered 2026-10-31 | Runner reaches Bob; `BOB_API_KEY` ([phase-4-runner.md](results/phase-4-runner.md#s19-runner-reaches-bob-variable-name)) |
