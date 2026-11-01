@@ -11,10 +11,10 @@
 | [tasks/README.md](tasks/README.md) | Index of the self-contained phase briefs | Current |
 | [tasks/phase-0-spikes.md](tasks/phase-0-spikes.md) | Brief: spikes against the local Bob CLI | Done |
 | [tasks/phase-1-design-freeze.md](tasks/phase-1-design-freeze.md) | Brief: threat model, ADRs, architecture freeze | Done |
-| [tasks/phase-2-reviewer-core.md](tasks/phase-2-reviewer-core.md) | Brief: reviewer core with offline tests | Ready |
-| [tasks/phase-3-real-bob.md](tasks/phase-3-real-bob.md) | Brief: real Bob integration, local | Ready |
+| [tasks/phase-2-reviewer-core.md](tasks/phase-2-reviewer-core.md) | Brief: reviewer core with offline tests | Done 2026-10-30 |
+| [tasks/phase-3-real-bob.md](tasks/phase-3-real-bob.md) | Brief: real Bob integration, local | Done 2026-10-30 |
 | [tasks/phase-4-runner-foundation.md](tasks/phase-4-runner-foundation.md) | Brief: runner foundation (container, stage split, secrets wiring) | Done 2026-10-31 |
-| [tasks/phase-5-github-trigger.md](tasks/phase-5-github-trigger.md) | Brief: GitHub trigger and end-to-end matrix | Ready |
+| [tasks/phase-5-github-trigger.md](tasks/phase-5-github-trigger.md) | Brief: GitHub trigger and end-to-end matrix | Done 2026-10-31 |
 | [tasks/phase-6-redteam-evals.md](tasks/phase-6-redteam-evals.md) | Brief: red team and quality evals | Ready |
 | [tasks/phase-7-hardening.md](tasks/phase-7-hardening.md) | Brief: operational hardening and cost reconciliation | Ready |
 | [tasks/phase-8-docs-article.md](tasks/phase-8-docs-article.md) | Brief: documentation, article, final validation | Ready |
@@ -35,7 +35,7 @@
 | [adr/0013-bob-license-acceptance.md](adr/0013-bob-license-acceptance.md) | `--accept-license` on every non-interactive Bob run | Accepted 2026-10-31 |
 | [diagrams/architecture-overview.drawio](diagrams/architecture-overview.drawio) | Architecture overview (source; PNG alongside) | Current |
 | [diagrams/trust-boundaries.drawio](diagrams/trust-boundaries.drawio) | Trust boundaries diagram (source; PNG alongside) | Current |
-| [TESTING.md](TESTING.md) | How to run each test suite and read results | Phase 2 done 2026-10-30 |
+| [TESTING.md](TESTING.md) | How to run each test suite and read results | Current (updated Phase 5, 2026-10-31) |
 | [SETUP.md](SETUP.md) | GitHub part: environment, variables, secret, first run | Draft (Phase 4), completed Phase 8 |
 | [RUNBOOK.md](RUNBOOK.md) | Kill switch, key rotation, teardown | Draft (Phase 4), completed Phase 8 |
 | ARTICLE.md | Narrative write-up | Planned (Phase 8) |

@@ -24,7 +24,7 @@ The system handles or protects six distinct assets:
 |---|---|---|
 | **Bob API Key** | `BOB_API_KEY`, a GitHub environment secret, granting access to the IBM Bob inference service and consuming Bobcoins or billing budget. | Critical |
 | **SCM Read Token** | The `prepare` job's `GITHUB_TOKEN` (`SCM_READ_TOKEN`) with read-only repository and pull request permissions used to fetch diffs and base-branch rules. | High |
-| **SCM Comment Token** | The `publish` job's `GITHUB_TOKEN` with `issues: write` only (or a dedicated bot token, ADR 0012), scoped strictly to comments. | High |
+| **SCM Comment Token** | The `publish` job's `GITHUB_TOKEN` with `pull-requests: write` ([ADR 0014](adr/0014-publish-token-pull-requests-write.md)), or a dedicated bot token ([ADR 0008](adr/0008-scm-identity-for-comments.md), [ADR 0012](adr/0012-secrets-and-credentials-on-github.md)), scoped strictly to comments. | High |
 | **Workflow Definition** | The workflow files on the default branch that decide which job gets which credential. Write access to them equals access to repository secrets. | High |
 | **Source Code & PR Content** | Repository code, pull request diffs, metadata, and team rule files. | High |
 | **PR Discussion Channel** | Pull request comments feed; must remain clean, free of spam, free of misleading approvals, and free of malicious markdown injections. | Medium |
@@ -60,7 +60,7 @@ Three primary trust boundaries separate untrusted inputs from privileged operati
                  |
      (TB-3) Validated Findings JSON (sanitized, parsed, schema-checked)
                  v
-[ Job publish: fresh runner, issues: write only ]
+[ Job publish: fresh runner, pull-requests: write (ADR 0014) ]
    advisory marker comment                         -->  [ GitHub PR Discussion ]
 ```
 
@@ -112,7 +112,7 @@ Three primary trust boundaries separate untrusted inputs from privileged operati
 
 ### AC-11: Secret Exposure through Workflow Changes or Over-broad Tokens
 * **Attack**: A user with write access, or a malicious change merged to a workflow, reads `BOB_API_KEY` or obtains a token with more scope than needed (for example a token able to submit approving reviews).
-* **Mitigation**: `BOB_API_KEY` lives in an environment limited to the default branch and is referenced only in the `env:` of one step (ADR 0012). Per-job `permissions:` are explicit and the `publish` job has `issues: write` only (G1, G25). Workflow files are default-branch only and change through review. A static check fails the build on stray `secrets.` references (G21). Retained artifacts are short-lived and hold no secrets (G26). A global kill switch allows immediate disabling (G10); rotation follows the runbook.
+* **Mitigation**: `BOB_API_KEY` lives in an environment limited to the default branch and is referenced only in the `env:` of one step ([ADR 0012](adr/0012-secrets-and-credentials-on-github.md)). Per-job `permissions:` are explicit and the `publish` job has `pull-requests: write` only ([ADR 0014](adr/0014-publish-token-pull-requests-write.md); G1, G25). Workflow files are default-branch only and change through review. A static check fails the build on stray `secrets.` references (G21). Retained artifacts are short-lived and hold no secrets (G26). A global kill switch allows immediate disabling (G10); rotation follows the runbook.
 
 ### AC-12: Supply Chain Tampering
 * **Attack**: Compromised upstream Bob installer or Docker base image injects backdoors into the review container.
@@ -165,7 +165,7 @@ The table below verifies that every guardrail from G1 through G37 is mapped to i
 | **G31** | Review triggers only when required CI concludes success on head SHA| Preventive | AC-9 |
 | **G32** | Head pinning (verify head SHA before review, exit if moved/closed) | Preventive | AC-9 |
 | **G33** | Team rules and standards loaded strictly from base branch via API | Preventive | AC-3 |
-| **G34** | Never approves or blocks; comment endpoint only; `publish` token has no pull-requests scope | Preventive | AC-8 |
+| **G34** | Never approves or blocks; comment endpoint only; `publish` token has `pull-requests: write` (ADR 0014); enforced by endpoint allowlist, workflow check, and repo setting | Preventive | AC-8 |
 | **G35** | Wrapper-generated advisory header/footer with imitation stripping | Transparency | AC-7, AC-8 |
 | **G36** | Findings contract (category, severity, confidence, diff line check)| Preventive | AC-2, AC-7 |
 | **G37** | Per-PR cost record produced and embedded in comment metadata | Detective | AC-10, AC-14 |

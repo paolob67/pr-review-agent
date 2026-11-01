@@ -55,7 +55,7 @@ G25). Source and scoping are in [ADR 0012](adr/0012-secrets-and-credentials-on-g
 |---|---|---|---|
 | `BOB_API_KEY` | Environment secret `BOB_API_KEY` in environment `bob-review` (default branch only) | `review` | Bob process only (G2) |
 | `SCM_READ_TOKEN` | The `prepare` job's `GITHUB_TOKEN` (`contents: read`, `pull-requests: read`, `actions: read`) | `prepare` | Prepare stage |
-| `SCM_COMMENT_TOKEN` | The `publish` job's `GITHUB_TOKEN` (`issues: write` only), or environment secret `BOB_COMMENT_TOKEN` if a dedicated bot is used (S17) | `publish` | Publish stage |
+| `SCM_COMMENT_TOKEN` | The `publish` job's `GITHUB_TOKEN` (`pull-requests: write`, [ADR 0014](adr/0014-publish-token-pull-requests-write.md)), or environment secret `BOB_COMMENT_TOKEN` if a dedicated bot is used (S17) | `publish` | Publish stage |
 
 Rules: a secret is referenced only in the `env:` of the one step that needs it; never in `run:`,
 `if:`, `with:`, matrix, outputs or artifacts; set with `gh secret set NAME --env bob-review < file`

@@ -1,6 +1,6 @@
 # Project Plan: Bob as a Pull Request Review Agent
 
-Status: revised 2026-10-30. Phases 0 to 3 are done; Phase 4 is in progress. See [STATUS.md](STATUS.md).
+Status: revised 2026-10-31. Phases 0 to 5 are complete (Phase 5 with owner-accepted deviations). See [STATUS.md](STATUS.md).
 
 ## Table of contents
 
@@ -256,7 +256,7 @@ Each item names the control, its type, and the test that proves it.
 
 | ID | Control | Type | Proven by |
 |---|---|---|---|
-| G1 | Workflow `permissions:` least privilege: workflow-level `permissions: {}`, then per job only what it needs (`issues: write` in `publish` only; no other write scope anywhere) | Preventive | actionlint, zizmor |
+| G1 | Workflow `permissions:` least privilege: workflow-level `permissions: {}`, then per job only what it needs (`pull-requests: write` in `publish` only, ADR 0014; no other write scope anywhere) | Preventive | actionlint, zizmor |
 | G2 | Separate credentials per stage: read-only SCM token (prepare), comment-only (publish), Bob key only (review) | Preventive | Unit test on env construction |
 | G3 | Scrubbed environment for the Bob process (`env -i` plus allowlist) | Preventive | Canary env var test |
 | G4 | Bob read-only: `--disable-tool-groups edit,execute --disable-mcp` on every `bob run` invocation; no overridable flags | Preventive | Live test: injected "write file" attempt leaves tree unchanged; assert stats.tool_calls==0 |
@@ -320,16 +320,16 @@ record regardless. IDs are stable: S12 is withdrawn and is not reused.
 | S8 | Can Bob read files outside the workspace, and can stdin carry a large prompt? | Prompt delivery design | Answered (v2): outside-workspace file access denied; stdin works for large prompts (200KB tested); deliver diff via stdin. |
 | S9 | Which system packages does Bob need beyond Node? | Dockerfile | Answered (v2): Node 22+ (24+ preferred); npm; package is @ibm/bob. Verify in Phase 4. |
 | S10 | Rate and concurrency limits on one API key | Parallel PR handling | Unresolved: no documentation found. Assume one-at-a-time; verify empirically in Phase 3. |
-| S11 | Does the container entrypoint start Bob as a different unprivileged UID, with a read-only rootfs and dropped capabilities, under podman locally (Ubuntu 24.04 base) and under Docker on the `ubuntu-24.04` runner? | G23 | Open: Phase 4. |
+| S11 | Does the container entrypoint start Bob as a different unprivileged UID, with a read-only rootfs and dropped capabilities, under podman locally (Ubuntu 24.04 base) and under Docker on the `ubuntu-24.04` runner? | G23 | Local pass 2026-10-31 (13/13 canary); runner: Bob ran as uid 10002 ([results](results/phase-4-container.md#3-s11-uid-split-under-the-hardened-flags)). |
 | S12 | Withdrawn (not applicable to the GitHub-hosted runner design). | none | Withdrawn. |
-| S13 | Which Bob service region applies to our instance, and what data-residency statement can we make now that the compute location is a GitHub-hosted runner that cannot be selected? | Implication 6, article | Unresolved: no region documentation found for Bob or for standard hosted runners. Owner should check the Bob portal. The article states "unverified". |
+| S13 | Which Bob service region applies to our instance, and what data-residency statement can we make now that the compute location is a GitHub-hosted runner that cannot be selected? | Implication 6, article | Answered 2026-10-30: Portal confirmed Bob subscription region is `Global`. Compute on GitHub-hosted runners (location not selectable); egress to Global. |
 | S14 | Format of trustedFolders.json; which settings keys pin approval mode and disable MCP and AGENTS.md loading? | G28 to G30, egress risk | Answered: trustedFolders.json format confirmed; project settings ignored when untrusted; AGENTS.md loads regardless of trust (disable via `"bob-cline.useAgentRules": false` in user-level settings.json); .env not loaded; MCP blocked per docs. |
 | S15 | `workflow_run` behaviour in practice for fork PRs | G6, G24, G31, G32 | Answered 2026-10-31 for same-repo PRs ([phase-5-github.md](results/phase-5-github.md)); fork payload unverified (needs a second account). |
 | S16 | Does Bobalytics show Bob Shell API-key usage? | G37, reconciliation | Open: Phase 7, optional. |
 | S17 | Can a `GITHUB_TOKEN` with only `issues: write` create, update and list comments on a PR, and is it refused on the reviews, check-runs and statuses endpoints? | G25, G34, ADR 0012 | Answered 2026-10-31, contradicts the plan: `issues: write` alone is refused (403) on list and post; posting needs `pull-requests: write`, which also reaches the reviews endpoint. Check runs and statuses are refused. Owner decision 2026-10-31: accept `pull-requests: write` (ADR 0014). [phase-4-runner.md](results/phase-4-runner.md#s17-comment-identity-and-token-scope-contradicts-the-plan) |
 | S18 | Are environment secrets with a deployment-branch restriction available for the owner's plan and repository visibility (private or public)? If not, what is the fallback? | G25, ADR 0012 | Answered 2026-10-31: available on the private repo; environment `bob-review` limited to `main` created. [phase-4-runner.md](results/phase-4-runner.md#s18-environment-secrets-on-the-owners-plan) |
 | S19 | Does a hosted runner reach the Bob service, and does `BOB_API_KEY` authenticate there (the docs search showed `BOBSHELL_API_KEY`; Phase 0 used `BOB_API_KEY`)? | D1, ADR 0001 | Answered 2026-10-31: yes; `BOB_API_KEY` authenticates from a hosted runner. [phase-4-runner.md](results/phase-4-runner.md#s19-runner-reaches-bob-variable-name) |
-| S20 | How are the reviewer code and image delivered to the jobs when the reviewed repo differs from this repo: reusable workflow from a private repo, image from GHCR by digest, or per-run build? Do artifacts pass cleanly between the three jobs? | Layout, G22 | Partly answered 2026-10-31: per-run build from the default-branch checkout works and artifacts pass cleanly; cross-repo delivery is Phase 5. [phase-4-runner.md](results/phase-4-runner.md#s20-delivery-route) |
+| S20 | How are the reviewer code and image delivered to the jobs when the reviewed repo differs from this repo: reusable workflow from a private repo, image from GHCR by digest, or per-run build? Do artifacts pass cleanly between the three jobs? | Layout, G22 | Partly answered 2026-10-31: per-run build from the default-branch checkout works and artifacts pass cleanly; cross-repo delivery decided in Phase 8. [phase-4-runner.md](results/phase-4-runner.md#s20-delivery-route) |
 
 Decision gate after Phase 0 (recorded 2026-10-30):
 
@@ -564,7 +564,7 @@ Principles:
 
 | # | Decision | Default |
 |---|---|---|
-| 12 | SCM identity for comments | The `publish` job's `GITHUB_TOKEN` with `issues: write` only (`github-actions[bot]`), pending S17; a dedicated bot account with a fine-grained token, or a GitHub App, is the alternative |
+| 12 | SCM identity for comments | The `publish` job's `GITHUB_TOKEN` with `pull-requests: write` (`github-actions[bot]`, [ADR 0014](adr/0014-publish-token-pull-requests-write.md)); a dedicated bot account with a fine-grained token, or a GitHub App, is the alternative ([ADR 0008](adr/0008-scm-identity-for-comments.md)) |
 | 13 | Author policy | Auto-review OWNER, MEMBER, COLLABORATOR; others by maintainer label |
 | 14 | Team rules location | `.bob-review/` on the base branch of the reviewed repo (`standards.md`, `project-rules.md`, optional `security.md`) |
 | 15 | Required CI definition | Repo variable listing the workflow names that must be green |

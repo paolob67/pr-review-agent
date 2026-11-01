@@ -19,7 +19,7 @@ holding a different credential:
    and uploads it as an artifact.
 2. **`review`** holds only `BOB_API_KEY` (environment secret). It runs IBM Bob Shell read-only in a
    hardened container on the prompt artifact and uploads the raw result as an artifact.
-3. **`publish`** holds only the comment token (`issues: write`). It treats the result artifact as
+3. **`publish`** holds only the comment token (`pull-requests: write`, [ADR 0014](adr/0014-publish-token-pull-requests-write.md)). It treats the result artifact as
    untrusted, validates findings, sanitises, and posts or updates a single markdown comment.
 
 The Bob service is the only external dependency besides GitHub.
@@ -31,7 +31,7 @@ The Bob service is the only external dependency besides GitHub.
 
 ### 2.1 Trigger and gates (`prepare` job)
 * **Event Listener**: Monitors `workflow_run` events corresponding to required CI workflows, as
-  well as manual trigger labels (e.g., `bob-review`).
+  well as manual trigger labels (e.g., `ai-review`, [ADR 0015](adr/0015-trigger-design.md)).
 * **Gate Evaluator**: Evaluates gating rules (G7, G10, G12, G31):
   * Verifies `workflow_run.conclusion == "success"` (the event fires for every conclusion).
   * Verifies `BOB_REVIEW_ENABLED == "true"` (a repository variable, readable in `if:`).
@@ -116,10 +116,10 @@ Unknown S15 analyzes how `workflow_run` interacts with pull requests, fork PRs, 
 3. **Outside Contributor Handling**: The trigger checks PR author association or labels before
    starting the `review` job, preventing denial-of-wallet attacks from unauthorized forks (G7).
 
-### 4.3 Open Points for Phase 5 Testing
-* Race conditions when multiple CI workflows finish concurrently for the same PR.
-* Behavior when a PR is updated while CI is running (canceling previous workflow runs via concurrency groups).
-* Handling of PRs from private forks or internal branches with distinct permission levels.
+### 4.3 Phase 5 Testing and Verification (S15)
+* Race conditions when multiple CI workflows finish concurrently for the same PR: handled by required-workflow gating (G31) and per-job concurrency groups ([ADR 0015](adr/0015-trigger-design.md)).
+* Behavior when a PR is updated while CI is running: handled by concurrency cancellation and head pinning (G11, G32).
+* Handling of same-repo PRs, hostile branch names, and label re-requests: verified in the 13-case end-to-end matrix ([results/phase-5-github.md](results/phase-5-github.md)). Fork and outside-contributor live cases remain owner-accepted deviations covered offline.
 
 ## 5. Job Outcomes and Failure Behavior
 
