@@ -2,7 +2,7 @@
 
 Update this file at the end of every task. Newest information first within each section.
 
-Last updated: 2026-11-01. Phases 0 to 7 complete. Phase 7 gate met: every drill recorded, a per-PR cost statement with stated accuracy, rebuild from SETUP.md with no undocumented step. S16 (Bobalytics) not available. Execution environment: GitHub-hosted runners ([ADR 0001](adr/0001-execution-environment.md)).
+Last updated: 2026-11-01. Phases 0 to 7 complete. Phase 8 in progress: ARTICLE.md written. Phase 7 gate met: every drill recorded, a per-PR cost statement with stated accuracy, rebuild from SETUP.md with no undocumented step. S16 (Bobalytics) not available. Execution environment: GitHub-hosted runners ([ADR 0001](adr/0001-execution-environment.md)).
 
 ## Phase tracker
 
@@ -16,7 +16,7 @@ Last updated: 2026-11-01. Phases 0 to 7 complete. Phase 7 gate met: every drill 
 | 5. GitHub trigger and end-to-end matrix | [phase-5-github-trigger.md](tasks/phase-5-github-trigger.md) | Done | Yes, with owner-accepted deviations | Second GitHub account (fork and outside-contributor cases, S15 fork payload); optional |
 | 6. Red team and quality evals | [phase-6-redteam-evals.md](tasks/phase-6-redteam-evals.md) | Done | Yes | n/a |
 | 7. Operational hardening and cost reconciliation | [phase-7-hardening.md](tasks/phase-7-hardening.md) | Done | Yes, S16 not available | n/a |
-| 8. Documentation, article, final validation | [phase-8-docs-article.md](tasks/phase-8-docs-article.md) | Not started | No | Confirm LinkedIn article length |
+| 8. Documentation, article, final validation | [phase-8-docs-article.md](tasks/phase-8-docs-article.md) | In progress | No | LinkedIn article decision pending; ARTICLE.md (full technical paper) written 2026-11-01 |
 
 Status values: Not started, In progress, Blocked (say why), Done (gate met, results recorded).
 

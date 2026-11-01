@@ -38,7 +38,7 @@
 | [TESTING.md](TESTING.md) | How to run each test suite and read results | Current (updated Phase 5, 2026-10-31) |
 | [SETUP.md](SETUP.md) | GitHub part: environment, variables, secret, first run | Rebuilt from the document in Phase 7; other-repo install completed in Phase 8 |
 | [RUNBOOK.md](RUNBOOK.md) | First five minutes, kill switch, missing review, cap, key rotation, leaked key, cost, artifacts, teardown | Drilled in Phase 7 (gaps listed in the file) |
-| ARTICLE.md | Narrative write-up | Planned (Phase 8) |
+| [ARTICLE.md](ARTICLE.md) | Full technical paper: motivation, architecture, guardrails, red-team results, quality evals, cost, caveats, adoption | Phase 8, 2026-11-01 |
 | [results/spikes.md](results/spikes.md) | Phase 0 spike findings: S1-S10, S13, S14; gate decisions | Phase 0 done 2026-10-30 |
 | [results/phase-1-signoff.md](results/phase-1-signoff.md) | Phase 1 sign-off record and policy decisions | Phase 1 done 2026-10-30 |
 | [results/phase-2-results.md](results/phase-2-results.md) | Phase 2 test counts, guardrails covered, design notes | Phase 2 done 2026-10-30 |
