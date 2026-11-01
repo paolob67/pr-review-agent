@@ -11,7 +11,9 @@ Stops all reviews at once without touching the secret (ADR 0012 item 9):
 gh variable set BOB_REVIEW_ENABLED -R OWNER/REPO --body false
 ```
 
-Check: `gh variable list -R OWNER/REPO`. The `prepare` job's `if:` requires exactly `true`.
+Check: `gh variable list -R OWNER/REPO`. The `prepare` job's `if:` requires exactly `true` before any
+trigger is considered, so the switch covers all three: the `workflow_run` after CI, the `ai-review`
+label and a manual `workflow_dispatch`.
 
 ## Rotate the Bob key
 
@@ -19,7 +21,12 @@ Check: `gh variable list -R OWNER/REPO`. The `prepare` job's `if:` requires exac
 2. Switch the kill switch off.
 3. `gh secret set BOB_API_KEY --env bob-review -R OWNER/REPO` and enter the new value.
 4. Revoke the old key in Bob.
-5. Switch the kill switch on and start one manual review to confirm.
+5. Switch the kill switch on and start one manual review to confirm (PR number N and its 40 character
+   head SHA; see [SETUP.md](SETUP.md)):
+
+   ```bash
+   gh workflow run bob-review.yml -R OWNER/REPO --ref main -f pr_number=N -f head_sha=<head SHA of PR N>
+   ```
 
 Rotate after any suspected exposure. The key used in Phase 4 expires 2026-12-30.
 
@@ -31,10 +38,11 @@ In the sandbox, one script removes everything Part B created and then lists what
 scripts/dev/teardown-sandbox.sh OWNER/REPO
 ```
 
-It deletes the `bob-review` environment (which removes the `BOB_API_KEY` environment secret), the two
-repo variables, and the reviewer files and workflow from the default branch. It does not delete the
-repo, the PR or the sandbox app. Expected listing at the end: no environments, no repo secrets, no
-variables, and only the `CI` workflow.
+It deletes the `bob-review` environment (which removes the `BOB_API_KEY` environment secret), the three
+repo variables (`BOB_REVIEW_ENABLED`, `BOB_REVIEW_REQUIRED_WORKFLOWS`, `BOB_REVIEW_BOB_TIMEOUT_SECONDS`),
+the `ai-review` label, and the reviewer files and workflows (`bob-review.yml`, `lint.yml`) from the
+default branch. It does not delete the repo, the PR or the sandbox app. Expected listing at the end: no
+environments, no repo secrets, no variables, and only the `CI` workflow.
 
 Manual equivalents:
 
@@ -42,7 +50,9 @@ Manual equivalents:
 gh api -X DELETE repos/OWNER/REPO/environments/bob-review
 gh variable delete BOB_REVIEW_ENABLED -R OWNER/REPO
 gh variable delete BOB_REVIEW_REQUIRED_WORKFLOWS -R OWNER/REPO
-git rm -r .github/workflows/bob-review.yml reviewer integrations tests/container   # then commit and push to main
+gh variable delete BOB_REVIEW_BOB_TIMEOUT_SECONDS -R OWNER/REPO
+gh label delete ai-review -R OWNER/REPO --yes
+git rm -r .github/workflows/bob-review.yml .github/workflows/lint.yml reviewer integrations tests/container   # then commit and push to main
 ```
 
 Remove the bot comment from a PR (replace N):

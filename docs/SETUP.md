@@ -42,12 +42,13 @@ Replace `OWNER/REPO` with the repo being reviewed.
    step). An invalid entry blocks every review; an empty value falls back to the workflow that fired.
    Optional: `BOB_REVIEW_BOB_TIMEOUT_SECONDS` overrides the Bob time limit (used by test case c12; leave unset).
 
-   Create the label that asks for a review of a PR that the author policy would skip (G7):
-   `gh label create ai-review -R OWNER/REPO --description "Ask the AI reviewer to review this PR"`.
+   Create the label that lets a maintainer opt in a PR that the author policy would skip (an outside
+   contributor, G7) and ask for another review of the same SHA:
+   `gh label create ai-review -R OWNER/REPO --color 0e8a16 --description "Maintainer: run the AI Assisted review" --force`.
    Only users who can label (triage rights or more) can apply it.
 
 3. **The Bob key.** In the sandbox, `scripts/dev/setup-sandbox.sh OWNER/REPO` does steps 1 to 4 in one go
-   and enters the key from the git-ignored `pr-review-agent.json` (its `apikey` field) through a pipe, so
+   (including the `ai-review` label) and enters the key from the git-ignored `pr-review-agent.json` (its `apikey` field) through a pipe, so
    it is never shown. For any other repo, enter it yourself: this prompts for the value, or reads it from a file you control.
    Never put the value on the command line, in shell history, in a doc or in a test.
 
@@ -73,8 +74,9 @@ Replace `OWNER/REPO` with the repo being reviewed.
    gh workflow run bob-review.yml -R OWNER/REPO --ref main -f pr_number=N -f head_sha=<40 hex head SHA of PR N>
    ```
 
-   (Without `head_sha`/`pr_number` the workflow also starts by itself when `CI` and `Lint` complete on a
-   pull request, and when a maintainer adds the `ai-review` label. Manual dispatch skips the CI check.)
+   (Manual dispatch needs both `pr_number` and `head_sha` and skips the CI check. The workflow also starts
+   by itself, with no dispatch, when `CI` and `Lint` complete on a pull request and when a maintainer adds
+   the `ai-review` label.)
 
    Expect three green jobs (`prepare`, `review`, `publish`) in about 1 to 1.5 minutes and one comment
    from `github-actions[bot]` marked "AI Assisted". Running it again on the same SHA updates that comment.
@@ -89,6 +91,9 @@ Replace `OWNER/REPO` with the repo being reviewed.
 - Each PR is reviewed at most 3 times (G14); the `ai-review` label asks for another review of the same SHA
   (it counts towards the cap).
 - A stale or malformed SHA or PR number ends in a quiet skip or a rejected input; no Bob call is made.
+- Not yet run live: fork PRs, outside contributors with and without the `ai-review` label, and the
+  fork payload (S15). They are covered by offline tests only; see "Current blockers" in
+  [STATUS.md](STATUS.md).
 - Each review job builds the reviewer image on the runner (about 25 s of runner time).
 
 ## Teardown
