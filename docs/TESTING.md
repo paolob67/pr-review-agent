@@ -152,11 +152,11 @@ The following suites require real credentials and are not run by `make test`:
 
 - `make test-live-bob`: Phase 3 - real Bob, real diffs, no GitHub.
 - `make test-e2e`: Phase 5 - full end-to-end matrix against the sandbox GitHub repository (below).
-- `make test-redteam`: Phase 6 - red-team injection corpus.
-- `make test-evals`: Phase 6 - precision evaluation against seeded-flaw PRs.
-
-These are defined in separate Makefile targets and documented in `docs/TESTING.md` as they are
-added.
+- `make redteam-offline`: Phase 6 - red-team sanitiser assertions (offline, no Bob calls).
+- `make redteam-open`: Phase 6 step 1 - open all red-team PRs immediately; no waiting.
+- `make redteam-check`: Phase 6 step 2 - assert all review comments and close PRs.
+- `make evals-open`: Phase 6 step 1 - open all 30 eval PRs immediately; no waiting.
+- `make evals-score`: Phase 6 step 2 - score all review comments and close PRs.
 
 ## End-to-end matrix (Phase 5, not part of `make test`)
 

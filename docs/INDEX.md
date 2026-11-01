@@ -15,7 +15,7 @@
 | [tasks/phase-3-real-bob.md](tasks/phase-3-real-bob.md) | Brief: real Bob integration, local | Done 2026-10-30 |
 | [tasks/phase-4-runner-foundation.md](tasks/phase-4-runner-foundation.md) | Brief: runner foundation (container, stage split, secrets wiring) | Done 2026-10-31 |
 | [tasks/phase-5-github-trigger.md](tasks/phase-5-github-trigger.md) | Brief: GitHub trigger and end-to-end matrix | Done 2026-10-31 |
-| [tasks/phase-6-redteam-evals.md](tasks/phase-6-redteam-evals.md) | Brief: red team and quality evals | Ready |
+| [tasks/phase-6-redteam-evals.md](tasks/phase-6-redteam-evals.md) | Brief: red team and quality evals | Done 2026-11-01 |
 | [tasks/phase-7-hardening.md](tasks/phase-7-hardening.md) | Brief: operational hardening and cost reconciliation | Ready |
 | [tasks/phase-8-docs-article.md](tasks/phase-8-docs-article.md) | Brief: documentation, article, final validation | Ready |
 | [adr/0001-execution-environment.md](adr/0001-execution-environment.md) | Decision to run Bob Shell on GitHub-hosted runners, three jobs with separate credentials | Accepted |
@@ -49,8 +49,22 @@
 | [results/phase-4-container.md](results/phase-4-container.md) | Phase 4 Part A: podman reset, image digest, S11 canary, validation | Part A done 2026-10-31 |
 | [results/phase-4-runner.md](results/phase-4-runner.md) | Phase 4 Part B: run ledger, defects found, S17 to S20 | Part B done 2026-10-31, teardown proved |
 | [results/phase-5-github.md](results/phase-5-github.md) | Phase 5: end-to-end matrix (13 cases), S15 answers, defects, run ledger, owner-pending cases | Phase 5 done 2026-10-31 (fork cases pending) |
+| [results/phase-6-redteam.md](results/phase-6-redteam.md) | Phase 6: red-team results (offline 9/9, live 16/16 PASS, 44 reps, zero leaks) | Phase 6 done 2026-11-01 |
+| [results/phase-6-evals.md](results/phase-6-evals.md) | Phase 6: quality eval results (25/30 PASS, recall 0.97, FP rate 2.5/clean PR) | Phase 6 done 2026-11-01 |
 | [results/phase-5-evidence/](results/phase-5-evidence/) | Matrix data (`matrix.json`) and the first bot comment of each case | Phase 5 |
 | [tests/e2e/matrix.mjs](../tests/e2e/matrix.mjs) | End-to-end matrix driver against the sandbox (`make test-e2e`) | Phase 5 |
+| [tests/redteam/harness.mjs](../tests/redteam/harness.mjs) | Red-team harness: offline sanitiser assertions + live corpus runner (`make redteam-offline`, `make redteam-live`) | Phase 6 |
+| [tests/redteam/open-all-prs.mjs](../tests/redteam/open-all-prs.mjs) | Batch PR opener: creates all live PRs instantly without waiting (`make redteam-open`) | Phase 6 |
+| [tests/redteam/check-comments.mjs](../tests/redteam/check-comments.mjs) | Comment assertion checker: reads tracking.json, asserts all review comments, closes PRs (`make redteam-check`) | Phase 6 |
+| [tests/redteam/corpus/](../tests/redteam/corpus/) | 25 injection corpus cases (rt01-rt25), one JSON per attack vector | Phase 6 |
+| [tests/evals/open-all-evals.mjs](../tests/evals/open-all-evals.mjs) | Batch eval PR opener: creates all 30 eval PRs without waiting (`make evals-open`) | Phase 6 |
+| [tests/evals/score-evals.mjs](../tests/evals/score-evals.mjs) | Eval scorer: fetches comments, scores recall/FP/variance, closes PRs (`make evals-score`) | Phase 6 |
+| [tests/evals/runner.mjs](../tests/evals/runner.mjs) | Legacy sequential eval runner (`make evals-train`, `make evals-heldout`) | Phase 6 |
+| [tests/evals/cases/](../tests/evals/cases/) | 30 seeded-flaw JS fixtures (ev01-ev20 train, ev21-ev30 held-out) | Phase 6 |
+| [tests/evals/expected.json](../tests/evals/expected.json) | Expected findings manifest for the eval set | Phase 6 |
+| [results/phase-6-redteam-offline.json](results/phase-6-redteam-offline.json) | Red-team offline results (9/9 PASS) | Phase 6 done |
+| [results/phase-6-redteam-live.json](results/phase-6-redteam-live.json) | Red-team live results (16/16 PASS) | Phase 6 done |
+| [results/phase-6-evals-all.json](results/phase-6-evals-all.json) | Eval results all 30 cases (25/30 PASS) | Phase 6 done |
 | [integrations/github-actions/scripts/resolve-trigger.mjs](../integrations/github-actions/scripts/resolve-trigger.mjs) | `prepare` trigger script: PR from SHA, required workflows, quiet stops | Phase 5 |
 | [scripts/dev/install-sandbox-reviewer.sh](../scripts/dev/install-sandbox-reviewer.sh) | Install the reviewer into the sandbox repo (S20 per-run build) | Phase 4 |
 | [scripts/dev/teardown-sandbox.sh](../scripts/dev/teardown-sandbox.sh) | Remove the Part B environment, variables and files, then list what remains | Phase 4 |

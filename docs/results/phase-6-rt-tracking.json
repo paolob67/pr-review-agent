@@ -1,0 +1,427 @@
+{
+  "date": "2026-11-01T10:28:03.234Z",
+  "repo": "paolob67/notes-sandbox",
+  "reps": 3,
+  "prs": [
+    {
+      "id": "rt03_commit_message_injection",
+      "rep": 1,
+      "pr": 27,
+      "sha": "3d331a00bec429d2d9ca750932586ce714d057a5",
+      "branch": "rt/rt03_commit_message_injection-rep1-1793528081753",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/27",
+      "t0": 1793528081753,
+      "done": false
+    },
+    {
+      "id": "rt03_commit_message_injection",
+      "rep": 2,
+      "pr": 28,
+      "sha": "8c8c41f79f0d2184e8e28407649e18a7f972f1c9",
+      "branch": "rt/rt03_commit_message_injection-rep2-1793528089215",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/28",
+      "t0": 1793528089215,
+      "done": false
+    },
+    {
+      "id": "rt03_commit_message_injection",
+      "rep": 3,
+      "pr": 29,
+      "sha": "0f022758cc448f2f514b640589f38f47b1692a04",
+      "branch": "rt/rt03_commit_message_injection-rep3-1793528096359",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/29",
+      "t0": 1793528096359,
+      "done": false
+    },
+    {
+      "id": "rt04_code_comment_injection",
+      "rep": 1,
+      "pr": 30,
+      "sha": "b5662ace89b6a010772f5155e4e051a00844d924",
+      "branch": "rt/rt04_code_comment_injection-rep1-1793528103274",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/30",
+      "t0": 1793528103274,
+      "done": false
+    },
+    {
+      "id": "rt04_code_comment_injection",
+      "rep": 2,
+      "pr": 31,
+      "sha": "9ed900978636c6fdc9296b1bb2cf299cee803bc6",
+      "branch": "rt/rt04_code_comment_injection-rep2-1793528110791",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/31",
+      "t0": 1793528110791,
+      "done": false
+    },
+    {
+      "id": "rt04_code_comment_injection",
+      "rep": 3,
+      "pr": 32,
+      "sha": "dcfe095682276d285ec1a0d67fcd5d7fa514841d",
+      "branch": "rt/rt04_code_comment_injection-rep3-1793528117986",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/32",
+      "t0": 1793528117986,
+      "done": false
+    },
+    {
+      "id": "rt05_readme_injection",
+      "rep": 1,
+      "pr": 33,
+      "sha": "d85d4bff3680a4fb981ce56b977a03594ce62eec",
+      "branch": "rt/rt05_readme_injection-rep1-1793528125456",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/33",
+      "t0": 1793528125456,
+      "done": false
+    },
+    {
+      "id": "rt05_readme_injection",
+      "rep": 2,
+      "pr": 34,
+      "sha": "024e1754b7c8ab39d0ecb96bbd9de56e4091d628",
+      "branch": "rt/rt05_readme_injection-rep2-1793528133109",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/34",
+      "t0": 1793528133109,
+      "done": false
+    },
+    {
+      "id": "rt05_readme_injection",
+      "rep": 3,
+      "pr": 35,
+      "sha": "649e2d7eb2450d9b1f72a3ddb49da94e5259b700",
+      "branch": "rt/rt05_readme_injection-rep3-1793528140324",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/35",
+      "t0": 1793528140324,
+      "done": false
+    },
+    {
+      "id": "rt06_filename_injection",
+      "rep": 1,
+      "pr": 36,
+      "sha": "1a2a3067da09ac8a1aca03ceb1e87d155a54b66c",
+      "branch": "rt/rt06_filename_injection-rep1-1793528147773",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/36",
+      "t0": 1793528147773,
+      "done": false
+    },
+    {
+      "id": "rt06_filename_injection",
+      "rep": 2,
+      "pr": 37,
+      "sha": "c494eb77bc5bd2782ec7c2c8815459462b1a4f15",
+      "branch": "rt/rt06_filename_injection-rep2-1793528155008",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/37",
+      "t0": 1793528155008,
+      "done": false
+    },
+    {
+      "id": "rt06_filename_injection",
+      "rep": 3,
+      "pr": 38,
+      "sha": "b9ea6207f58f4230af5b3d813dd3bb778690b09a",
+      "branch": "rt/rt06_filename_injection-rep3-1793528162161",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/38",
+      "t0": 1793528162161,
+      "done": false
+    },
+    {
+      "id": "rt07_unicode_bidi_injection",
+      "rep": 1,
+      "pr": 45,
+      "sha": "42122d063161f10660edf3e9b55feec26e4a7e33",
+      "branch": "rt/rt07_unicode_bidi_injection-rep1-1793528883234",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/45",
+      "t0": 1793528883234,
+      "done": false
+    },
+    {
+      "id": "rt07_unicode_bidi_injection",
+      "rep": 2,
+      "pr": 46,
+      "sha": "bc6909a5a7787086b34b105467ac40663e3ca5b3",
+      "branch": "rt/rt07_unicode_bidi_injection-rep2-1793528889331",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/46",
+      "t0": 1793528889331,
+      "done": false
+    },
+    {
+      "id": "rt07_unicode_bidi_injection",
+      "rep": 3,
+      "pr": 47,
+      "sha": "a0f8cf76912c04bcd137662578a3654b365484f7",
+      "branch": "rt/rt07_unicode_bidi_injection-rep3-1793528895506",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/47",
+      "t0": 1793528895506,
+      "done": false
+    },
+    {
+      "id": "rt11_instructions_to_run_tools",
+      "rep": 1,
+      "pr": 48,
+      "sha": "bba6063b8290a9a3c457404a42492dd6999d6033",
+      "branch": "rt/rt11_instructions_to_run_tools-rep1-1793528901263",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/48",
+      "t0": 1793528901263,
+      "done": false
+    },
+    {
+      "id": "rt11_instructions_to_run_tools",
+      "rep": 2,
+      "pr": 49,
+      "sha": "fff4dd3be3bfae249c94c6319dc7a7fe8d52a045",
+      "branch": "rt/rt11_instructions_to_run_tools-rep2-1793528907265",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/49",
+      "t0": 1793528907265,
+      "done": false
+    },
+    {
+      "id": "rt11_instructions_to_run_tools",
+      "rep": 3,
+      "pr": 50,
+      "sha": "0802c2988a9c2db8ae6edfa6e244d060d9c4d853",
+      "branch": "rt/rt11_instructions_to_run_tools-rep3-1793528913127",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/50",
+      "t0": 1793528913127,
+      "done": false
+    },
+    {
+      "id": "rt12_read_parent_env",
+      "rep": 1,
+      "pr": 51,
+      "sha": "596312ae353a8284aee5f0e4ac0a1d6ec5203875",
+      "branch": "rt/rt12_read_parent_env-rep1-1793528918767",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/51",
+      "t0": 1793528918767,
+      "done": false
+    },
+    {
+      "id": "rt12_read_parent_env",
+      "rep": 2,
+      "pr": 52,
+      "sha": "d3bc9f6ef9dede0c08ab1d349cf8b29e19c29468",
+      "branch": "rt/rt12_read_parent_env-rep2-1793528924595",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/52",
+      "t0": 1793528924595,
+      "done": false
+    },
+    {
+      "id": "rt12_read_parent_env",
+      "rep": 3,
+      "pr": 53,
+      "sha": "544718343b86f8c162d7b5fd2c924320631a74c5",
+      "branch": "rt/rt12_read_parent_env-rep3-1793528930395",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/53",
+      "t0": 1793528930395,
+      "done": false
+    },
+    {
+      "id": "rt13_read_credential_files",
+      "rep": 1,
+      "pr": 54,
+      "sha": "ae66294dc9ae13f40243d1baf969974c765049b0",
+      "branch": "rt/rt13_read_credential_files-rep1-1793528936396",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/54",
+      "t0": 1793528936396,
+      "done": false
+    },
+    {
+      "id": "rt13_read_credential_files",
+      "rep": 2,
+      "pr": 55,
+      "sha": "a22da1ea64dedb558d2bd9bdc1136bd69ccf5a63",
+      "branch": "rt/rt13_read_credential_files-rep2-1793528942338",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/55",
+      "t0": 1793528942338,
+      "done": false
+    },
+    {
+      "id": "rt13_read_credential_files",
+      "rep": 3,
+      "pr": 56,
+      "sha": "ff1541f621c3ff13c5d0acdadf3e215804fac93f",
+      "branch": "rt/rt13_read_credential_files-rep3-1793528948028",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/56",
+      "t0": 1793528948028,
+      "done": false
+    },
+    {
+      "id": "rt14_write_file_attempt",
+      "rep": 1,
+      "pr": 57,
+      "sha": "673cb5d2358b49c5a1510cfd2a38f968b0378a0d",
+      "branch": "rt/rt14_write_file_attempt-rep1-1793528953796",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/57",
+      "t0": 1793528953796,
+      "done": false
+    },
+    {
+      "id": "rt14_write_file_attempt",
+      "rep": 2,
+      "pr": 58,
+      "sha": "23264390e5cf5e79805cce53e7cbffe7c1ab6ed6",
+      "branch": "rt/rt14_write_file_attempt-rep2-1793528959854",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/58",
+      "t0": 1793528959854,
+      "done": false
+    },
+    {
+      "id": "rt14_write_file_attempt",
+      "rep": 3,
+      "pr": 59,
+      "sha": "91937a203a2ca1ea664036a6446ad6c7e0ff6f60",
+      "branch": "rt/rt14_write_file_attempt-rep3-1793528966093",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/59",
+      "t0": 1793528966093,
+      "done": false
+    },
+    {
+      "id": "rt15_network_call_attempt",
+      "rep": 1,
+      "pr": 60,
+      "sha": "314f2e2293dca028963d6099a77ae3999d88616f",
+      "branch": "rt/rt15_network_call_attempt-rep1-1793528972302",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/60",
+      "t0": 1793528972302,
+      "done": false
+    },
+    {
+      "id": "rt15_network_call_attempt",
+      "rep": 2,
+      "pr": 61,
+      "sha": "63a5888d2bd2a7bb8e327b9d4ffa73653553a9c2",
+      "branch": "rt/rt15_network_call_attempt-rep2-1793528978436",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/61",
+      "t0": 1793528978436,
+      "done": false
+    },
+    {
+      "id": "rt15_network_call_attempt",
+      "rep": 3,
+      "pr": 62,
+      "sha": "41c8c715fdf32de794ea3b3ca881beef1e36bca7",
+      "branch": "rt/rt15_network_call_attempt-rep3-1793528984337",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/62",
+      "t0": 1793528984337,
+      "done": false
+    },
+    {
+      "id": "rt16_rules_file_injection",
+      "rep": 1,
+      "pr": 63,
+      "sha": "94f86ce6e39662880b6127c73a1a5ca8946b4469",
+      "branch": "rt/rt16_rules_file_injection-rep1-1793528990121",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/63",
+      "t0": 1793528990121,
+      "done": false
+    },
+    {
+      "id": "rt16_rules_file_injection",
+      "rep": 2,
+      "pr": 64,
+      "sha": "e9e9cb6a7b5dfcca56707af3c16bdbbffaa9a347",
+      "branch": "rt/rt16_rules_file_injection-rep2-1793528995894",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/64",
+      "t0": 1793528995894,
+      "done": false
+    },
+    {
+      "id": "rt16_rules_file_injection",
+      "rep": 3,
+      "pr": 65,
+      "sha": "fe57859e3da2f491ac2639fb3893fe1f0cfcffaa",
+      "branch": "rt/rt16_rules_file_injection-rep3-1793529001979",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/65",
+      "t0": 1793529001979,
+      "done": false
+    },
+    {
+      "id": "rt17_agents_md_injection",
+      "rep": 1,
+      "pr": 66,
+      "sha": "d6846e4ed2ce8f0a49ab10b24d79f22dc82a15b6",
+      "branch": "rt/rt17_agents_md_injection-rep1-1793529008127",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/66",
+      "t0": 1793529008127,
+      "done": false
+    },
+    {
+      "id": "rt17_agents_md_injection",
+      "rep": 2,
+      "pr": 67,
+      "sha": "ab16d1c8b5f44fb3fef7969f372f48e822851e55",
+      "branch": "rt/rt17_agents_md_injection-rep2-1793529014212",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/67",
+      "t0": 1793529014212,
+      "done": false
+    },
+    {
+      "id": "rt17_agents_md_injection",
+      "rep": 3,
+      "pr": 68,
+      "sha": "814f70b6708202d8cda9c5448458d1755ae70291",
+      "branch": "rt/rt17_agents_md_injection-rep3-1793529020260",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/68",
+      "t0": 1793529020260,
+      "done": false
+    },
+    {
+      "id": "rt18_env_file_injection",
+      "rep": 1,
+      "pr": 69,
+      "sha": "fde4ca783a4f6e488e1cebf26fd6ee57d7498ed5",
+      "branch": "rt/rt18_env_file_injection-rep1-1793529026012",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/69",
+      "t0": 1793529026012,
+      "done": false
+    },
+    {
+      "id": "rt18_env_file_injection",
+      "rep": 2,
+      "pr": 70,
+      "sha": "f949ef6e43cd1e61349f8a9a563c352c3ca6db63",
+      "branch": "rt/rt18_env_file_injection-rep2-1793529031934",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/70",
+      "t0": 1793529031934,
+      "done": false
+    },
+    {
+      "id": "rt18_env_file_injection",
+      "rep": 3,
+      "pr": 71,
+      "sha": "905b227707622075f4db15042944094e1a4bbfa6",
+      "branch": "rt/rt18_env_file_injection-rep3-1793529037783",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/71",
+      "t0": 1793529037783,
+      "done": false
+    },
+    {
+      "id": "rt23_branch_name_injection",
+      "rep": 1,
+      "pr": 72,
+      "sha": "cb7b7d6c840d31c4803153c2f907a979b860c16e",
+      "branch": "rt/rt23_branch_name_injection-rep1-1793529043626",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/72",
+      "t0": 1793529043626,
+      "done": false
+    },
+    {
+      "id": "rt23_branch_name_injection",
+      "rep": 2,
+      "pr": 73,
+      "sha": "46716c40dd3c3e935af93be0c7640a8b3a3776ed",
+      "branch": "rt/rt23_branch_name_injection-rep2-1793529049539",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/73",
+      "t0": 1793529049539,
+      "done": false
+    },
+    {
+      "id": "rt23_branch_name_injection",
+      "rep": 3,
+      "pr": 74,
+      "sha": "8cabf9fc3ef5c45f0e4a263def1bb3c873693feb",
+      "branch": "rt/rt23_branch_name_injection-rep3-1793529055582",
+      "url": "https://github.com/paolob67/notes-sandbox/pull/74",
+      "t0": 1793529055582,
+      "done": false
+    }
+  ]
+}

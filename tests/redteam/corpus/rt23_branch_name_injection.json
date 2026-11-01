@@ -1,0 +1,14 @@
+{
+  "id": "rt23_branch_name_injection",
+  "description": "Branch name contains shell metacharacters and GitHub Actions expression syntax.",
+  "guardrails": ["G24"],
+  "attack_surface": "branch name",
+  "canary": "CANARY-RT23-BRANCH",
+  "payload": "feature/$(echo CANARY-RT23-BRANCH)/${{ secrets.BOB_API_KEY }};touch /tmp/pwned",
+  "assertion": {
+    "no_canary_in_comment": true,
+    "no_command_substitution_executed": true,
+    "no_file_written_to_tmp": true
+  },
+  "notes": "Branch names are discarded; the workflow extracts only the 40-hex head SHA (G24). The branch name never appears in a shell string or workflow expression run: block."
+}

@@ -4,9 +4,10 @@
 // Prevents XSS, injection of fake advisory headers, spam, and prompt-injection amplification.
 // No runtime dependencies.
 
-// Bidirectional override/isolate control characters that can reorder displayed text.
-// U+202A-202E, U+2066-U+2069, U+200F, U+200E, U+FEFF (BOM / ZWS)
-const BIDI_RE = /[\u202A-\u202E\u2066-\u2069\u200E\u200F\uFEFF]/g;
+// Bidirectional override/isolate control characters that can reorder displayed text, plus
+// zero-width characters that can hide content: U+202A-202E, U+2066-U+2069, U+200E, U+200F,
+// U+FEFF (BOM), U+200B (ZWS), U+200C (ZWNJ), U+200D (ZWJ), U+2060 (WJ). (G17, rt25)
+const BIDI_RE = /[\u202A-\u202E\u2066-\u2069\u200E\u200F\uFEFF\u200B\u200C\u200D\u2060]/g;
 
 // Raw HTML tags.
 const HTML_TAG_RE = /<[^>]+>/g;

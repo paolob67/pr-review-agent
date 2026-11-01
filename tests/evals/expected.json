@@ -1,0 +1,264 @@
+{
+  "schema_version": 1,
+  "description": "Expected findings for the Phase 6 eval set. Each case lists the minimum conditions a run must satisfy. 'min_findings' is the floor; 'expected_rule_ids' are rule IDs that MUST appear; 'expected_categories' are categories that must be represented; 'clean' true means zero real-severity findings expected.",
+  "cases": {
+    "ev01_hardcoded_secret": {
+      "set": "train",
+      "clean": false,
+      "min_findings": 1,
+      "expected_rule_ids": ["STD-001"],
+      "expected_categories": ["standards", "security"],
+      "expected_min_severity": "high",
+      "notes": "Hard-coded API key token pattern should be caught as STD-001 and/or security."
+    },
+    "ev02_sql_injection": {
+      "set": "train",
+      "clean": false,
+      "min_findings": 1,
+      "expected_rule_ids": ["STD-002"],
+      "expected_categories": ["standards", "security"],
+      "expected_min_severity": "high",
+      "notes": "Template-literal query concatenation is a classic SQL injection (STD-002)."
+    },
+    "ev03_missing_input_validation": {
+      "set": "train",
+      "clean": false,
+      "min_findings": 1,
+      "expected_rule_ids": ["STD-003"],
+      "expected_categories": ["standards", "security"],
+      "expected_min_severity": "medium",
+      "notes": "Filename from request used directly without validation or path restriction."
+    },
+    "ev04_path_traversal": {
+      "set": "train",
+      "clean": false,
+      "min_findings": 1,
+      "expected_rule_ids": ["STD-004"],
+      "expected_categories": ["standards", "security"],
+      "expected_min_severity": "high",
+      "notes": "No path resolve+startsWith check before readFileSync."
+    },
+    "ev05_silent_error": {
+      "set": "train",
+      "clean": false,
+      "min_findings": 1,
+      "expected_rule_ids": ["STD-005"],
+      "expected_categories": ["standards"],
+      "expected_min_severity": "medium",
+      "notes": "Empty catch silently swallows the error."
+    },
+    "ev06_missing_tests": {
+      "set": "train",
+      "clean": false,
+      "min_findings": 1,
+      "expected_rule_ids": ["STD-006", "TEAM-001"],
+      "expected_categories": ["standards", "team_rule"],
+      "expected_min_severity": "medium",
+      "notes": "New src/ behaviour added; no test file in the diff."
+    },
+    "ev07_dead_code": {
+      "set": "train",
+      "clean": false,
+      "min_findings": 1,
+      "expected_rule_ids": ["STD-007"],
+      "expected_categories": ["standards"],
+      "expected_min_severity": "low",
+      "notes": "Large commented-out block."
+    },
+    "ev08_weak_crypto": {
+      "set": "train",
+      "clean": false,
+      "min_findings": 1,
+      "expected_rule_ids": ["TEAM-002"],
+      "expected_categories": ["team_rule", "security"],
+      "expected_min_severity": "high",
+      "notes": "MD5 used for password hashing."
+    },
+    "ev09_insecure_random": {
+      "set": "train",
+      "clean": false,
+      "min_findings": 1,
+      "expected_rule_ids": ["TEAM-003"],
+      "expected_categories": ["team_rule", "security"],
+      "expected_min_severity": "high",
+      "notes": "Math.random() used to generate session token."
+    },
+    "ev10_reversible_password": {
+      "set": "train",
+      "clean": false,
+      "min_findings": 1,
+      "expected_rule_ids": ["TEAM-004"],
+      "expected_categories": ["team_rule", "security"],
+      "expected_min_severity": "critical",
+      "notes": "AES encryption used instead of a slow hash for passwords."
+    },
+    "ev11_tls_disabled": {
+      "set": "train",
+      "clean": false,
+      "min_findings": 1,
+      "expected_rule_ids": ["TEAM-005"],
+      "expected_categories": ["team_rule", "security"],
+      "expected_min_severity": "high",
+      "notes": "rejectUnauthorized: false disables TLS verification."
+    },
+    "ev12_no_timeout": {
+      "set": "train",
+      "clean": false,
+      "min_findings": 1,
+      "expected_rule_ids": ["TEAM-007"],
+      "expected_categories": ["team_rule"],
+      "expected_min_severity": "medium",
+      "notes": "fetch() with no AbortController timeout."
+    },
+    "ev13_os_command_injection": {
+      "set": "train",
+      "clean": false,
+      "min_findings": 1,
+      "expected_rule_ids": ["STD-002"],
+      "expected_categories": ["security"],
+      "expected_min_severity": "critical",
+      "notes": "exec() with string interpolation of filename."
+    },
+    "ev14_ssrf": {
+      "set": "train",
+      "clean": false,
+      "min_findings": 1,
+      "expected_rule_ids": ["STD-003"],
+      "expected_categories": ["security"],
+      "expected_min_severity": "high",
+      "notes": "User-supplied URL passed directly to fetch() with no allowlist."
+    },
+    "ev15_missing_authz": {
+      "set": "train",
+      "clean": false,
+      "min_findings": 1,
+      "expected_rule_ids": [],
+      "expected_categories": ["security"],
+      "expected_min_severity": "high",
+      "notes": "DELETE without any auth/session check."
+    },
+    "ev16_unsafe_eval": {
+      "set": "train",
+      "clean": false,
+      "min_findings": 1,
+      "expected_rule_ids": [],
+      "expected_categories": ["security"],
+      "expected_min_severity": "critical",
+      "notes": "eval() on user input."
+    },
+    "ev17_prototype_pollution": {
+      "set": "train",
+      "clean": false,
+      "min_findings": 1,
+      "expected_rule_ids": [],
+      "expected_categories": ["security"],
+      "expected_min_severity": "high",
+      "notes": "Recursive merge without __proto__/constructor key checks."
+    },
+    "ev18_secret_in_log": {
+      "set": "train",
+      "clean": false,
+      "min_findings": 1,
+      "expected_rule_ids": ["STD-011"],
+      "expected_categories": ["standards", "security"],
+      "expected_min_severity": "medium",
+      "notes": "Password logged in plain text."
+    },
+    "ev19_multi_flaw": {
+      "set": "train",
+      "clean": false,
+      "min_findings": 2,
+      "expected_rule_ids": ["STD-001"],
+      "expected_categories": ["standards", "security", "team_rule"],
+      "expected_min_severity": "high",
+      "notes": "Hard-coded GitHub token, insecure random, no timeout - at least 2 distinct findings expected."
+    },
+    "ev20_clean": {
+      "set": "train",
+      "clean": true,
+      "max_real_findings": 0,
+      "notes": "Clean code - no real flaws. Any security/standards/team_rule finding at medium or above is a false positive."
+    },
+    "ev21_regex_dos": {
+      "set": "held-out",
+      "clean": false,
+      "min_findings": 1,
+      "expected_rule_ids": [],
+      "expected_categories": ["security"],
+      "expected_min_severity": "high",
+      "notes": "ReDoS-vulnerable regex with nested quantifier on untrusted input."
+    },
+    "ev22_insecure_deserialise": {
+      "set": "held-out",
+      "clean": false,
+      "min_findings": 1,
+      "expected_rule_ids": [],
+      "expected_categories": ["security"],
+      "expected_min_severity": "critical",
+      "notes": "node:vm.runInNewContext does not sandbox; user code escapes."
+    },
+    "ev23_open_redirect": {
+      "set": "held-out",
+      "clean": false,
+      "min_findings": 1,
+      "expected_rule_ids": ["STD-003"],
+      "expected_categories": ["security"],
+      "expected_min_severity": "high",
+      "notes": "Unvalidated redirect to user-supplied URL."
+    },
+    "ev24_ecb_mode": {
+      "set": "held-out",
+      "clean": false,
+      "min_findings": 1,
+      "expected_rule_ids": ["TEAM-002"],
+      "expected_categories": ["team_rule", "security"],
+      "expected_min_severity": "high",
+      "notes": "AES-ECB mode is prohibited by TEAM-002."
+    },
+    "ev25_no_public_api_docs": {
+      "set": "held-out",
+      "clean": false,
+      "min_findings": 1,
+      "expected_rule_ids": ["TEAM-006"],
+      "expected_categories": ["team_rule"],
+      "expected_min_severity": "low",
+      "notes": "New exported functions, no README update."
+    },
+    "ev26_stack_trace_leak": {
+      "set": "held-out",
+      "clean": false,
+      "min_findings": 1,
+      "expected_rule_ids": ["STD-005"],
+      "expected_categories": ["standards", "security"],
+      "expected_min_severity": "medium",
+      "notes": "err.stack exposed to users in a 500 response."
+    },
+    "ev27_noisy_but_fine": {
+      "set": "held-out",
+      "clean": true,
+      "max_real_findings": 0,
+      "notes": "Contains a TODO comment and a parameterised query builder that looks like SQL injection but is not. Zero real findings expected."
+    },
+    "ev28_clean_crypto": {
+      "set": "held-out",
+      "clean": true,
+      "max_real_findings": 0,
+      "notes": "scrypt + timingSafeEqual - correct crypto. Zero findings expected."
+    },
+    "ev29_missing_tests_complex": {
+      "set": "held-out",
+      "clean": false,
+      "min_findings": 1,
+      "expected_rule_ids": ["STD-006", "TEAM-001"],
+      "expected_categories": ["standards", "team_rule"],
+      "expected_min_severity": "medium",
+      "notes": "New class with no tests; no security flaws - false security alarms would be FPs."
+    },
+    "ev30_clean_network": {
+      "set": "held-out",
+      "clean": true,
+      "max_real_findings": 0,
+      "notes": "URL allowlist, HTTPS enforcement, timeout, rejectUnauthorized true. Zero findings expected."
+    }
+  }
+}

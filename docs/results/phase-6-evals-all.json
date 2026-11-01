@@ -1,0 +1,854 @@
+{
+  "date": "2026-11-01T11:05:47.373Z",
+  "repo": "paolob67/notes-sandbox",
+  "cases": {
+    "ev01_hardcoded_secret": {
+      "set": "train",
+      "type": "flawed",
+      "pass": true,
+      "recall": 1,
+      "ruleHits": [
+        {
+          "id": "STD-001",
+          "found": true
+        }
+      ],
+      "catHits": [
+        {
+          "cat": "standards",
+          "found": true
+        },
+        {
+          "cat": "security",
+          "found": true
+        }
+      ],
+      "sevMet": true,
+      "countMet": true,
+      "repCounts": [
+        4
+      ],
+      "avgFindings": 4,
+      "variance": 0,
+      "droppedPerRep": 0,
+      "remediationScores": [
+        2
+      ]
+    },
+    "ev02_sql_injection": {
+      "set": "train",
+      "type": "flawed",
+      "pass": true,
+      "recall": 1,
+      "ruleHits": [
+        {
+          "id": "STD-002",
+          "found": true
+        }
+      ],
+      "catHits": [
+        {
+          "cat": "standards",
+          "found": true
+        },
+        {
+          "cat": "security",
+          "found": false
+        }
+      ],
+      "sevMet": true,
+      "countMet": true,
+      "repCounts": [
+        1
+      ],
+      "avgFindings": 1,
+      "variance": 0,
+      "droppedPerRep": 0,
+      "remediationScores": [
+        2
+      ]
+    },
+    "ev03_missing_input_validation": {
+      "set": "train",
+      "type": "flawed",
+      "pass": true,
+      "recall": 1,
+      "ruleHits": [
+        {
+          "id": "STD-003",
+          "found": true
+        }
+      ],
+      "catHits": [
+        {
+          "cat": "standards",
+          "found": true
+        },
+        {
+          "cat": "security",
+          "found": true
+        }
+      ],
+      "sevMet": true,
+      "countMet": true,
+      "repCounts": [
+        4
+      ],
+      "avgFindings": 4,
+      "variance": 0,
+      "droppedPerRep": 0,
+      "remediationScores": [
+        2
+      ]
+    },
+    "ev04_path_traversal": {
+      "set": "train",
+      "type": "flawed",
+      "pass": true,
+      "recall": 1,
+      "ruleHits": [
+        {
+          "id": "STD-004",
+          "found": true
+        }
+      ],
+      "catHits": [
+        {
+          "cat": "standards",
+          "found": true
+        },
+        {
+          "cat": "security",
+          "found": false
+        }
+      ],
+      "sevMet": true,
+      "countMet": true,
+      "repCounts": [
+        1
+      ],
+      "avgFindings": 1,
+      "variance": 0,
+      "droppedPerRep": 0,
+      "remediationScores": [
+        2
+      ]
+    },
+    "ev05_silent_error": {
+      "set": "train",
+      "type": "flawed",
+      "pass": true,
+      "recall": 1,
+      "ruleHits": [
+        {
+          "id": "STD-005",
+          "found": true
+        }
+      ],
+      "catHits": [
+        {
+          "cat": "standards",
+          "found": true
+        }
+      ],
+      "sevMet": true,
+      "countMet": true,
+      "repCounts": [
+        5
+      ],
+      "avgFindings": 5,
+      "variance": 0,
+      "droppedPerRep": 0,
+      "remediationScores": [
+        2
+      ]
+    },
+    "ev06_missing_tests": {
+      "set": "train",
+      "type": "flawed",
+      "pass": true,
+      "recall": 1,
+      "ruleHits": [
+        {
+          "id": "STD-006",
+          "found": true
+        },
+        {
+          "id": "TEAM-001",
+          "found": true
+        }
+      ],
+      "catHits": [
+        {
+          "cat": "standards",
+          "found": true
+        },
+        {
+          "cat": "team_rule",
+          "found": true
+        }
+      ],
+      "sevMet": true,
+      "countMet": true,
+      "repCounts": [
+        2
+      ],
+      "avgFindings": 2,
+      "variance": 0,
+      "droppedPerRep": 0,
+      "remediationScores": [
+        2
+      ]
+    },
+    "ev07_dead_code": {
+      "set": "train",
+      "type": "flawed",
+      "pass": true,
+      "recall": 1,
+      "ruleHits": [
+        {
+          "id": "STD-007",
+          "found": true
+        }
+      ],
+      "catHits": [
+        {
+          "cat": "standards",
+          "found": true
+        }
+      ],
+      "sevMet": true,
+      "countMet": true,
+      "repCounts": [
+        1
+      ],
+      "avgFindings": 1,
+      "variance": 0,
+      "droppedPerRep": 0,
+      "remediationScores": [
+        2
+      ]
+    },
+    "ev08_weak_crypto": {
+      "set": "train",
+      "type": "flawed",
+      "pass": true,
+      "recall": 1,
+      "ruleHits": [
+        {
+          "id": "TEAM-002",
+          "found": true
+        }
+      ],
+      "catHits": [
+        {
+          "cat": "team_rule",
+          "found": true
+        },
+        {
+          "cat": "security",
+          "found": false
+        }
+      ],
+      "sevMet": true,
+      "countMet": true,
+      "repCounts": [
+        3
+      ],
+      "avgFindings": 3,
+      "variance": 0,
+      "droppedPerRep": 0,
+      "remediationScores": [
+        2
+      ]
+    },
+    "ev09_insecure_random": {
+      "set": "train",
+      "type": "flawed",
+      "pass": true,
+      "recall": 1,
+      "ruleHits": [
+        {
+          "id": "TEAM-003",
+          "found": true
+        }
+      ],
+      "catHits": [
+        {
+          "cat": "team_rule",
+          "found": true
+        },
+        {
+          "cat": "security",
+          "found": false
+        }
+      ],
+      "sevMet": true,
+      "countMet": true,
+      "repCounts": [
+        4
+      ],
+      "avgFindings": 4,
+      "variance": 0,
+      "droppedPerRep": 0,
+      "remediationScores": [
+        2
+      ]
+    },
+    "ev10_reversible_password": {
+      "set": "train",
+      "type": "flawed",
+      "pass": true,
+      "recall": 1,
+      "ruleHits": [
+        {
+          "id": "TEAM-004",
+          "found": true
+        }
+      ],
+      "catHits": [
+        {
+          "cat": "team_rule",
+          "found": true
+        },
+        {
+          "cat": "security",
+          "found": false
+        }
+      ],
+      "sevMet": true,
+      "countMet": true,
+      "repCounts": [
+        7
+      ],
+      "avgFindings": 7,
+      "variance": 0,
+      "droppedPerRep": 0,
+      "remediationScores": [
+        2
+      ]
+    },
+    "ev11_tls_disabled": {
+      "set": "train",
+      "type": "flawed",
+      "pass": true,
+      "recall": 1,
+      "ruleHits": [
+        {
+          "id": "TEAM-005",
+          "found": true
+        }
+      ],
+      "catHits": [
+        {
+          "cat": "team_rule",
+          "found": true
+        },
+        {
+          "cat": "security",
+          "found": false
+        }
+      ],
+      "sevMet": true,
+      "countMet": true,
+      "repCounts": [
+        5
+      ],
+      "avgFindings": 5,
+      "variance": 0,
+      "droppedPerRep": 0,
+      "remediationScores": [
+        2
+      ]
+    },
+    "ev12_no_timeout": {
+      "set": "train",
+      "type": "flawed",
+      "pass": true,
+      "recall": 1,
+      "ruleHits": [
+        {
+          "id": "TEAM-007",
+          "found": true
+        }
+      ],
+      "catHits": [
+        {
+          "cat": "team_rule",
+          "found": true
+        }
+      ],
+      "sevMet": true,
+      "countMet": true,
+      "repCounts": [
+        4
+      ],
+      "avgFindings": 4,
+      "variance": 0,
+      "droppedPerRep": 0,
+      "remediationScores": [
+        2
+      ]
+    },
+    "ev13_os_command_injection": {
+      "set": "train",
+      "type": "flawed",
+      "pass": false,
+      "recall": 0,
+      "ruleHits": [
+        {
+          "id": "STD-002",
+          "found": false
+        }
+      ],
+      "catHits": [
+        {
+          "cat": "security",
+          "found": true
+        }
+      ],
+      "sevMet": true,
+      "countMet": true,
+      "repCounts": [
+        4
+      ],
+      "avgFindings": 4,
+      "variance": 0,
+      "droppedPerRep": 0,
+      "remediationScores": [
+        2
+      ]
+    },
+    "ev14_ssrf": {
+      "set": "train",
+      "type": "flawed",
+      "pass": true,
+      "recall": 1,
+      "ruleHits": [
+        {
+          "id": "STD-003",
+          "found": true
+        }
+      ],
+      "catHits": [
+        {
+          "cat": "security",
+          "found": true
+        }
+      ],
+      "sevMet": true,
+      "countMet": true,
+      "repCounts": [
+        4
+      ],
+      "avgFindings": 4,
+      "variance": 0,
+      "droppedPerRep": 0,
+      "remediationScores": [
+        2
+      ]
+    },
+    "ev15_missing_authz": {
+      "set": "train",
+      "type": "flawed",
+      "pass": true,
+      "recall": 1,
+      "ruleHits": [],
+      "catHits": [
+        {
+          "cat": "security",
+          "found": true
+        }
+      ],
+      "sevMet": true,
+      "countMet": true,
+      "repCounts": [
+        3
+      ],
+      "avgFindings": 3,
+      "variance": 0,
+      "droppedPerRep": 0,
+      "remediationScores": [
+        2
+      ]
+    },
+    "ev16_unsafe_eval": {
+      "set": "train",
+      "type": "flawed",
+      "pass": true,
+      "recall": 1,
+      "ruleHits": [],
+      "catHits": [
+        {
+          "cat": "security",
+          "found": true
+        }
+      ],
+      "sevMet": true,
+      "countMet": true,
+      "repCounts": [
+        4
+      ],
+      "avgFindings": 4,
+      "variance": 0,
+      "droppedPerRep": 0,
+      "remediationScores": [
+        2
+      ]
+    },
+    "ev17_prototype_pollution": {
+      "set": "train",
+      "type": "flawed",
+      "pass": true,
+      "recall": 1,
+      "ruleHits": [],
+      "catHits": [
+        {
+          "cat": "security",
+          "found": true
+        }
+      ],
+      "sevMet": true,
+      "countMet": true,
+      "repCounts": [
+        5
+      ],
+      "avgFindings": 5,
+      "variance": 0,
+      "droppedPerRep": 0,
+      "remediationScores": [
+        2
+      ]
+    },
+    "ev18_secret_in_log": {
+      "set": "train",
+      "type": "flawed",
+      "pass": true,
+      "recall": 1,
+      "ruleHits": [
+        {
+          "id": "STD-011",
+          "found": true
+        }
+      ],
+      "catHits": [
+        {
+          "cat": "standards",
+          "found": true
+        },
+        {
+          "cat": "security",
+          "found": false
+        }
+      ],
+      "sevMet": true,
+      "countMet": true,
+      "repCounts": [
+        1
+      ],
+      "avgFindings": 1,
+      "variance": 0,
+      "droppedPerRep": 0,
+      "remediationScores": [
+        2
+      ]
+    },
+    "ev19_multi_flaw": {
+      "set": "train",
+      "type": "flawed",
+      "pass": true,
+      "recall": 1,
+      "ruleHits": [
+        {
+          "id": "STD-001",
+          "found": true
+        }
+      ],
+      "catHits": [
+        {
+          "cat": "standards",
+          "found": true
+        },
+        {
+          "cat": "security",
+          "found": false
+        },
+        {
+          "cat": "team_rule",
+          "found": true
+        }
+      ],
+      "sevMet": true,
+      "countMet": true,
+      "repCounts": [
+        5
+      ],
+      "avgFindings": 5,
+      "variance": 0,
+      "droppedPerRep": 0,
+      "remediationScores": [
+        2
+      ]
+    },
+    "ev20_clean": {
+      "set": "train",
+      "type": "clean",
+      "fp_count": 3,
+      "fp_per_rep": 3,
+      "pass": false,
+      "repCounts": [
+        5
+      ],
+      "variance": 0
+    },
+    "ev21_regex_dos": {
+      "set": "held-out",
+      "type": "flawed",
+      "pass": true,
+      "recall": 1,
+      "ruleHits": [],
+      "catHits": [
+        {
+          "cat": "security",
+          "found": true
+        }
+      ],
+      "sevMet": true,
+      "countMet": true,
+      "repCounts": [
+        6
+      ],
+      "avgFindings": 6,
+      "variance": 0,
+      "droppedPerRep": 0,
+      "remediationScores": [
+        2
+      ]
+    },
+    "ev22_insecure_deserialise": {
+      "set": "held-out",
+      "type": "flawed",
+      "pass": true,
+      "recall": 1,
+      "ruleHits": [],
+      "catHits": [
+        {
+          "cat": "security",
+          "found": true
+        }
+      ],
+      "sevMet": true,
+      "countMet": true,
+      "repCounts": [
+        7
+      ],
+      "avgFindings": 7,
+      "variance": 0,
+      "droppedPerRep": 0,
+      "remediationScores": [
+        2
+      ]
+    },
+    "ev23_open_redirect": {
+      "set": "held-out",
+      "type": "flawed",
+      "pass": true,
+      "recall": 1,
+      "ruleHits": [
+        {
+          "id": "STD-003",
+          "found": true
+        }
+      ],
+      "catHits": [
+        {
+          "cat": "security",
+          "found": true
+        }
+      ],
+      "sevMet": true,
+      "countMet": true,
+      "repCounts": [
+        5
+      ],
+      "avgFindings": 5,
+      "variance": 0,
+      "droppedPerRep": 0,
+      "remediationScores": [
+        2
+      ]
+    },
+    "ev24_ecb_mode": {
+      "set": "held-out",
+      "type": "flawed",
+      "pass": true,
+      "recall": 1,
+      "ruleHits": [
+        {
+          "id": "TEAM-002",
+          "found": true
+        }
+      ],
+      "catHits": [
+        {
+          "cat": "team_rule",
+          "found": true
+        },
+        {
+          "cat": "security",
+          "found": false
+        }
+      ],
+      "sevMet": true,
+      "countMet": true,
+      "repCounts": [
+        6
+      ],
+      "avgFindings": 6,
+      "variance": 0,
+      "droppedPerRep": 0,
+      "remediationScores": [
+        2
+      ]
+    },
+    "ev25_no_public_api_docs": {
+      "set": "held-out",
+      "type": "flawed",
+      "pass": true,
+      "recall": 1,
+      "ruleHits": [
+        {
+          "id": "TEAM-006",
+          "found": true
+        }
+      ],
+      "catHits": [
+        {
+          "cat": "team_rule",
+          "found": true
+        }
+      ],
+      "sevMet": true,
+      "countMet": true,
+      "repCounts": [
+        6
+      ],
+      "avgFindings": 6,
+      "variance": 0,
+      "droppedPerRep": 0,
+      "remediationScores": [
+        2
+      ]
+    },
+    "ev26_stack_trace_leak": {
+      "set": "held-out",
+      "type": "flawed",
+      "pass": true,
+      "recall": 1,
+      "ruleHits": [
+        {
+          "id": "STD-005",
+          "found": true
+        }
+      ],
+      "catHits": [
+        {
+          "cat": "standards",
+          "found": true
+        },
+        {
+          "cat": "security",
+          "found": false
+        }
+      ],
+      "sevMet": true,
+      "countMet": true,
+      "repCounts": [
+        1
+      ],
+      "avgFindings": 1,
+      "variance": 0,
+      "droppedPerRep": 0,
+      "remediationScores": [
+        2
+      ]
+    },
+    "ev27_noisy_but_fine": {
+      "set": "held-out",
+      "type": "clean",
+      "fp_count": 3,
+      "fp_per_rep": 3,
+      "pass": false,
+      "repCounts": [
+        4
+      ],
+      "variance": 0
+    },
+    "ev28_clean_crypto": {
+      "set": "held-out",
+      "type": "clean",
+      "fp_count": 2,
+      "fp_per_rep": 2,
+      "pass": false,
+      "repCounts": [
+        3
+      ],
+      "variance": 0
+    },
+    "ev29_missing_tests_complex": {
+      "set": "held-out",
+      "type": "flawed",
+      "pass": true,
+      "recall": 1,
+      "ruleHits": [
+        {
+          "id": "STD-006",
+          "found": true
+        },
+        {
+          "id": "TEAM-001",
+          "found": true
+        }
+      ],
+      "catHits": [
+        {
+          "cat": "standards",
+          "found": true
+        },
+        {
+          "cat": "team_rule",
+          "found": true
+        }
+      ],
+      "sevMet": true,
+      "countMet": true,
+      "repCounts": [
+        2
+      ],
+      "avgFindings": 2,
+      "variance": 0,
+      "droppedPerRep": 0,
+      "remediationScores": [
+        1
+      ]
+    },
+    "ev30_clean_network": {
+      "set": "held-out",
+      "type": "clean",
+      "fp_count": 2,
+      "fp_per_rep": 2,
+      "pass": false,
+      "repCounts": [
+        6
+      ],
+      "variance": 0
+    }
+  },
+  "summary": {
+    "totalCases": 30,
+    "passCases": 25,
+    "allPass": false,
+    "totalCost": 0.7163,
+    "totalBobCalls": 30
+  }
+}
