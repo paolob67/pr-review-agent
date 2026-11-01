@@ -1,0 +1,151 @@
+{
+ "note": "Bob calls that completed inside review jobs later marked cancelled (a newer trigger cancelled the job after the Bob step). No audit record exists for them; the figure is stats.session_costs from the retained result artifact, read on 2026-11-01. Data only, no PR content.",
+ "collected_at": "2026-11-01T12:12:02.552Z",
+ "calls": [
+  {
+   "run_id": 41215400090,
+   "created_at": "2026-10-31T15:33:14Z",
+   "bobcoins": 0.03116
+  },
+  {
+   "run_id": 41217427559,
+   "created_at": "2026-10-31T15:59:03Z",
+   "bobcoins": 0.016184
+  },
+  {
+   "run_id": 41218626200,
+   "created_at": "2026-10-31T16:13:25Z",
+   "bobcoins": 0.031738
+  },
+  {
+   "run_id": 41219423347,
+   "created_at": "2026-10-31T16:23:04Z",
+   "bobcoins": 0.017506
+  },
+  {
+   "run_id": 41221515300,
+   "created_at": "2026-10-31T16:49:20Z",
+   "bobcoins": 0.022614
+  },
+  {
+   "run_id": 41294811697,
+   "created_at": "2026-11-01T09:49:54Z",
+   "bobcoins": 0.015198
+  },
+  {
+   "run_id": 41296647821,
+   "created_at": "2026-11-01T10:15:05Z",
+   "bobcoins": 0.022816
+  },
+  {
+   "run_id": 41296666502,
+   "created_at": "2026-11-01T10:15:21Z",
+   "bobcoins": 0.016588
+  },
+  {
+   "run_id": 41296676617,
+   "created_at": "2026-11-01T10:15:29Z",
+   "bobcoins": 0.022318
+  },
+  {
+   "run_id": 41296713359,
+   "created_at": "2026-11-01T10:15:56Z",
+   "bobcoins": 0.022754
+  },
+  {
+   "run_id": 41296724858,
+   "created_at": "2026-11-01T10:16:05Z",
+   "bobcoins": 0.014728
+  },
+  {
+   "run_id": 41297567821,
+   "created_at": "2026-11-01T10:27:30Z",
+   "bobcoins": 0.041526
+  },
+  {
+   "run_id": 41297603637,
+   "created_at": "2026-11-01T10:28:00Z",
+   "bobcoins": 0.017128
+  },
+  {
+   "run_id": 41297634812,
+   "created_at": "2026-11-01T10:28:26Z",
+   "bobcoins": 0.016364
+  },
+  {
+   "run_id": 41297685985,
+   "created_at": "2026-11-01T10:29:10Z",
+   "bobcoins": 0.016594
+  },
+  {
+   "run_id": 41297721507,
+   "created_at": "2026-11-01T10:29:41Z",
+   "bobcoins": 0.015324
+  },
+  {
+   "run_id": 41297789032,
+   "created_at": "2026-11-01T10:30:33Z",
+   "bobcoins": 0.015598
+  },
+  {
+   "run_id": 41297792974,
+   "created_at": "2026-11-01T10:30:36Z",
+   "bobcoins": 0.015638
+  },
+  {
+   "run_id": 41297800976,
+   "created_at": "2026-11-01T10:30:41Z",
+   "bobcoins": 0.01589
+  },
+  {
+   "run_id": 41297826601,
+   "created_at": "2026-11-01T10:31:01Z",
+   "bobcoins": 0.039014
+  },
+  {
+   "run_id": 41299091077,
+   "created_at": "2026-11-01T10:48:30Z",
+   "bobcoins": 0.021516
+  },
+  {
+   "run_id": 41299635972,
+   "created_at": "2026-11-01T10:56:15Z",
+   "bobcoins": 0.06251
+  },
+  {
+   "run_id": 41299650342,
+   "created_at": "2026-11-01T10:56:26Z",
+   "bobcoins": 0.041226
+  },
+  {
+   "run_id": 41299665480,
+   "created_at": "2026-11-01T10:56:39Z",
+   "bobcoins": 0.015682
+  },
+  {
+   "run_id": 41299691865,
+   "created_at": "2026-11-01T10:57:02Z",
+   "bobcoins": 0.041704
+  },
+  {
+   "run_id": 41299722493,
+   "created_at": "2026-11-01T10:57:28Z",
+   "bobcoins": 0.015864
+  },
+  {
+   "run_id": 41299750057,
+   "created_at": "2026-11-01T10:57:52Z",
+   "bobcoins": 0.023096
+  },
+  {
+   "run_id": 41299768430,
+   "created_at": "2026-11-01T10:58:08Z",
+   "bobcoins": 0.022474
+  },
+  {
+   "run_id": 41299818352,
+   "created_at": "2026-11-01T10:58:51Z",
+   "bobcoins": 0.014988
+  }
+ ]
+}

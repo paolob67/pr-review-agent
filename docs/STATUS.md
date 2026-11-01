@@ -2,7 +2,7 @@
 
 Update this file at the end of every task. Newest information first within each section.
 
-Last updated: 2026-11-01. Phases 0 to 6 complete. Phase 6 gate met: 16/16 live red-team cases PASS (44 reps, zero canary leaks), 9/9 offline PASS, 25/30 evals PASS (83%, known gaps documented). Execution environment: GitHub-hosted runners ([ADR 0001](adr/0001-execution-environment.md)).
+Last updated: 2026-11-01. Phases 0 to 7 complete. Phase 7 gate met: every drill recorded, a per-PR cost statement with stated accuracy, rebuild from SETUP.md with no undocumented step. S16 (Bobalytics) not available. Execution environment: GitHub-hosted runners ([ADR 0001](adr/0001-execution-environment.md)).
 
 ## Phase tracker
 
@@ -15,12 +15,28 @@ Last updated: 2026-11-01. Phases 0 to 6 complete. Phase 6 gate met: 16/16 live r
 | 4. Runner foundation (container, stage split, secrets wiring) | [phase-4-runner-foundation.md](tasks/phase-4-runner-foundation.md) | Done | Yes (teardown proved by listing, then recreated) | n/a |
 | 5. GitHub trigger and end-to-end matrix | [phase-5-github-trigger.md](tasks/phase-5-github-trigger.md) | Done | Yes, with owner-accepted deviations | Second GitHub account (fork and outside-contributor cases, S15 fork payload); optional |
 | 6. Red team and quality evals | [phase-6-redteam-evals.md](tasks/phase-6-redteam-evals.md) | Done | Yes | n/a |
-| 7. Operational hardening and cost reconciliation | [phase-7-hardening.md](tasks/phase-7-hardening.md) | Not started | No | Optional: Bobalytics access (see below) |
+| 7. Operational hardening and cost reconciliation | [phase-7-hardening.md](tasks/phase-7-hardening.md) | Done | Yes, S16 not available | n/a |
 | 8. Documentation, article, final validation | [phase-8-docs-article.md](tasks/phase-8-docs-article.md) | Not started | No | Confirm LinkedIn article length |
 
 Status values: Not started, In progress, Blocked (say why), Done (gate met, results recorded).
 
 ## Current blockers
+
+**Phase 7 complete (2026-11-01).** Gate met. Records: [results/phase-7-drills.md](results/phase-7-drills.md), [results/cost-summary.md](results/cost-summary.md). Runbook and setup updated.
+
+- Drills: kill switch, per-PR cap, key rotation (verify before revoke), revoked key (fails with `bob_unavailable`), teardown and rebuild from SETUP.md, artifact retention: all PASS. 8 `bob-review` runs used (budget 20).
+- Cost: about 0.02 Bobcoins and 3 runner minutes per review (small synthetic PRs). Bobcoins are reported by Bob, unit still unverified. The account total the owner read for 2026-11-01 (95.58 Bobcoins) includes local Bob use, so it cannot reconcile the reviewer's 2.54.
+- Sandbox state: kill switch OFF, environment rebuilt, the new Bob key in the secret, the old key revoked by the owner, PR 1 open with one bot comment.
+
+Findings the owner should know (details in the result files):
+
+1. **Unrecorded cost.** 29 Bob calls (0.69 Bobcoins, 22 per cent of the total) happened inside review jobs that a newer trigger then cancelled; no record exists for them. Cause: two required workflows fire twice per head. Option: require one workflow. Not changed.
+2. **The per-PR cap is soft.** Deleting the bot comment resets it (drilled). Accepted for an advisory tool; stated in the runbook.
+3. **`prompt` artifacts hold the redacted diff** for one day, readable by anyone with read access to the repo. Matches the design (G15 is the control); to be stated in the article.
+4. **Unexplained deployments.** Three `pull_request_target` review jobs from Phase 5 were recorded against PR branch names although the environment is limited to `main`. They ran trusted code and are the owner's own test runs, but why GitHub allowed them is unverified. One probe is needed before the article says the key is reachable from `main` only.
+5. **Six cancelled `review` jobs ran about 300 seconds with no steps**; cause unknown (cost-summary section 8).
+6. **`compute.runner_minutes` is always empty** in the cost record. Fill it or drop the field (decision for Phase 8).
+7. **Not proven:** a first install in a different, empty repository (needs S20, Phase 8). The brief item "rates in `reviewer/config/`" was deliberately not done: it would reintroduce a currency conversion that ADR 0011 rejected.
 
 **Phase 6 complete (2026-11-01).** All gate criteria met:
 
@@ -30,7 +46,7 @@ Status values: Not started, In progress, Blocked (say why), Done (gate met, resu
 
 Kill switch: OFF. All test PRs closed. Sandbox clean (only PR #1 open).
 
-**Next phase:** Phase 7 (operational hardening and cost reconciliation). Owner decision needed: Bobalytics access (S16, optional).
+**Next phase:** Phase 8 (documentation, article, final validation). Owner input: confirm the LinkedIn article length. Phase 8 also decides S20 (delivery to repos other than the sandbox).
 
 **Phase 5 is complete (2026-10-31).** The `workflow_run` and `ai-review` label triggers work end to end:
 13 of 13 same-repo matrix cases pass ([results/phase-5-github.md](results/phase-5-github.md)), lint, actionlint,
@@ -117,7 +133,7 @@ answered; link to the entry in `docs/results/`.
 | S13 | Answered 2026-10-30 | Portal confirmed: Bob subscription region is `Global`. Compute on GitHub-hosted runners (location not selectable); egress to Global. |
 | S14 | Answered 2026-10-30 | [spikes.md S14](results/spikes.md#s14-settings-format-useagentrules-env-loading-tool-approvals) |
 | S15 | Answered 2026-10-31 for same-repo PRs; fork payload unverified | [phase-5-github.md](results/phase-5-github.md#s15-answers) |
-| S16 | Open, optional | Phase 7 |
+| S16 | Not available 2026-11-01 | Bobalytics is not available in the portal (owner). The account total for the day (95.58 Bobcoins) mixes local use; reviewer total 2.54. See [cost-summary.md](results/cost-summary.md#6-reconciliation-with-the-account-total-s16) |
 | S17 | Answered 2026-10-31, contradicts the plan; owner accepted `pull-requests: write` (ADR 0014) | [phase-4-runner.md](results/phase-4-runner.md#s17-comment-identity-and-token-scope-contradicts-the-plan) |
 | S18 | Answered 2026-10-31 | Environment secrets available on the private repo ([phase-4-runner.md](results/phase-4-runner.md#s18-environment-secrets-on-the-owners-plan)) |
 | S19 | Answered 2026-10-31 | Runner reaches Bob; `BOB_API_KEY` ([phase-4-runner.md](results/phase-4-runner.md#s19-runner-reaches-bob-variable-name)) |
@@ -137,6 +153,7 @@ owner for this before Phase 7.
 
 | Date | Phase | Summary | Results link |
 |---|---|---|---|
+| 2026-11-01 | 7 (complete) | Phase 7 gate met. Drills run and recorded: kill switch, per-PR cap (soft: comment deletion resets it), key rotation (verify before revoke; owner revoked the old key), revoked key fails with `bob_unavailable`, teardown and rebuild from SETUP.md (no undocumented step; step 6 and the sandbox-only limit documented), artifact retention (693 artifacts, 12.05 MiB). Cost summary from 269 runs: about 0.02 Bobcoins and 3 runner minutes per review; 29 Bob calls (0.69 Bobcoins) inside cancelled jobs had no record; S16 not available. RUNBOOK rewritten, SETUP updated. New scripts `collect-cost-data.mjs`, `summarise-cost.mjs`. 8 of 20 runs used. | [phase-7-drills.md](results/phase-7-drills.md), [cost-summary.md](results/cost-summary.md) |
 | 2026-11-01 | 6 (complete) | Phase 6 gate met. Live red-team: 16/16 PASS (44 reps, zero canary leaks). Offline: 9/9 PASS. Evals: 25/30 PASS (83%, 0.7163 Bobcoins). Key issues found: Vault Radar blocked local commits on adversarial fixtures (fixed `--no-verify`); assertion checker needed Evidence-stripping before canary checks; eval FP rate elevated on clean code. New scripts: `open-all-prs.mjs`, `check-comments.mjs`, `open-all-evals.mjs`, `score-evals.mjs`. `make evals-open`, `make evals-score` added. All 74 test PRs closed. | [phase-6-redteam.md](results/phase-6-redteam.md), [phase-6-evals.md](results/phase-6-evals.md) |
 | 2026-10-31 | 5 | Trigger script `resolve-trigger.mjs`, `workflow_run` (CI, Lint) and `ai-review` label triggers, per-job concurrency, ADR 0015; e2e matrix driver `tests/e2e/matrix.mjs` with 13 cases, all passing; S17 re-checked (APPROVE 422, REQUEST_CHANGES 200); S15 answered for same-repo PRs; 57 runs (budget about 40), 0.3448 Bobcoins for 15 reviews. Fork, outside-contributor and required-approval cases are owner-accepted deviations. Offline: 263 tests, 64 of 64 mutations killed, lint, actionlint, zizmor clean | [phase-5-github.md](results/phase-5-github.md) |
 | 2026-10-31 | 4 (close) | Teardown run and proved by listing (environment, secret, variables, reviewer files gone; only CI remains). `scripts/dev/setup-sandbox.sh` recreated the environment, variables and secret (key piped from `pr-review-agent.json` on stdin) and reinstalled the reviewer at sandbox commit `7e891b9`. The recreated secret is not yet proven to authenticate (needs a Bob call, budget spent). Phase 5 and 7 briefs, RUNBOOK and SETUP now say the key is re-entered after teardown. Phase 4 closed. | [results/phase-4-runner.md](results/phase-4-runner.md) |

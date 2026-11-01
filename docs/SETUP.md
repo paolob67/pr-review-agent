@@ -1,8 +1,14 @@
 # Setup (GitHub part, draft)
 
-Draft from Phase 4 Part B, extended in Phase 5. Everything here was done in a private sandbox repo, and the
-commands are the ones that worked. Only GitHub and the Bob service are needed (ADR 0001). Phase 8
-completes this document.
+Draft from Phase 4 Part B, extended in Phase 5 and checked in Phase 7. Everything here was done in a private
+sandbox repo, and the commands are the ones that worked. Only GitHub and the Bob service are needed (ADR 0001).
+Phase 8 completes this document.
+
+**What has been proven.** On 2026-11-01 the sandbox was torn down and rebuilt by following steps 1 to 6 below,
+with no step outside this document ([results/phase-7-drills.md](results/phase-7-drills.md) section 5). **What
+has not:** a first install in a different, empty repository. Step 4 uses a script that only works for the
+sandbox, and how to deliver the reviewer to another repository (reusable workflow or image) is decided in Phase 8
+(S20). Until then this document builds the sandbox, not an arbitrary repository.
 
 ## Before you start
 
@@ -71,15 +77,18 @@ Replace `OWNER/REPO` with the repo being reviewed.
 
    ```bash
    gh variable set BOB_REVIEW_ENABLED -R OWNER/REPO --body true
-   gh workflow run bob-review.yml -R OWNER/REPO --ref main -f pr_number=N -f head_sha=<40 hex head SHA of PR N>
+   SHA=$(gh pr view N -R OWNER/REPO --json headRefOid --jq .headRefOid)   # N is the PR number
+   gh workflow run bob-review.yml -R OWNER/REPO --ref main -f pr_number=N -f head_sha=$SHA
    ```
 
    (Manual dispatch needs both `pr_number` and `head_sha` and skips the CI check. The workflow also starts
    by itself, with no dispatch, when `CI` and `Lint` complete on a pull request and when a maintainer adds
    the `ai-review` label.)
 
-   Expect three green jobs (`prepare`, `review`, `publish`) in about 1 to 1.5 minutes and one comment
-   from `github-actions[bot]` marked "AI Assisted". Running it again on the same SHA updates that comment.
+   Expect three green jobs (`prepare`, `review`, `publish`) in about 1 to 1.5 minutes (82 seconds in the
+   Phase 7 rebuild) and one comment from `github-actions[bot]` marked "AI Assisted". Running it again on the
+   same SHA updates that comment. If the comment says "Review unavailable", the Bob key was rejected or Bob
+   failed: see [RUNBOOK.md](RUNBOOK.md#a-review-did-not-appear), step 4.
 
 ## What to expect
 

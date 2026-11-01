@@ -16,7 +16,7 @@
 | [tasks/phase-4-runner-foundation.md](tasks/phase-4-runner-foundation.md) | Brief: runner foundation (container, stage split, secrets wiring) | Done 2026-10-31 |
 | [tasks/phase-5-github-trigger.md](tasks/phase-5-github-trigger.md) | Brief: GitHub trigger and end-to-end matrix | Done 2026-10-31 |
 | [tasks/phase-6-redteam-evals.md](tasks/phase-6-redteam-evals.md) | Brief: red team and quality evals | Done 2026-11-01 |
-| [tasks/phase-7-hardening.md](tasks/phase-7-hardening.md) | Brief: operational hardening and cost reconciliation | Ready |
+| [tasks/phase-7-hardening.md](tasks/phase-7-hardening.md) | Brief: operational hardening and cost reconciliation | Done 2026-11-01 (S16 not available) |
 | [tasks/phase-8-docs-article.md](tasks/phase-8-docs-article.md) | Brief: documentation, article, final validation | Ready |
 | [adr/0001-execution-environment.md](adr/0001-execution-environment.md) | Decision to run Bob Shell on GitHub-hosted runners, three jobs with separate credentials | Accepted |
 | [adr/0002-author-and-fork-policy.md](adr/0002-author-and-fork-policy.md) | Role-based author policy and maintainer label gate | Accepted |
@@ -36,8 +36,8 @@
 | [diagrams/architecture-overview.drawio](diagrams/architecture-overview.drawio) | Architecture overview (source; PNG alongside) | Current |
 | [diagrams/trust-boundaries.drawio](diagrams/trust-boundaries.drawio) | Trust boundaries diagram (source; PNG alongside) | Current |
 | [TESTING.md](TESTING.md) | How to run each test suite and read results | Current (updated Phase 5, 2026-10-31) |
-| [SETUP.md](SETUP.md) | GitHub part: environment, variables, secret, first run | Draft (Phase 4), completed Phase 8 |
-| [RUNBOOK.md](RUNBOOK.md) | Kill switch, key rotation, teardown | Draft (Phase 4), completed Phase 8 |
+| [SETUP.md](SETUP.md) | GitHub part: environment, variables, secret, first run | Rebuilt from the document in Phase 7; other-repo install completed in Phase 8 |
+| [RUNBOOK.md](RUNBOOK.md) | First five minutes, kill switch, missing review, cap, key rotation, leaked key, cost, artifacts, teardown | Drilled in Phase 7 (gaps listed in the file) |
 | ARTICLE.md | Narrative write-up | Planned (Phase 8) |
 | [results/spikes.md](results/spikes.md) | Phase 0 spike findings: S1-S10, S13, S14; gate decisions | Phase 0 done 2026-10-30 |
 | [results/phase-1-signoff.md](results/phase-1-signoff.md) | Phase 1 sign-off record and policy decisions | Phase 1 done 2026-10-30 |
@@ -51,6 +51,10 @@
 | [results/phase-5-github.md](results/phase-5-github.md) | Phase 5: end-to-end matrix (13 cases), S15 answers, defects, run ledger, owner-pending cases | Phase 5 done 2026-10-31 (fork cases pending) |
 | [results/phase-6-redteam.md](results/phase-6-redteam.md) | Phase 6: red-team results (offline 9/9, live 16/16 PASS, 44 reps, zero leaks) | Phase 6 done 2026-11-01 |
 | [results/phase-6-evals.md](results/phase-6-evals.md) | Phase 6: quality eval results (25/30 PASS, recall 0.97, FP rate 2.5/clean PR) | Phase 6 done 2026-11-01 |
+| [results/phase-7-drills.md](results/phase-7-drills.md) | Phase 7: kill switch, cap, key rotation, revoked key, rebuild from docs, artifact retention | Phase 7 done 2026-11-01 |
+| [results/cost-summary.md](results/cost-summary.md) | Phase 7: per-PR cost statement with accuracy, runner minutes, cancelled-review cost, S16 | Phase 7 done 2026-11-01 |
+| [results/cost-data.json](results/cost-data.json) | Phase 7: per-run job timings and audit records for 269 runs (data only) | Phase 7 |
+| [results/cost-data-cancelled.json](results/cost-data-cancelled.json) | Phase 7: Bob calls found inside cancelled review jobs (29) | Phase 7 |
 | [results/phase-5-evidence/](results/phase-5-evidence/) | Matrix data (`matrix.json`) and the first bot comment of each case | Phase 5 |
 | [tests/e2e/matrix.mjs](../tests/e2e/matrix.mjs) | End-to-end matrix driver against the sandbox (`make test-e2e`) | Phase 5 |
 | [tests/redteam/harness.mjs](../tests/redteam/harness.mjs) | Red-team harness: offline sanitiser assertions + live corpus runner (`make redteam-offline`, `make redteam-live`) | Phase 6 |
@@ -69,6 +73,8 @@
 | [scripts/dev/install-sandbox-reviewer.sh](../scripts/dev/install-sandbox-reviewer.sh) | Install the reviewer into the sandbox repo (S20 per-run build) | Phase 4 |
 | [scripts/dev/teardown-sandbox.sh](../scripts/dev/teardown-sandbox.sh) | Remove the Part B environment, variables and files, then list what remains | Phase 4 |
 | [scripts/dev/setup-sandbox.sh](../scripts/dev/setup-sandbox.sh) | Recreate environment, variables and secret (key piped from the key file) after a teardown | Phase 4 |
+| [scripts/dev/collect-cost-data.mjs](../scripts/dev/collect-cost-data.mjs) | Read-only: collect run timings and audit records from a repo into `cost-data.json` | Phase 7 |
+| [scripts/dev/summarise-cost.mjs](../scripts/dev/summarise-cost.mjs) | Offline: aggregate `cost-data.json` into distributions and totals | Phase 7 |
 | [scripts/spikes/s17-approve-check.sh](../scripts/spikes/s17-approve-check.sh) | S17: can the job token APPROVE or REQUEST_CHANGES (sandbox) | Phase 4 |
 | [scripts/spikes/s17-token-scope.sh](../scripts/spikes/s17-token-scope.sh) | S17: job token permission sets against comments, reviews, checks, statuses | Phase 4 |
 | [scripts/spikes/s1-installer.sh](../scripts/spikes/s1-installer.sh) | S1: installer inspection script | Phase 0 |
